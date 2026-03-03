@@ -1,0 +1,61 @@
+# =========================
+# Visual Studio files
+# =========================
+
+.vs/
+*.VC.db
+*.VC.opendb
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.slnx
+*.vcxproj
+*.vcxproj.filters
+
+# =========================
+# Build folders
+# =========================
+
+Debug/
+Release/
+x64/
+x86/
+build/
+out/
+
+# CMake (if ever used)
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+
+# =========================
+# Temporary files
+# =========================
+
+*.log
+*.tlog
+*.obj
+*.pch
+*.ipch
+*.pdb
+*.ilk
+*.idb
+*.aps
+*.ncb
+
+# =========================
+# Others
+# =========================
+
+*.txt
+
+# =========================
+# Keep source folders
+# =========================
+
+# (These are kept automatically unless ignored above)
+# App/
+# Core/
+
+!feuile de route.txt

@@ -48,8 +48,6 @@ cmake_install.cmake
 # Others
 # =========================
 
-*.txt
-
 # =========================
 # Keep source folders
 # =========================
@@ -57,5 +55,3 @@ cmake_install.cmake
 # (These are kept automatically unless ignored above)
 # App/
 # Core/
-
-!feuile de route.txt

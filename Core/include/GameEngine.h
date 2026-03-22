@@ -7,15 +7,13 @@
 #include <iostream>
 
 namespace Core {
-
 	template<typename TActions>
 	class GameEngine
 	{
 	public:
-		GameEngine(GameMaster& gm, EventManager<TActions>& em, CtrlInterface& ci)
+		GameEngine(GameMaster& gm, EventManager<TActions>& em)
 			: m_gameMaster{ gm }
 			, m_eventManager{ em }
-			, m_ctrlInterface{ ci }
 		{
 			std::cout << "GameEngine constructed.\n";
 		};
@@ -24,28 +22,40 @@ namespace Core {
 		{
 			std::cout << "Engine running...\n";
 
-			while (m_gameMaster.isRunning())
+			bool play_message_printed{ false };
+			while (1)
 			{
-				// get events
-				m_eventManager.onEvent();
+				if (!m_gameMaster.isRunning())
+				{
+					if (!play_message_printed)
+					{
+						std::cout << "press play\n";
+						play_message_printed = true;
+					}
+				}
+
+				// get events from event manager (controller)
+				auto action = m_eventManager.onEvent(true);
+				
 				// update with events
-				//m_gameMaster.onEvent(event);
+				if (action)
+					m_gameMaster.update(*action);
+
 				// get render data
 				// render
-				break;
 			}
 
 			std::cout << "Engine shutting down...\n";
 		}
 
-		void init()
-		{ }
+		bool init()
+		{
+			return m_gameMaster.init(m_eventManager);
+		}
 
 	private:
-		CtrlInterface& m_ctrlInterface{};
-		EventManager<TActions>& m_eventManager{};
 		GameMaster& m_gameMaster{};
-
+		EventManager<TActions>& m_eventManager{};
 	};
 }
 

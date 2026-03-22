@@ -1,9 +1,18 @@
+#ifndef TERMINAL_LIB_H
+#define TERMINAL_LIB_H
 
 #include <iostream>
-#include <optional>
 #include <windows.h>
 
 namespace Core {
+
+    struct TerminalRawEvent
+    {
+        bool isValid;           // valid or unvalid event
+        WORD code;              // virtual key or device code
+        DWORD controlState;     // modifier / control bits
+        bool pressed;           // key down or up
+    };
 
     class TerminalLib
     {
@@ -20,23 +29,16 @@ namespace Core {
         void enableRawMode();
         void disableRawMode();
 
-        std::optional<WORD> read(bool readlock);
-
-        //int editorReadKey(int fd);
-        //int getCursorPosition(int ifd, int ofd, int* rows, int* cols);
-        //int getWindowSize(int ifd, int ofd, int* rows, int* cols);
-       
+        TerminalRawEvent readUserEvent(bool lockpolling) const;
 
     private:
         bool m_isRawModeActive{ false };
         DWORD m_consInputDevice;
         HANDLE m_hStdin{};
         DWORD m_consOrigMode{};
-
-        //int m_rows{};
-        //int m_cols{};
     };
 
 
 }
 
+#endif

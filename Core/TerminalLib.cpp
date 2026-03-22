@@ -29,27 +29,32 @@ namespace Core {
         std::cout << "console raw mode disabled\n";
     }
 
-    std::optional<WORD> TerminalLib::read(bool readlock)
+    TerminalRawEvent TerminalLib::readUserEvent(bool lockpolling) const
     {
         INPUT_RECORD rec;
         DWORD byte_read;
         
-        //while (ReadConsoleInput(m_hStdin, &rec, 1, &byte_read) == 0); this is a blocking loop waiting for user input
+        TerminalRawEvent rawEvent;
 
-        while (readlock)
+        //while (ReadConsoleInput(m_hStdin, &rec, 1, &byte_read) == 0); this is a blocking loop waiting for user input
+        while (lockpolling)
         {
             ReadConsoleInput(m_hStdin, &rec, 1, &byte_read);
 
             if (rec.EventType == KEY_EVENT && rec.Event.KeyEvent.bKeyDown && byte_read == 1)
             {
-                WORD c = rec.Event.KeyEvent.wVirtualKeyCode;
-             
-                std::cout << "Key: 0x" << std::hex << c << "\n";
+                rawEvent.code = rec.Event.KeyEvent.wVirtualKeyCode;
+                rawEvent.controlState = rec.Event.KeyEvent.dwControlKeyState;
+                rawEvent.pressed = rec.Event.KeyEvent.bKeyDown;
 
-                return c;
+                rawEvent.isValid = true;
+
+                return rawEvent;
             }
         }
 
-        return std::nullopt;
+        rawEvent.isValid = false;
+
+        return rawEvent;
     }
 }

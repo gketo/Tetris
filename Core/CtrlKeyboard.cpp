@@ -1,41 +1,57 @@
 #include "CtrlKeyboard.h"
 
+#include "Action.h"
+#include "DeviceEvent.h"
+#include "EventManager.h"
+#include "Logger.h"
+
+#include <optional>
+
 namespace Core {
 
-	InputEvent CtrlKeyboard::readUserEvent(bool lockpolling) const
+	void CtrlKeyboard::bind(EventManager& em) const
+    {
+		LOG_DEBUG("[CtrlKeyboard] Binding keys...");
+        em.bindKey(KeyCode::spacebar, EngineAction::PLAY);
+        em.bindKey(KeyCode::key_R, EngineAction::RESUME);
+        em.bindKey(KeyCode::key_P, EngineAction::PAUSE);
+        em.bindKey(KeyCode::key_Q, EngineAction::QUIT);
+    }
+
+	std::optional<KeyCode> CtrlKeyboard::readEvent() const
 	{
-		TerminalRawEvent rawEvent = m_terminalLib.readUserEvent(lockpolling);
-		
-		InputEvent UNVALID_EVENT{ false, m_currentDevice, KeyCode::None };
-
-		if (!rawEvent.isValid)
+        auto event = m_eventSource.readEvent();
+	
+		if (!event)
 		{
-			return UNVALID_EVENT;
+			return std::nullopt; // propagate
 		}
+        
+        //LOG_DEBUG("[CtrlKeyboard] readEvent: %s", event->to_string().c_str());
+        
+        if (event->key == ' ')
+        {
+            return KeyCode::spacebar;
+        }
 
-		bool ctrl = (rawEvent.controlState & (LEFT_CTRL_PRESSED | RIGHT_CTRL_PRESSED)) != 0;
-		//bool shift = (event.controlState & SHIFT_PRESSED) != 0;
-		//bool alt = (event.controlState & (LEFT_ALT_PRESSED | RIGHT_ALT_PRESSED)) != 0;
+        if (event->isCtrl)
+        {
+            switch (event->key)     // interpret as ASCII int 
+            { 
+            case 'P':   return KeyCode::ctrl_P;
+            case 'Q':   return KeyCode::ctrl_Q;
+            }
+        }
 
-		switch (rawEvent.code)
-		{ // interpret as ASCII int 
-		case 'P':
-			if (ctrl)
-				return { true, m_currentDevice, KeyCode::ctrl_p };
-			break;
-		case 'Q':
-			if (ctrl) 
-				return { true, m_currentDevice, KeyCode::ctrl_q };
-			break;
-		case ' ':
-			return { true, m_currentDevice, KeyCode::spacebar };
+        switch (event->key)     // interpret as ASCII int 
+        { 
+        case 'p':   return KeyCode::key_P;
+        case 'q':   return KeyCode::key_Q;
+        case 'r':   return KeyCode::key_R;
+        }
 
-		default:
-			// for the moment we stricly control events propagated 
-			//std::cout << "default : key : " << rawEvent.code << "\n";
-			return UNVALID_EVENT;
-		}
-
-		return UNVALID_EVENT;
+        // treat any other event as unregistred
+		LOG_DEBUG("[CtrlKeyboard] Unregistered event ");
+        return std::nullopt;
 	}
 }

@@ -1,55 +1,52 @@
-#ifndef GAME_H
-#define GAME_H
+#pragma once
 
-#include "EventManager.h"
+#include "Action.h"
+
+#include <string>
+
+namespace Core {
+    class EventManager; // forward declaration
+}
 
 namespace Game {
 
-    enum class Action
-    {
-        // general
-        PLAY,
-        PAUSE,
-        QUIT,
-        // tetris
-        ROTATE_LEFT,
-        ROTATE_RIGHT,
-        //
-        max_user_actions
-    };
-
-    // Helper function to convert KeyCode enum to string
-    inline std::string dbg_to_string(Action action)
-    {
-        switch (action)
-        {
-        case Action::PLAY: return "PLAY";
-        case Action::PAUSE: return "PAUSE";
-        case Action::ROTATE_LEFT: return "ROTATE_LEFT";
-        case Action::ROTATE_RIGHT: return "ROTATE_RIGHT";
-        case Action::QUIT: return "QUIT";
-        default: return "Unknown Action";
-        }
-    }
-	
-	class Game
+    class Game
 	{
     public:
         virtual ~Game() = default;
 
-        virtual bool init(Core::EventManager<Action>& em) = 0;
-        virtual void mapKeys(Core::EventManager<Action>& em) = 0;
-        virtual bool update(Action action) = 0;
-        bool isRunning()
-        {
-            return m_isRunning;
-        }
+        virtual void bindKeys(Core::EventManager& em) = 0;
+        virtual void init(Core::EventManager& em) = 0;
+		virtual std::string rules() = 0;
+        virtual bool update(Core::Action action) = 0;
+        void resume();
+        void pause();
+        void stop();
+        virtual bool isRunning() const = 0;
+        virtual bool isPaused() const;
 
     protected:
-        bool m_isRunning{ false };
+        bool m_pauseRequested{ false };
+        bool m_stopRequested{ false };
 	};
+
+    inline void Game::resume()
+    {
+        m_pauseRequested = false;
+    }
+
+    inline void Game::pause()
+    {
+        m_pauseRequested = true;
+    }
+
+    inline void Game::stop()
+    {
+        m_stopRequested = true;
+    }
+
+    inline bool Game::isPaused() const
+    {
+        return m_pauseRequested;
+    }
 }
-
-
-
-#endif

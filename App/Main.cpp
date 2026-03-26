@@ -4,28 +4,28 @@
 #include "EventManager.h"
 #include "Game.h"
 #include "GameEngine.h"
-#include "TerminalLib.h"
-
-#include <iostream>
-#include <string>
-#include <windows.h>
+#include "ITerminalCore.h"
+#include "Logger.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    LOG_DEBUG("[Main.cpp] Hello World!");
 
     Core::GameMaster gm{};
 
-    Core::TerminalLib terminal{ STD_INPUT_HANDLE };
-    terminal.enableRawMode();
+    auto terminal {Core::createTerminalCore()};
+    if (terminal)
+    {
+        terminal->init();
+    }
 
-    Core::CtrlKeyboard controller{Core::DeviceType::keyboard, terminal};
+    Core::CtrlKeyboard controller{*terminal};
 
-    Core::EventManager<Game::Action> em{ controller };
+    Core::EventManager em{ controller };
 
-    Core::GameEngine<Game::Action> ge{ gm, em };
+    Core::GameEngine ge{ gm, em };
 
-    if (ge.init())
-        ge.run();
+    ge.init();
+    ge.run();
 
 }

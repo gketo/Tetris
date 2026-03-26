@@ -1,40 +1,48 @@
 #include "TetrisGame.h"
 
-namespace Game {
+#include "DeviceEvent.h"
+#include "EventManager.h"
+#include "Game.h"
+#include "Logger.h"
+#include "TetrisAction.h"
 
-    bool TetrisGame::init(Core::EventManager<Action>& em)
+#include <string>
+
+namespace Tetris {
+
+    void TetrisGame::bindKeys(Core::EventManager& em)
     {
-        mapKeys(em);
-        return true;
+		LOG_DEBUG("[TetrisGame] Binding keys...");
+        em.bindKey(Core::KeyCode::arrow_up, TetrisAction::ROTATE_LEFT);
     }
 
-    void TetrisGame::mapKeys(Core::EventManager<Action>& em)
+    void TetrisGame::init(Core::EventManager& em)
     {
-        em.mapKey(Core::KeyCode::ctrl_p, Action::PAUSE);
-        em.mapKey(Core::KeyCode::spacebar, Action::PLAY);
-        em.mapKey(Core::KeyCode::ctrl_q, Action::QUIT);
+		LOG_DEBUG("[TetrisGame] Initializing...");
+        bindKeys(em);
     }
 
-    bool TetrisGame::update(Action action)
+    std::string TetrisGame::rules()
     {
-        if (!m_isRunning && action != Action::PLAY)
-            return false;
+        return
+            "Welcome to Tetris, here are the rules :)\n"
+            "- Move pieces left/right using arrow keys\n"
+            "- Rotate pieces using up arrow\n"
+            "- Drop pieces faster using down arrow\n"
+            "- Clear lines to score points\n"
+            "- Press Ctrl+P to pause\n"
+            "- Press Ctrl+Q to quit\n"
+            "Ready to start ? Press spacebar to play :D\n";
+    }
 
-        switch (action)
-        {
-        case Action::PAUSE:
-            m_isRunning = false;
-            return true;
-        case Action::PLAY:
-            std::cout << "launching game\n";
-            m_isRunning = true;
-            return true;
-        case Action::QUIT:
-            m_isRunning = false;
-            return true;
-        default:
-            return false;
-        }
+    bool TetrisGame::update(Core::Action action)
+    {
         return false;
     }
+
+    bool TetrisGame::isRunning() const
+    {
+        return true && !m_stopRequested;
+    }
+
 }

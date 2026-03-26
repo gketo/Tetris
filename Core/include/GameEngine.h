@@ -1,62 +1,154 @@
-#ifndef GAMEENGINE_H
-#define GAMEENGINE_H
+#pragma once
 
+#include "EngineAction.h"
 #include "EventManager.h"
 #include "GameMaster.h"
 
 #include <iostream>
 
 namespace Core {
-	template<typename TActions>
+
 	class GameEngine
 	{
 	public:
-		GameEngine(GameMaster& gm, EventManager<TActions>& em)
+		GameEngine(GameMaster& gm, EventManager& em)
 			: m_gameMaster{ gm }
 			, m_eventManager{ em }
+		{}
+
+		void init()
 		{
-			std::cout << "GameEngine constructed.\n";
-		};
+			LOG_DEBUG("[GameEngine] Initializing...");	
+			m_eventManager.init();	
+			m_gameMaster.init(m_eventManager);
+		}
 
 		void run()
 		{
-			std::cout << "Engine running...\n";
+			LOG_DEBUG("[GameEngine] Engine running...\n");
 
-			bool play_message_printed{ false };
-			while (1)
+			auto rules = m_gameMaster.getRules();
+			std::cout << rules;
+
+			while (true) 
 			{
-				if (!m_gameMaster.isRunning())
+				auto actionVariantOpt = m_eventManager.onEvent();
+
+				if (actionVariantOpt) 
 				{
-					if (!play_message_printed)
+					auto actionVariant = *actionVariantOpt;
+
+					if (auto engineAction = std::get_if<EngineAction>(&actionVariant))
 					{
-						std::cout << "press play\n";
-						play_message_printed = true;
+						auto action = *engineAction;
+
+						if (action == EngineAction::PLAY) 
+						{	// launch game (eg while true)
+							LOG_DEBUG("[GameEngine] Play requested...");
+							break;
+						}
+						else if (action == EngineAction::QUIT)
+						{	// quit (eg exit run)
+							quit();
+							return;
+						}
 					}
 				}
+			}
+			
+			LOG_DEBUG("[GameEngine] Launching game...");
 
+			while (m_gameMaster.isRunning())
+			{
 				// get events from event manager (controller)
-				auto action = m_eventManager.onEvent(true);
+				auto actionVariantOpt = m_eventManager.onEvent();
 				
 				// update with events
-				if (action)
-					m_gameMaster.update(*action);
+				if (actionVariantOpt) 
+				{
+					auto actionVariant = *actionVariantOpt;
 
+					std::visit([this](auto&& action) 
+					{
+						using actionType = std::decay_t<decltype(action)>;
+
+						if constexpr (std::is_same_v<actionType, EngineAction>) 
+						{
+							if (m_gameMaster.isPaused())
+							{
+								switch (action)
+								{
+								case EngineAction::RESUME:
+									resume();
+									break;
+								case EngineAction::QUIT:
+									quit();
+									break;
+								default:
+									LOG_DEBUG("[GameEngine] EngineAction ignored while paused");
+									break;
+								}
+								return;
+							}
+
+							// Game is running
+							switch (action) 
+							{
+							case EngineAction::PAUSE:
+								pause();
+								break;
+							case EngineAction::QUIT:
+								quit();
+								break;
+							default: 
+								LOG_DEBUG("[GameEngine] EngineAction ignored");
+								break;
+							}
+						} 
+						else // Game action
+						{
+							LOG_DEBUG("[GameEngine] GameAction propagated");
+							m_gameMaster.update(action);
+						}
+					}, actionVariant); // std::visit
+				}
 				// get render data
+				
 				// render
+
+				// win lose ?
+
+				// continue
+
+				// break
 			}
 
-			std::cout << "Engine shutting down...\n";
+			LOG_DEBUG("[GameEngine] Engine shutting down...");
 		}
 
-		bool init()
+		void resume()
 		{
-			return m_gameMaster.init(m_eventManager);
+			LOG_DEBUG("[GameEngine] Resume requested...");
+			m_gameMaster.resume();
+		}
+
+		void pause()
+		{
+			LOG_DEBUG("[GameEngine] Pause requested...");
+			m_gameMaster.pause();
+		}
+
+		void quit()
+		{
+			LOG_DEBUG("[GameEngine] Quit requested...");
+			if (m_gameMaster.isRunning())
+			{				
+				m_gameMaster.stop();
+			}
 		}
 
 	private:
-		GameMaster& m_gameMaster{};
-		EventManager<TActions>& m_eventManager{};
+		GameMaster& m_gameMaster;
+		EventManager& m_eventManager;
 	};
 }
-
-#endif // !GAMEENGINE_H

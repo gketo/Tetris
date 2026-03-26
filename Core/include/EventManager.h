@@ -1,49 +1,59 @@
-#ifndef EVENTMANAGER_H
-#define EVENTMANAGER_H
+#pragma once
 
-#include "CtrlInterface.h"
-#include "RendererInterface.h"
+#include "Action.h"
+#include "DeviceEvent.h" // KeyCode
+#include "IController.h"
+#include "Logger.h"
 
-#include <iostream>
 #include <map>
 #include <optional>
-#include <string>
 
 namespace Core {
 
-	template<typename TAction>
 	class EventManager
 	{
 	public: 
-		EventManager(const CtrlInterface& ci)
+		EventManager(const IController& ci)
 			: m_controller{ci}
 		{ }
 
-		void mapKey(KeyCode code, TAction action)
+		void init()
+		{
+			LOG_DEBUG("[EventManager] Initializing...");
+			bindController();
+		}
+
+		void bindKey(KeyCode code, Core::Action action)
 		{
 			m_eventMapping[code] = action;
 		}
 
-		std::optional<TAction> onEvent(bool lockpolling)
+		std::optional<Core::Action> onEvent()
 		{
-			std::cout << "EventManager onEvent()\n";
-			InputEvent event = m_controller.readUserEvent(lockpolling);
+			auto opt = m_controller.readEvent();
 			
-			if (!event.isValid) 
-				return std::nullopt;
-
-			event.print();
-
-			if (m_eventMapping.count(event.keyCode))
-				return m_eventMapping[event.keyCode];
+			if (opt) 
+			{
+				auto keycode = *opt;
+				// check if we registered the event (== if key value exists in m_eventMapping)
+				auto it = m_eventMapping.find(keycode);
+				if (it != m_eventMapping.end())
+				{
+					LOG_DEBUG("[EventManager] Registered event: %s", keycode_to_string(keycode).data());
+					return it->second;
+				}
+			}
 
 			return std::nullopt;
 		}
 	
 	private:
-		const CtrlInterface& m_controller;
-		std::map<KeyCode, TAction> m_eventMapping;
+		std::map<KeyCode, Core::Action> m_eventMapping;
+		const IController& m_controller;
+
+		void bindController()
+		{
+			m_controller.bind(*this);
+		}
 	};
 }
-
-#endif

@@ -1,18 +1,8 @@
-#ifndef TERMINAL_LIB_H
-#define TERMINAL_LIB_H
-
-#include <iostream>
-#include <windows.h>
+#pragma once
 
 namespace Core {
 
-    struct TerminalRawEvent
-    {
-        bool isValid;           // valid or unvalid event
-        WORD code;              // virtual key or device code
-        DWORD controlState;     // modifier / control bits
-        bool pressed;           // key down or up
-    };
+
 
     class TerminalLib
     {
@@ -40,5 +30,3 @@ namespace Core {
 
 
 }
-
-#endif

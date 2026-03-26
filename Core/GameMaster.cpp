@@ -1,10 +1,41 @@
 #include "GameMaster.h"
 
+#include "Action.h"
+#include "EventManager.h"
+
+#include <string>
+
 namespace Core {
 
-	bool GameMaster::init(Core::EventManager<Game::Action>& em)
+	void GameMaster::init(EventManager& em)
 	{
-		return m_currentGame.init(em);
+		LOG_DEBUG("[GameMaster] Initializing...");
+		m_currentGame.init(em);
+	}
+
+	std::string GameMaster::getRules()
+	{
+		return m_currentGame.rules();
+	}
+
+	bool GameMaster::update(Action action)
+	{
+		return m_currentGame.update(action);
+	}
+
+	void GameMaster::resume()
+	{
+		m_currentGame.resume();
+	}
+
+	void GameMaster::pause()
+	{
+		m_currentGame.pause();
+	}
+
+	void GameMaster::stop()
+	{
+		m_currentGame.stop();
 	}
 
 	bool GameMaster::isRunning()
@@ -12,9 +43,8 @@ namespace Core {
 		return m_currentGame.isRunning();
 	}
 
-	bool GameMaster::update(Game::Action action)
+	bool GameMaster::isPaused()
 	{
-		return m_currentGame.update(action);
+		return m_currentGame.isPaused();
 	}
-
 }

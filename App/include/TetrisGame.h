@@ -1,21 +1,24 @@
-#ifndef TETRIS_H
-#define TETRIS_H
+#pragma once
 
 #include "Game.h"
+#include "TetrisAction.h"
 
-namespace Game {
+#include <string>
 
-	class TetrisGame : public Game
+namespace Core {
+    class EventManager; // forward declaration
+}
+
+namespace Tetris {
+
+	class TetrisGame : public Game::Game
 	{
 	public:
-		bool init(Core::EventManager<Action>& em) override;
-		void mapKeys(Core::EventManager<Action>& em) override;
-		bool update(Action action) override;
-
+		void bindKeys(Core::EventManager& em) override;
+        void init(Core::EventManager& em) override;
+		std::string rules() override;
+        bool update(Core::Action action) override;
+		bool isRunning() const override;
 	};
 
 }
-
-
-
-#endif

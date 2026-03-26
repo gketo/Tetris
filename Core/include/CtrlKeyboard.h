@@ -1,25 +1,21 @@
-#ifndef CTRL_KEYBOARD_H
-#define CTRL_KEYBOARD_H
+#pragma once
 
-#include "CtrlInterface.h"
-#include "TerminalLib.h"
+#include "DeviceEvent.h" // KeyCode
+#include "IController.h"
+#include "IEventSource.h"
 
+#include <optional>
 
 namespace Core {
+	class EventManager; // forward declaration
 
-	class CtrlKeyboard : public CtrlInterface {
+	class CtrlKeyboard : public IController {
 	public:
-		CtrlKeyboard(DeviceType device, const TerminalLib& terminal)
-			: CtrlInterface{ device }
-			, m_terminalLib{ terminal }
+		CtrlKeyboard(const IEventSource& eventSource)
+			: IController{ eventSource }
 		{ }
 
-		// if ctrl and event.code == 17, only ctrl was pressed, else event.code = key pressed (ex. u = 85, ctrl + u = 85)
-		InputEvent readUserEvent(bool lockpolling) const override;
-
-	private:
-		const TerminalLib& m_terminalLib;
+		void bind(EventManager& em) const override;
+		std::optional<KeyCode> readEvent() const override;
 	};
 }
-
-#endif

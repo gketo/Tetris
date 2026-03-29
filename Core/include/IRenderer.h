@@ -1,14 +1,17 @@
 #pragma once
 
-#include <string>
+#include "Frame2D.h"
+#include "Lifecycle.h"
 
 namespace Core {
 
-    class IRenderer
+    class IRenderer : virtual public Lifecycle
     {
     public:
         virtual ~IRenderer() = default;
+        
+        // virtual void render(const IRenderable& renderable) const = 0;
+        virtual void render(const Frame2D& frame) const = 0;
 
-        virtual void renderText(std::string text) = 0;
     };
 }

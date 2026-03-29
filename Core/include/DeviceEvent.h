@@ -8,14 +8,14 @@ namespace Core {
 
     enum class SourceType
     {
-        terminal,
+        TERMINAL,
         None
     };
 
     enum class DeviceType 
 	{
 		None,
-		keyboard,
+		KEYBOARD,
 		Count
 	};
 
@@ -23,23 +23,23 @@ namespace Core {
 	{
 		None,
 		// keyboard
-		key_escape,
-		ctrl_P,
-		ctrl_Q,
-		key_P,
-		key_Q,
-		key_R,
-		spacebar,
-		arrow_up
+		KEY_ESCAPE,
+		CTRL_P,
+		CTRL_Q,
+		KEY_P,
+		KEY_Q,
+		KEY_R,
+		SPACEBAR,
+		ARROW_UP
 		//
 	};
 
-    // Helper function to convert SourceType enum to string
+	// Helper function to convert SourceType enum to string
 	inline std::string_view source_to_string(SourceType source)
 	{
 		switch (source)
 		{
-		case SourceType::terminal: return "terminal";
+		case SourceType::TERMINAL: return "TERMINAL";
 		case SourceType::None: return "None";
 		default: return "Unknown";
 		}
@@ -50,7 +50,7 @@ namespace Core {
 	{
 		switch (device)
 		{
-		case DeviceType::keyboard: return "keyboard";
+		case DeviceType::KEYBOARD: return "KEYBOARD";
 		case DeviceType::None: return "None";
 		default: return "Unknown";
 		}
@@ -61,14 +61,14 @@ namespace Core {
 	{
 		switch (keyCode)
 		{
-		case KeyCode::key_escape: return "Escape";
-		case KeyCode::ctrl_P: return "Ctrl+P";
-		case KeyCode::ctrl_Q: return "Ctrl+Q";
-		case KeyCode::key_P: return "Key_P";
-		case KeyCode::key_Q: return "Key_Q";
-		case KeyCode::key_R: return "Key_R";
-		case KeyCode::spacebar: return "Spacebar";
-		case KeyCode::arrow_up: return "ArrowUp";
+		case KeyCode::KEY_ESCAPE: return "ESCAPE";
+		case KeyCode::CTRL_P: return "CTRL_P";
+		case KeyCode::CTRL_Q: return "CTRL_Q";
+		case KeyCode::KEY_P: return "key_P";
+		case KeyCode::KEY_Q: return "key_Q";
+		case KeyCode::KEY_R: return "key_R";
+		case KeyCode::SPACEBAR: return "SPACEBAR";
+		case KeyCode::ARROW_UP: return "ARROW_UP";
 		case KeyCode::None: return "None";
 		default: return "Unknown";
 		}

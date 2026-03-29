@@ -6,6 +6,7 @@
 #include <optional>
 
 namespace Core {
+	
 	class EventManager; // forward declaration
 
 	class IController

@@ -30,11 +30,11 @@ namespace Core {
 
 		std::optional<Core::Action> onEvent()
 		{
-			auto opt = m_controller.readEvent();
+			auto keycodeOpt = m_controller.readEvent();
 			
-			if (opt) 
+			if (keycodeOpt) 
 			{
-				auto keycode = *opt;
+				auto keycode = *keycodeOpt;
 				// check if we registered the event (== if key value exists in m_eventMapping)
 				auto it = m_eventMapping.find(keycode);
 				if (it != m_eventMapping.end())

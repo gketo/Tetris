@@ -1,11 +1,13 @@
 #pragma once
 
 #include "Action.h"
+#include "Logger.h"
 
 #include <string>
 
 namespace Core {
     class EventManager; // forward declaration
+    class IRenderable;
 }
 
 namespace Game {
@@ -15,38 +17,39 @@ namespace Game {
     public:
         virtual ~Game() = default;
 
-        virtual void bindKeys(Core::EventManager& em) = 0;
         virtual void init(Core::EventManager& em) = 0;
+        virtual void bindKeys(Core::EventManager& em) = 0;
 		virtual std::string rules() = 0;
         virtual bool update(Core::Action action) = 0;
+        virtual bool isGameover() const = 0;
+        virtual const Core::IRenderable& getRenderData() const = 0;
+        void launch();
         void resume();
         void pause();
-        void stop();
-        virtual bool isRunning() const = 0;
-        virtual bool isPaused() const;
+        void terminate();
 
     protected:
-        bool m_pauseRequested{ false };
-        bool m_stopRequested{ false };
+        bool terminationRequested{ false };
 	};
+
+    inline void Game::launch()
+    {
+        LOG_DEBUG("[Game] Launched...");
+    }
 
     inline void Game::resume()
     {
-        m_pauseRequested = false;
+        LOG_DEBUG("[Game] Resumed...");
     }
 
     inline void Game::pause()
     {
-        m_pauseRequested = true;
+        LOG_DEBUG("[Game] Paused...");
     }
 
-    inline void Game::stop()
+    inline void Game::terminate()
     {
-        m_stopRequested = true;
-    }
-
-    inline bool Game::isPaused() const
-    {
-        return m_pauseRequested;
+        LOG_DEBUG("[Game] Received a termination request...");
+        terminationRequested = true;
     }
 }

@@ -9,7 +9,9 @@ namespace Core {
 
 	void GameMaster::init(EventManager& em)
 	{
-		LOG_DEBUG("[GameMaster] Initializing...");
+		LOG_DEBUG("[GameMaster] Initializing..."); 
+		Lifecycle::init();
+
 		m_currentGame.init(em);
 	}
 
@@ -23,28 +25,54 @@ namespace Core {
 		return m_currentGame.update(action);
 	}
 
-	void GameMaster::resume()
+	const IRenderable& GameMaster::getRenderData() const
 	{
+		return m_currentGame.getRenderData();
+	}
+
+
+	inline const char* GameMaster::caller() const  
+    {
+        return "GameMaster";
+    }
+
+	void GameMaster::onInit()
+	{
+		// generic init
+	}
+
+	void GameMaster::onLaunch()
+	{
+		LOG_DEBUG("[GameMaster] Launching game...");
+		m_currentGame.launch();
+	}
+	
+	void GameMaster::onResume()
+	{
+		LOG_DEBUG("[GameMaster] Resuming game...");
 		m_currentGame.resume();
 	}
 
-	void GameMaster::pause()
+	void GameMaster::onPause()
 	{
+		LOG_DEBUG("[GameMaster] Pausing game...");
 		m_currentGame.pause();
 	}
 
-	void GameMaster::stop()
+	void GameMaster::onTerminate() noexcept
 	{
-		m_currentGame.stop();
+		LOG_DEBUG("[GameMaster] Shutting down game...");
+		m_currentGame.terminate();
 	}
 
-	bool GameMaster::isRunning()
+	void GameMaster::onQuit() noexcept
 	{
-		return m_currentGame.isRunning();
+		LOG_DEBUG("[GameMaster] Quiting...");
+		// ex save data here
 	}
 
-	bool GameMaster::isPaused()
+	bool GameMaster::isGameover()
 	{
-		return m_currentGame.isPaused();
+		return m_currentGame.isGameover();
 	}
 }

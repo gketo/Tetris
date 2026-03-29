@@ -12,42 +12,43 @@ namespace Core {
 	void CtrlKeyboard::bind(EventManager& em) const
     {
 		LOG_DEBUG("[CtrlKeyboard] Binding keys...");
-        em.bindKey(KeyCode::spacebar, EngineAction::PLAY);
-        em.bindKey(KeyCode::key_R, EngineAction::RESUME);
-        em.bindKey(KeyCode::key_P, EngineAction::PAUSE);
-        em.bindKey(KeyCode::key_Q, EngineAction::QUIT);
+        em.bindKey(KeyCode::SPACEBAR, EngineAction::PLAY);
+        em.bindKey(KeyCode::KEY_R, EngineAction::RESUME);
+        em.bindKey(KeyCode::KEY_P, EngineAction::PAUSE);
+        em.bindKey(KeyCode::KEY_Q, EngineAction::QUIT);
     }
 
 	std::optional<KeyCode> CtrlKeyboard::readEvent() const
 	{
-        auto event = m_eventSource.readEvent();
+        auto eventOpt = m_eventSource.readEvent();
 	
-		if (!event)
+		if (!eventOpt)
 		{
 			return std::nullopt; // propagate
 		}
         
+        auto event = *eventOpt;
         //LOG_DEBUG("[CtrlKeyboard] readEvent: %s", event->to_string().c_str());
         
-        if (event->key == ' ')
+        if (event.key == ' ')
         {
-            return KeyCode::spacebar;
+            return KeyCode::SPACEBAR;
         }
 
-        if (event->isCtrl)
+        if (event.isCtrl)
         {
-            switch (event->key)     // interpret as ASCII int 
+            switch (event.key)     // interpret as ASCII int 
             { 
-            case 'P':   return KeyCode::ctrl_P;
-            case 'Q':   return KeyCode::ctrl_Q;
+            case 'P':   return KeyCode::CTRL_P;
+            case 'Q':   return KeyCode::CTRL_Q;
             }
         }
 
-        switch (event->key)     // interpret as ASCII int 
+        switch (event.key)     // interpret as ASCII int 
         { 
-        case 'p':   return KeyCode::key_P;
-        case 'q':   return KeyCode::key_Q;
-        case 'r':   return KeyCode::key_R;
+        case 'p':   return KeyCode::KEY_P;
+        case 'q':   return KeyCode::KEY_Q;
+        case 'r':   return KeyCode::KEY_R;
         }
 
         // treat any other event as unregistred

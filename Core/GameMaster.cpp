@@ -1,78 +1,80 @@
 #include "GameMaster.h"
 
-#include "Action.h"
+#include "ActionVariant.h"
+#include "DataVariant.h"
 #include "EventManager.h"
+#include "GameType.h"
+#include "IGame.h"
+#include "RulesData.h"
+#include "TetrisGame.h"
 
+#include <memory>
 #include <string>
 
 namespace Core {
 
-	void GameMaster::init(EventManager& em)
+	bool GameMaster::update(const ActionVariant& action)
 	{
-		LOG_DEBUG("[GameMaster] Initializing..."); 
-		Lifecycle::init();
-
-		m_currentGame.init(em);
+		return m_currentGame->update(action);
 	}
 
-	std::string GameMaster::getRules()
+	void GameMaster::setCurrentGame(Game::GameType gameType)
 	{
-		return m_currentGame.rules();
+		LOG_DEBUG("[GameMaster] Setting <%s> as current game...", Game::gametype_to_string(gameType)); 
+		switch (gameType)
+		{
+		case Game::GameType::TETRIS:
+			m_currentGame = std::make_unique<Game::Tetris::TetrisGame>();
+			break;
+		case Game::GameType::TEST:
+			m_currentGame = std::make_unique<Game::Tetris::TetrisGame>();
+			break;
+		default:
+			throw std::runtime_error("GameMaster: trying to setCurrentGame() unexisting game");
+			break;
+		}
 	}
 
-	bool GameMaster::update(Action action)
+	void GameMaster::unsetCurrentGame()
 	{
-		return m_currentGame.update(action);
+		m_currentGame = nullptr;
 	}
 
-	const IRenderable& GameMaster::getRenderData() const
+	void GameMaster::initGame(EventManager& em)
 	{
-		return m_currentGame.getRenderData();
+		LOG_DEBUG("[GameMaster] Initializing current game..."); 
+		m_currentGame->init(em);
 	}
 
-
-	inline const char* GameMaster::caller() const  
-    {
-        return "GameMaster";
-    }
-
-	void GameMaster::onInit()
+	void GameMaster::resetGame()
 	{
-		// generic init
+		m_currentGame->reset();
 	}
 
-	void GameMaster::onLaunch()
+	bool GameMaster::isGameOver()
 	{
-		LOG_DEBUG("[GameMaster] Launching game...");
-		m_currentGame.launch();
-	}
-	
-	void GameMaster::onResume()
-	{
-		LOG_DEBUG("[GameMaster] Resuming game...");
-		m_currentGame.resume();
+		return m_currentGame->isGameOver();
 	}
 
-	void GameMaster::onPause()
+	std::unique_ptr<DataVariant> GameMaster::getRules() const
 	{
-		LOG_DEBUG("[GameMaster] Pausing game...");
-		m_currentGame.pause();
+		return std::make_unique<DataVariant>(m_currentGame->getRules());
 	}
 
-	void GameMaster::onTerminate() noexcept
+ 	std::unique_ptr<DataVariant> GameMaster::getRenderData() const
 	{
-		LOG_DEBUG("[GameMaster] Shutting down game...");
-		m_currentGame.terminate();
+		return std::make_unique<DataVariant>(m_currentGame->getData());
 	}
 
-	void GameMaster::onQuit() noexcept
-	{
-		LOG_DEBUG("[GameMaster] Quiting...");
-		// ex save data here
-	}
+	// void GameMaster::onTerminate() noexcept
+	// {
+	// 	LOG_DEBUG("[GameMaster] Shutting down game...");
+	// 	m_currentGame->terminate();
+	// }
 
-	bool GameMaster::isGameover()
-	{
-		return m_currentGame.isGameover();
-	}
+	// void GameMaster::onQuit() noexcept
+	// {
+	// 	LOG_DEBUG("[GameMaster] Quiting...");
+	// 	// ex save data here
+	// }
 }

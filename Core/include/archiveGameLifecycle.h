@@ -1,3 +1,5 @@
+#ifdef EXCLUDE_THIS_FILE
+
 // chatgpt
 #pragma once
 
@@ -76,3 +78,5 @@ namespace Core {
     };
 
 }
+
+#endif

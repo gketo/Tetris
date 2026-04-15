@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-namespace Tetris {
+namespace Game::Tetris {
 
     enum class TetrisAction
     {
@@ -19,7 +19,6 @@ namespace Tetris {
         {
         case TetrisAction::ROTATE_LEFT: return "ROTATE_LEFT";
         case TetrisAction::ROTATE_RIGHT: return "ROTATE_RIGHT";
-        default: return "Unknown TetrisAction";
         }
     }
 }

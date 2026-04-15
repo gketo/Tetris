@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DeviceEvent.h" // KeyCode
+#include "DeviceEvent.h"
 #include "IController.h"
 #include "IEventSource.h"
 
@@ -15,7 +15,7 @@ namespace Core {
 			: IController{ eventSource }
 		{ }
 
-		void bind(EventManager& em) const override;
-		std::optional<KeyCode> readEvent() const override;
+		// void bind(EventManager& em) const override;
+		std::optional<DeviceEvent> readEvent() const override;
 	};
 }

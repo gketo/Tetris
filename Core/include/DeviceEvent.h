@@ -1,89 +1,47 @@
 #pragma once
 
+#include "DeviceType.h"
+#include "KeyCode.h"
+#include "SourceType.h"
+
 #include <format>
+#include <optional>
 #include <string>
-#include <string_view>
 
 namespace Core {
 
-    enum class SourceType
-    {
-        TERMINAL,
-        None
-    };
-
-    enum class DeviceType 
-	{
-		None,
-		KEYBOARD,
-		Count
-	};
-
-	enum class KeyCode
-	{
-		None,
-		// keyboard
-		KEY_ESCAPE,
-		CTRL_P,
-		CTRL_Q,
-		KEY_P,
-		KEY_Q,
-		KEY_R,
-		SPACEBAR,
-		ARROW_UP
-		//
-	};
-
-	// Helper function to convert SourceType enum to string
-	inline std::string_view source_to_string(SourceType source)
-	{
-		switch (source)
-		{
-		case SourceType::TERMINAL: return "TERMINAL";
-		case SourceType::None: return "None";
-		default: return "Unknown";
-		}
-	}
-
-    // Helper function to convert DeviceType enum to string
-	inline std::string_view device_to_string(DeviceType device)
-	{
-		switch (device)
-		{
-		case DeviceType::KEYBOARD: return "KEYBOARD";
-		case DeviceType::None: return "None";
-		default: return "Unknown";
-		}
-	}
-
-    // Helper function to convert KeyCode enum to string
-	inline std::string_view keycode_to_string(KeyCode keyCode)
-	{
-		switch (keyCode)
-		{
-		case KeyCode::KEY_ESCAPE: return "ESCAPE";
-		case KeyCode::CTRL_P: return "CTRL_P";
-		case KeyCode::CTRL_Q: return "CTRL_Q";
-		case KeyCode::KEY_P: return "key_P";
-		case KeyCode::KEY_Q: return "key_Q";
-		case KeyCode::KEY_R: return "key_R";
-		case KeyCode::SPACEBAR: return "SPACEBAR";
-		case KeyCode::ARROW_UP: return "ARROW_UP";
-		case KeyCode::None: return "None";
-		default: return "Unknown";
-		}
-	}
-
     struct DeviceEvent
     {
+        DeviceEvent() = default;
+
+        DeviceEvent(SourceType source, DeviceType device, KeyCode code, std::optional<char> ch = std::nullopt, KeyModifier modifiers = KeyModifier::None)
+        : source{ source }
+        , device{ device }
+        , code{ code }
+        , ch{ ch }
+        , modifiers{ modifiers }
+        {}
+
         SourceType source{ SourceType::None };
         DeviceType device{ DeviceType::None };
-        bool isCtrl{ false };
-        int key{ -1 };
+        KeyCode code{ KeyCode::None };
+        std::optional<char> ch;
+        KeyModifier modifiers{ KeyModifier::None };
+
+        bool operator==(const DeviceEvent&) const = default;
+        // bool operator==(const DeviceEvent& other) const
+        // {
+        //     return  source      == other.source  &&
+        //             device      == other.device  &&
+        //             code        == other.code    &&
+        //             ch          == other.ch      &&
+        //             modifiers   == other.modifiers;
+        // }
 
         std::string to_string() const
         {
-            return std::format("[DeviceEvent] -> Source: {}, Device: {}, isCtrl: {}, key: {}", source_to_string(source), device_to_string(device), isCtrl, key);
+            return std::format("[DeviceEvent] -> Source: {}, Device: {}, KeyCode: {}, KeyModifiers: {}, ch (opt): {}", source_to_string(source), device_to_string(device), keycode_to_string(code), keymodifier_to_string(modifiers), (ch ? std::string{1, *ch} : "None"));
         }
     };
+	
 }

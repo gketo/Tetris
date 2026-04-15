@@ -1,42 +1,87 @@
 #pragma once
 
-#include "TextAttributs.h"
+#include "GraphicsUtils.h"
 
-#include <vector>
+#include <unordered_set>
 
-namespace Core
-{
+namespace Core::Grid2D {
+
+    namespace GfxUtils = Core::Graphics::Utils;
+    
+    template<typename T>
     class Cell
     {
     public:
-        char ch;
-        Color fg;
-        Color bg;
+        T content;
 
         // getter
-        const std::vector<Attr>& attrs() const
+        const GfxUtils::Color& fg() const
         {
-            return m_attrs;
+            return m_style.fg;
         }
 
-        void addAttr(const Attr& attr)
+        const GfxUtils::Color& bg() const
         {
-            // Keep attrs sorted on insertion
-            auto it = std::lower_bound(m_attrs.begin(), m_attrs.end(), attr);
-            // only insert if not already present (optional)
-            if (it == m_attrs.end() || *it != attr)
+            return m_style.bg;
+        }
+
+        const std::unordered_set<GfxUtils::Attr>& attrs() const
+        {
+            return m_style.attrs;
+        }
+
+        // setter
+        void setFg(GfxUtils::Color color)
+        {
+            m_style.fg = color;
+        }
+
+        void setBg(GfxUtils::Color color)
+        {
+            m_style.bg = color;
+        }
+
+        void addAttr(const GfxUtils::Attr& attr)
+        {
+            if (attr == GfxUtils::Attr::Default)
             {
-                m_attrs.insert(it, attr);
+                clearAttrs();
+                return;
+            }
+
+            // only insert if not already present
+            auto [it, inserted] = m_style.attrs.insert(attr);
+            if (inserted)
+            {
+                removeAttr(GfxUtils::Attr::Default);
+            }
+        }
+
+        void removeAttr(const GfxUtils::Attr& attr)
+        {
+            // erase the attribute if it exists
+            m_style.attrs.erase(attr);
+
+            // ensure at least one attribute exists
+            if (m_style.attrs.empty())
+            {
+                m_style.attrs.insert(GfxUtils::Attr::Default);
             }
         }
 
         void clearAttrs()
         {
-            m_attrs.clear();
+            m_style.attrs.clear();
+            m_style.attrs.insert(GfxUtils::Attr::Default);
+        }
+
+        bool hasAttr(const GfxUtils::Attr& attr) const
+        {
+            return m_style.attrs.contains(attr);
         }
 
     private:
-        std::vector<Attr> m_attrs;
+        GfxUtils::Style m_style;
     };
 
-} // namespace Core::Data
+}

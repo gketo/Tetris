@@ -1,3 +1,5 @@
+#ifdef EXCLUDE_THIS_FILE
+
 #include "TerminalLib.h"
 
 #include <iostream>
@@ -9,7 +11,7 @@ namespace Core {
 
     struct TerminalRawEventWin
     {
-        bool isValid;           // valid or unvalid event
+        bool isValid;           // valid or invalid event
         WORD code;              // virtual key or device code
         DWORD controlState;     // modifier / control bits
         bool pressed;           // key down or up
@@ -75,3 +77,7 @@ namespace Core {
     }
     
 }
+
+#endif
+
+#endif

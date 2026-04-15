@@ -1,7 +1,9 @@
 #pragma once
 
-namespace Core
-{
+#include <unordered_set>
+
+namespace Core::Graphics::Utils {
+    
     enum class Color
     { 
         BLACK,
@@ -10,18 +12,28 @@ namespace Core
         YELLOW,
         BLUE,
         MAGENTA,
-        CYAN,
+        CYAN,   
         WHITE,
+        BRIGHT_WHITE,
         Fg_Default,
         Bg_Default,
-        Unvalid
+        Invalid
     };
    
     enum class Attr
     {
+        // for text based rendering
         BOLD,
         ITALICS,
         UNDERLINED,
+        //
         Default
     }; 
-} // namespace Core::Graphics::Utils::Typo
+
+    struct Style
+    {
+        Color fg;
+        Color bg;
+        std::unordered_set<Attr> attrs{ Attr::Default };
+    };
+}

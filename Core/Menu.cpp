@@ -1,0 +1,52 @@
+#include "Menu.h"
+
+#include "DataVariant.h"
+#include "GameMaster.h"
+#include "MenuData.h"
+
+#include <variant>
+#include <vector>
+
+namespace Core {
+
+    void Menu::clear()
+    {
+        m_menuData.clear();
+        m_selectedIndex = 0;
+    }
+
+    void Menu::build(MenuData md)
+    {
+        clear();
+        m_menuData = std::move(md);
+    }
+
+    const MenuData& Menu::getMenuData() const
+    {
+        return m_menuData;
+    }
+
+    void Menu::moveUp()
+    {
+        if (m_selectedIndex > 0)
+        {
+            --m_selectedIndex;
+        }
+        m_menuData.setSelectedIndex(m_selectedIndex);
+    }
+
+    void Menu::moveDown()
+    {
+        if (m_selectedIndex < m_menuData.size() - 1)
+        {
+            ++m_selectedIndex;
+        }
+        m_menuData.setSelectedIndex(m_selectedIndex);
+    }
+
+    const MenuEntry& Menu::getSelectedEntry()
+    {
+        return m_menuData.getEntry(m_selectedIndex);
+    }
+    
+}

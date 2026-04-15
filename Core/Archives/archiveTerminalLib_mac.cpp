@@ -1,3 +1,6 @@
+#ifdef EXCLUDE_THIS_FILE
+
+
 #include "TerminalLib.h"
 
 
@@ -58,3 +61,5 @@ namespace Core {
         return rawEvent;
     }
 }
+
+#endif

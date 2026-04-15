@@ -1,3 +1,5 @@
+#ifdef EXCLUDE_THIS_FILE
+
 #pragma once
 
 namespace Core {
@@ -30,3 +32,5 @@ namespace Core {
 
 
 }
+
+#endif

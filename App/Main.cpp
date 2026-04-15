@@ -1,10 +1,6 @@
 // Main.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-#include "CtrlKeyboard.h"
-#include "EventManager.h"
-#include "Game.h"
-#include "GameEngine.h"
-#include "ITerminalCore.h"
+#include "LauncherApp.h"
 #include "Logger.h"
 
 /* DEBUG */
@@ -27,39 +23,21 @@ int main()
     //signal(SIGABRT, crashHandler); // catches abort caused by pure virtual call
 
     LOG_DEBUG("[Main.cpp] Hello World!");
-
-    Core::GameMaster gm{};
-
-    auto terminal {Core::createTerminalCore()};
-    if (terminal)
-    {
-        terminal->init();
-    }
-
-    Core::CtrlKeyboard controller{*terminal};
-
-    Core::EventManager em{ controller };
-
-    Core::GameEngine ge{ gm, em , *terminal};
+    
+    Core::LauncherApp laucher{};
 
     try 
     {
-        ge.init();
+        laucher.launch();
     } 
-    catch (...)
+    catch (const std::exception& e) 
     {
-        LOG_DEBUG("[Main.cpp] Can't initialize GameEngine");
+        LOG_DEBUG("[Main.cpp] Can't launch Launcher: %s", e.what());
     }
-
-    try 
+    catch (...) 
     {
-        ge.run();
-    } 
-    catch (...)
-    {
-        LOG_DEBUG("[Main.cpp] Can't run GameEngine");
+        LOG_DEBUG("[Main.cpp] Can't launch Launcher: unknown exception");
     }
-
 
     return 0;
 }

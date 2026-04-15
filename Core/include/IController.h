@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DeviceEvent.h" // KeyCode
+#include "DeviceEvent.h"
 #include "IEventSource.h"
 
 #include <optional>
@@ -18,8 +18,8 @@ namespace Core {
 
 		virtual ~IController() = default;
 
-		virtual void bind(EventManager& em) const = 0;
-		virtual std::optional<KeyCode> readEvent() const = 0;
+		// virtual void bind(EventManager& em) const = 0;
+		virtual std::optional<DeviceEvent> readEvent() const = 0;
 
 	protected:
 		const IEventSource& m_eventSource;

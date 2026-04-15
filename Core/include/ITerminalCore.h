@@ -8,6 +8,21 @@
 
 #include <memory>
 #include <optional>
+#include <utility>
+
+// forward declaration
+namespace Core {
+    class MenuData;
+}
+
+namespace Game {
+    class RulesData;
+}
+
+namespace Core::Grid2D {
+    template<typename T>
+    class Frame2D;
+}
 
 namespace Core {
 
@@ -16,56 +31,30 @@ namespace Core {
     public:
         virtual ~ITerminalCore() = default;
 
+        // rendering
+        virtual void render(const Core::MenuData& menuData) const = 0;
+        virtual void render(const Game::RulesData& rules) const = 0;
+        virtual void render(const Core::Grid2D::Frame2D<char>&frame) const = 0;
+
     protected:
-        const char* caller() const override; // for clearer logging
-        void onInit() override;
-        void onTerminate() noexcept override;
-		void onQuit() noexcept override;
+        int m_winHeight;   // windows height in rows (starts at 1 in termios)
+        int m_winWidth;   // windows width in cols (starts at 1 in termios)
+        int m_crow;   // cursor pos
+        int m_ccol;   // cursor pos
 
-
-    private:
         virtual bool enableRawMode() = 0;
         virtual bool disableRawMode() = 0;
+        
+        virtual std::pair<int, int> getCursorPosition() const = 0;
+        virtual bool updateCursorPosition() = 0;
+        virtual bool updateWindowSize() = 0;
 
-        // virtual void clearScreen(std::string& framestr) const = 0;
-        // virtual void hideCursor(std::string& framestr) const = 0;
-        // virtual void showCursor(std::string& framestr) const = 0;
+        virtual void clearScreen() const = 0;
+        virtual void hideCursor() const = 0;
+        virtual void showCursor() const = 0;
+        virtual void moveCursor(int row, int col) const = 0;
 	};
-
-    inline const char* ITerminalCore::caller() const  
-    {
-        return "ITerminalCore";
-    }
-
-    inline void ITerminalCore::onInit()
-    {
-        if (!enableRawMode())
-        {
-            throw std::runtime_error("[ERROR] Couldn't init MacOS Terminal.\n");
-        }
-    }
-
-    inline void ITerminalCore::onTerminate() noexcept
-    {
-        LOG_DEBUG("[TerminalCore] Shutting down...");
-        try 
-        {
-            disableRawMode();
-        }
-        catch (...) 
-        {
-            LOG_ERROR("[TerminalCore] Shutdown failed.\n");
-            return;
-        }
-        LOG_DEBUG("[TerminalCore] Shutdown complete...");
-    }
-
-    inline void ITerminalCore::onQuit() noexcept
-	{
-		LOG_DEBUG("[TerminalCore] Quiting...");
-        // save data here
-	}
-
+ 
     std::unique_ptr<ITerminalCore> createTerminalCore();
 
 }

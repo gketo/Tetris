@@ -1,40 +1,42 @@
 #pragma once
 
-#include "Action.h"
-#include "Game.h"
-#include "GameLifecycle.h"
+#include "ActionVariant.h"
+#include "DataVariant.h"
+#include "GameType.h"
+#include "IGame.h"
 
-#include "TetrisGame.h" // debug dbg
-
+#include <map>
+#include <memory>
 #include <string>
+
+namespace Game {
+	class RulesData;
+}
+
+namespace Core {
+	// forward declaration
+	class EventManager; 
+}
 
 namespace Core {
 
-	class EventManager; // forward declaration
-	class IRenderable;
-
-	class GameMaster : public GameLifecycle
+	class GameMaster
 	{
 	public:
-		void init(Core::EventManager& em);
-		std::string getRules();
-		bool update(Action action);
-		const IRenderable& getRenderData() const;
+		bool update(const ActionVariant& action);
 
-		const char* caller() const override;
-		void onInit() override;
-		void onLaunch() override;
-		void onResume() override;
-		void onPause() override;
-		void onTerminate() noexcept override;
-		void onQuit() noexcept override;
+		void setCurrentGame(Game::GameType gameType);
+		void unsetCurrentGame();
 
-		bool isGameover();
+		void initGame(EventManager& em);
+		void resetGame();
+		bool isGameOver();
 
+		std::unique_ptr<DataVariant> getRules() const;
+		std::unique_ptr<DataVariant> getRenderData() const;
 
 	private:
-		Tetris::TetrisGame m_tetris{}; // debug dbg
-		Game::Game& m_currentGame{ m_tetris };
+		std::unique_ptr<Game::IGame> m_currentGame{ nullptr };
 	};
 
 }

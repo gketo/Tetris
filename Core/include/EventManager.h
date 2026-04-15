@@ -1,59 +1,48 @@
 #pragma once
 
-#include "Action.h"
+#include "ActionVariant.h"
 #include "DeviceEvent.h" // KeyCode
+#include "InputBinding.h"
 #include "IController.h"
-#include "Logger.h"
 
+#include <algorithm>
 #include <map>
+#include <memory>
 #include <optional>
+#include <queue>
+#include <unordered_set>
+#include <vector>
 
 namespace Core {
+
+
+	using IControllerPtr = std::unique_ptr<IController>;
+	using ActionQueue = std::queue<Core::ActionVariant>;
 
 	class EventManager
 	{
 	public: 
-		EventManager(const IController& ci)
-			: m_controller{ci}
-		{ }
+		// EventManager(const IController& ci)
+		// 	: m_controller{ci}
+		// { }
 
-		void init()
-		{
-			LOG_DEBUG("[EventManager] Initializing...");
-			bindController();
-		}
+		void addController(IControllerPtr ci);
 
-		void bindKey(KeyCode code, Core::Action action)
-		{
-			m_eventMapping[code] = action;
-		}
+		void clearInputBindings();
+		void registerInputBindings(std::vector<InputBinding> bindings);
+		// void bindKey(KeyCode code, ActionVariant action);
 
-		std::optional<Core::Action> onEvent()
-		{
-			auto keycodeOpt = m_controller.readEvent();
-			
-			if (keycodeOpt) 
-			{
-				auto keycode = *keycodeOpt;
-				// check if we registered the event (== if key value exists in m_eventMapping)
-				auto it = m_eventMapping.find(keycode);
-				if (it != m_eventMapping.end())
-				{
-					LOG_DEBUG("[EventManager] Registered event: %s", keycode_to_string(keycode).data());
-					return it->second;
-				}
-			}
-
-			return std::nullopt;
-		}
+		void pollEvents();
+		std::optional<Core::ActionVariant> popEvent();
+		void clearPendingEvents();
 	
 	private:
-		std::map<KeyCode, Core::Action> m_eventMapping;
-		const IController& m_controller;
+		std::map<KeyCode, Core::ActionVariant> m_eventMapping;
+		std::vector<InputBinding> m_registeredInputBindings;
+		std::vector<IControllerPtr> m_controllers;
+		ActionQueue m_pendingEvents;
 
-		void bindController()
-		{
-			m_controller.bind(*this);
-		}
+		void bindController();
 	};
+
 }

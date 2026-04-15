@@ -24,9 +24,10 @@ class Lifecycle
                 return;
             }
 
-            LOG_DEBUG("[Lifecycle] %s: Initializing...", caller());
+            LOG_DEBUG("[Lifecycle] %s: Initialization requested...", caller());
             onInit();   // propagate exceptions
-            
+            LOG_DEBUG("[Lifecycle] %s: Initialization completed...", caller());
+
             m_isInitialized = true;
             m_isTerminated = false;
         }
@@ -44,8 +45,9 @@ class Lifecycle
                 return;
             }
 
-            LOG_DEBUG("[Lifecycle] %s: Shutting down...", caller());
+            LOG_DEBUG("[Lifecycle] %s: Termination requested...", caller());
             onTerminate();
+            LOG_DEBUG("[Lifecycle] %s: Termination completed...", caller());
 
             m_isRunning = false;
             m_isTerminated = true;
@@ -53,8 +55,9 @@ class Lifecycle
 
         void quit() noexcept
         {
+            LOG_DEBUG("[Lifecycle] %s: Quitting requested...", caller());
             onQuit();
-            terminate();
+            LOG_DEBUG("[Lifecycle] %s: Quitting completed...", caller());
         }
 
     protected:

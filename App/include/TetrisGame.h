@@ -1,27 +1,30 @@
 #pragma once
 
-#include "Game.h"
+#include "DataVariant.h"
+#include "IGame.h"
 #include "TetrisAction.h"
-
-#include <string>
 
 namespace Core {
     class EventManager; // forward declaration
-	class IRenderable;
 }
 
-namespace Tetris {
+namespace Game::Tetris {
 
-	class TetrisGame : public Game::Game
+	class TetrisGame : public IGame
 	{
 	public:
         void init(Core::EventManager& em) override;
+		void reset() override;
 		void bindKeys(Core::EventManager& em) override;
-		std::string rules() override;
-        bool update(Core::Action action) override;
-		bool isGameover() const override;
+        bool update(Core::ActionVariant action) override;
+		bool isGameOver() const override;
 
-        const Core::IRenderable& getRenderData() const override;
+    	const Core::DataVariant& getData() const override;
+
+	private:
+		void setRules() override;
+        //debug
+        void setData();
 	};
 
 }

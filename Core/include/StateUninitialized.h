@@ -21,7 +21,8 @@ namespace Core::Engine {
     inline void StateUninitialized::enter()
     {
         LOG_DEBUG("[GameEngineSM] StateUninitialized : enter()...");
-        // do nothing
+        // this one is always finished to allow transition
+        m_isFinished = true;
     }
 
     inline void StateUninitialized::exit()
@@ -38,6 +39,6 @@ namespace Core::Engine {
 
     inline bool StateUninitialized::isFinished() const
     {
-        return true;
+        return m_isFinished;
     }
 }

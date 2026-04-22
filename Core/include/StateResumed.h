@@ -36,11 +36,12 @@ namespace Core::Engine {
         if (auto ge = dynamic_cast<GameEngine*>(m_context))
         {
             ge->m_sm.setNextState(std::make_unique<StateRunning>(m_context));
+            m_isFinished = true;
         }
     }
 
     inline bool StateResumed::isFinished() const
     {
-        return true;
+        return m_isFinished;
     }
 }

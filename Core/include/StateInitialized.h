@@ -22,7 +22,10 @@ namespace Core::Engine {
     inline void StateInitialized::enter()
     {
         LOG_DEBUG("[GameEngineSM] StateInitialized : enter()...");
-        // do nothing
+        if (auto ge = dynamic_cast<GameEngine*>(m_context))
+        {
+            ge->m_renderer->clearScreen();
+        }
     }
 
     inline void StateInitialized::exit()
@@ -34,17 +37,17 @@ namespace Core::Engine {
     inline void StateInitialized::update()
     {
         LOG_DEBUG("[GameEngineSM] StateInitialized : update()...");
-        // do nothing
         if (auto ge = dynamic_cast<GameEngine*>(m_context))
         {
-            ge->m_sm.setNextState(std::make_unique<StateDisplayRules>(m_context));
+            ge->m_sm.setNextState(std::make_unique<StateRunning>(m_context));
+            m_isFinished = true;
         }
 
     }
 
     inline bool StateInitialized::isFinished() const
     {
-        return true;
+        return m_isFinished;
     }
 
 }

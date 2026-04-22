@@ -25,17 +25,18 @@ namespace Core {
 
     inline void StateMachine::update() 
     {
-        if (!m_isTransitioning)
+        if (m_isTransitioning)
         {
-            if (m_state) 
-            {
-                m_state->update();
-            }
-            if (m_nextState && m_nextState != m_state)
-            {
-                transitionTo(std::move(m_nextState));
-                m_nextState = nullptr;
-            }
+            return;
+        }
+        if (m_state)
+        {
+            m_state->update();
+        }
+        if (m_nextState && m_nextState != m_state)
+        {
+            transitionTo(std::move(m_nextState));
+            m_nextState = nullptr;
         }
     }
 
@@ -54,6 +55,7 @@ namespace Core {
 
     inline void StateMachine::transitionTo(std::unique_ptr<IState> state) 
     {
+        if (m_state && !m_state->isFinished()) { return; }
         m_isTransitioning = true;
         if (m_state) { m_state->exit(); }
         m_state = std::move(state);

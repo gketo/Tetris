@@ -54,10 +54,11 @@ namespace Core::Engine {
                     switch (std::get<MenuAction>(*actionVariantOpt))
                     {
                     case MenuAction::MENU_ACCEPT:
-                        ge->m_sm.setNextState(std::make_unique<StateRunning>(m_context));
+                        ge->m_sm.setNextState(std::make_unique<StatePaused>(m_context));
+                        m_isFinished = true;
                         return;
-                    case MenuAction::MENU_CANCEL:
-                        ge->m_sm.setNextState(std::make_unique<StateQuitted>(m_context));
+                    // case MenuAction::MENU_CANCEL:
+                        // ge->m_sm.setNextState(std::make_unique<StateQuitted>(m_context));
                         return;
                     default:
                         LOG_ERROR("[GameEngineSM] StateDisplayRules: Unkown action");
@@ -65,11 +66,12 @@ namespace Core::Engine {
                 }
             }
             ge->m_renderer->submit(std::move(ge->m_gameMaster.getRules()));
+            ge->m_renderer->update();
         }
     }
 
     inline bool StateDisplayRules::isFinished() const 
     { 
-        return true; 
+        return m_isFinished; 
     }
 }

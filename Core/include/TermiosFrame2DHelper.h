@@ -17,12 +17,12 @@ namespace Core::Terminal::Termios {
 
     using Core::Grid2D::Cell;
 
-    struct TermiosFrameRenderHelper
+    struct TermiosFrame2DRenderHelper
     {
     public:
         // returns frame as terminal printable string
         template<typename TCell>
-        static std::string to_string(const Core::Grid2D::Frame2D<TCell>& frame);
+        static std::string to_string(const ITerminalCore& terminal, const Core::Grid2D::Frame2D<TCell>& frame);
 
     private:
         template<typename TCell>
@@ -31,7 +31,7 @@ namespace Core::Terminal::Termios {
     };
 
     template<typename TCell>
-    std::string TermiosFrameRenderHelper::to_string(const Core::Grid2D::Frame2D<TCell>& frame)
+    std::string TermiosFrame2DRenderHelper::to_string(const ITerminalCore& terminal, const Core::Grid2D::Frame2D<TCell>& frame)
     {
         // Ensure the cell content is printable (char for terminal)
         static_assert(std::is_same_v<decltype(frame.getCell(0,0).content), char>, "Frame2D Render: to_string only works with Cell<stringable>");
@@ -44,57 +44,72 @@ namespace Core::Terminal::Termios {
             return frameStr;
         }
 
+        terminal.hideCursor(frameStr);
+        terminal.cursorHome(frameStr);
+
+         // get windows size 
+        auto termConfig = terminal.getTerminalConfig();
+        auto winHeight = termConfig.height;
+        auto winWidth = termConfig.width;
+
         Cell<char> prevCell{};
         prevCell.setFg(GfxUtils::Color::Invalid);
         prevCell.setBg(GfxUtils::Color::Invalid);
 
-        frameStr += CURSOR_HOME.data();
-
-        for (const auto& row : grid)
+        // for each line in window
+        for (int row = 0; row < winHeight; row++)
         {
-            std::string rowStr{};
-            rowStr += ERASE_RIGHT.data();
-            rowStr += TermiosUtils::RESET_COLORS.data();
-            
-            for (size_t col = 0; col < row.size(); ++col)
+            terminal.moveCursor(frameStr, row, 0);
+            if (row < grid.size())
             {
-                const auto& currCell = row[col];
-
-                const auto& styleDiff = computeCellStyleDiff(currCell, prevCell);
-
-                rowStr += TermiosUtils::Termios_toAnsiFgColor(styleDiff.fg);
-                rowStr += TermiosUtils::Termios_toAnsiBgColor(styleDiff.bg);
-                for (const auto& attr : styleDiff.attrs)
-                {
-                    rowStr += TermiosUtils::Termios_toAnsiTextAttr(attr);
-                }
+                const auto& rrow = grid[row];
                 
-                rowStr.push_back(currCell.content);
-
-                prevCell = currCell;
-
-                // end of line
-                if (col == row.size() - 1)
+                std::string rowStr{};
+                rowStr += TermiosUtils::ERASE_LINE_TORIGHT;
+                rowStr += TermiosUtils::RESET_COLORS;
+                
+                for (size_t col = 0; col < rrow.size(); col++)
                 {
-                    rowStr.append(TermiosUtils::RESET_COLORS.data());      // reset colors
-                    rowStr.push_back('\r');
-                    rowStr.push_back('\n');
+                    const auto& currCell = rrow[col];
 
-                    prevCell.setFg(GfxUtils::Color::Invalid);
-                    prevCell.setBg(GfxUtils::Color::Invalid);
+                    const auto& styleDiff = computeCellStyleDiff(currCell, prevCell);
 
+                    rowStr += TermiosUtils::Termios_toAnsiFgColor(styleDiff.fg);
+                    rowStr += TermiosUtils::Termios_toAnsiBgColor(styleDiff.bg);
+                    for (const auto& attr : styleDiff.attrs)
+                    {
+                        rowStr += TermiosUtils::Termios_toAnsiTextAttr(attr);
+                    }
+                    
+                    rowStr.push_back(currCell.content);
+
+                    prevCell = currCell;
+
+                    // end of line
+                    if (col == rrow.size() - 1)
+                    {
+                        rowStr += TermiosUtils::RESET_COLORS;      // reset colors
+
+                        prevCell.setFg(GfxUtils::Color::Invalid);
+                        prevCell.setBg(GfxUtils::Color::Invalid);
+                    }
                 }
+                frameStr += rowStr;
             }
-            frameStr += rowStr;
+            else
+            {
+                frameStr += TermiosUtils::ERASE_LINE_TORIGHT;
+            }
         }
-
-        // frameStr += CURSOR_HOME.data();
+        frameStr += TermiosUtils::RESET_ATTRS;
+        frameStr += TermiosUtils::RESET_COLORS;
+        terminal.cursorHome(frameStr);
 
         return frameStr;
     }
 
     template<typename TCell>
-    GfxUtils::Style TermiosFrameRenderHelper::computeCellStyleDiff(const Cell<TCell>& current, const Cell<TCell>& previous)
+    GfxUtils::Style TermiosFrame2DRenderHelper::computeCellStyleDiff(const Cell<TCell>& current, const Cell<TCell>& previous)
     {
         // style different escape sequences
         GfxUtils::Style styleDiff{};

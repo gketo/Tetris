@@ -27,16 +27,20 @@ namespace Core {
             m_renderSystem->render(*data, *m_renderVisitor);
         }
     }
+    // todo why do i have two versions
+//     void IRenderer::render(const DataVariant& dataVar)
+//     {
+//         if (!m_renderVisitor)
+//         {
+//             throw std::runtime_error("IRenderer: Render() renderVisitor not set. Use setRenderVisitor()");
+//         }
 
-    void IRenderer::render(const DataVariant& dataVar)
-    {
-        if (!m_renderVisitor)
-        {
-            throw std::runtime_error("IRenderer: Render() renderVisitor not set. Use setRenderVisitor()");
-        }
+//         m_renderSystem->render(dataVar, *m_renderVisitor);
+//     }
 
-        m_renderSystem->render(dataVar, *m_renderVisitor);
-    }
+
+
+}
 
     // void IRenderer::render(const MenuData& menuData)
     // {
@@ -57,5 +61,3 @@ namespace Core {
 
     //     m_renderSystem->render(rules, *m_renderVisitor);
     // }
-
-}

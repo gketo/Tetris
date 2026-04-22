@@ -10,6 +10,7 @@ namespace Core {
 		PLAY,
 		PAUSE,
         RESUME,
+        DISP_RULES,
 		QUIT,
         // Rules
         // ACCEPT_RULES,
@@ -24,6 +25,7 @@ namespace Core {
         case EngineAction::PLAY: return "PLAY";
         case EngineAction::PAUSE: return "PAUSE";
         case EngineAction::RESUME: return "RESUME";
+        case EngineAction::DISP_RULES: return "DISP_RULES";
         case EngineAction::QUIT: return "QUIT";
         // case EngineAction::ACCEPT_RULES: return "ACCEPT_RULES";
         }

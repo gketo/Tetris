@@ -43,7 +43,6 @@ run-with-log: $(TARGET)
 	# small delay to ensure terminal is ready
 	@sleep 0.5
 	# run program with DEBUG_TTY pointing to FIFO
-	clear
 	@export DEBUG_TTY=$(LOG_PIPE); ./$(TARGET)
 
 clean-pipe:

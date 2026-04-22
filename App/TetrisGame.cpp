@@ -20,6 +20,10 @@ namespace Game::Tetris {
     void TetrisGame::init(Core::EventManager& em)
     {
 		LOG_DEBUG("[TetrisGame] Initializing...");
+
+        m_minWindowHeight = 24;
+        m_minWindowWidth = 20;
+
         bindKeys(em);
         setRules();
         // dbg
@@ -42,13 +46,13 @@ namespace Game::Tetris {
     {
         m_rules = RulesData{
             "Welcome to Tetris, here are the rules :)",
-            "- Move pieces left/right using arrow keys",
-            "- Rotate pieces using up arrow",
-            "- Drop pieces faster using down arrow",
-            "- Clear lines to score points",
-            "- Press P to pause",
-            "- Then press R to resume or press Q to quit",
-            "Ready to start ? Press ENTER to play :D (already leaving ? :( Press Q))"
+            "Move pieces left/right using arrow keys",
+            "Rotate pieces using up arrow",
+            "Drop pieces faster using down arrow",
+            "Clear lines to score points",
+            "Press P to pause",
+            "Then press R to resume or press Q to quit",
+            "Accept ? Press ENTER to play :D"
         };
     }
 

@@ -20,7 +20,10 @@ void crashHandler(int sig) {
 int main()
 {
     // DEBUG
-    //signal(SIGABRT, crashHandler); // catches abort caused by pure virtual call
+    signal(SIGSEGV, crashHandler);
+    signal(SIGABRT, crashHandler);
+    signal(SIGILL, crashHandler);
+    signal(SIGFPE, crashHandler);
 
     LOG_DEBUG("[Main.cpp] Hello World!");
     

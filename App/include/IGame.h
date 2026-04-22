@@ -38,6 +38,8 @@ namespace Game {
     protected:
         RulesData m_rules;
         Core::DataVariant m_data;    
+        int m_minWindowHeight; // todo assert this exists
+        int m_minWindowWidth;
         
         virtual void setRules() = 0;
 	};

@@ -6,8 +6,9 @@
 #include "Logger.h"
 #include "MenuData.h"
 #include "RulesData.h"
-#include "TermiosFrame2DHelper.h"
 #include "TermiosMenuHelper.h"
+#include "TermiosRulesHelper.h"
+#include "TermiosFrame2DHelper.h"
 #include "TermiosUtils.h"
 
 #include <array>
@@ -15,6 +16,7 @@
 #include <errno.h>
 #include <format>
 #include <memory>
+#include <mutex>
 #include <optional>
 #include <stdexcept>
 #include <sys/ioctl.h>
@@ -150,51 +152,129 @@ namespace Core::Terminal::Termios {
         return event;
     }
 
-     void TerminalCoreTermios::render(const Core::MenuData& menuData) const
+    void TerminalCoreTermios::update()
+    {
+        updateTerminalConfig();
+    }
+
+    bool TerminalCoreTermios::updateTerminalConfig() 
+    {
+        return updateTerminalSize();
+    }
+
+    void TerminalCoreTermios::outputBuffer()
+    {
+        std::lock_guard<std::mutex> lock(m_bufferMutex);
+        write(STDOUT_FILENO, m_bufferStr.c_str(), m_bufferStr.size());
+        m_bufferStr.clear();
+    }
+
+    void TerminalCoreTermios::clearScreen()
+    {
+        std::string frameStr;
+        frameStr += TermiosUtils::CURSOR_HOME;
+
+        for (int row = 0; row < m_termConfig.height; row++)
+        {
+            moveCursor(frameStr, row, 0);
+            frameStr += TermiosUtils::ERASE_LINE_TORIGHT;
+        }
+
+        flushBuffer();
+        appendToBuffer(frameStr);
+        outputBuffer();
+    }
+
+    void TerminalCoreTermios::hideCursor()
+    {  
+        write(STDOUT_FILENO, TermiosUtils::HIDE_CURSOR.data(), TermiosUtils::HIDE_CURSOR.size());
+    }
+
+    void TerminalCoreTermios::showCursor()
+    {  
+        write(STDOUT_FILENO, TermiosUtils::SHOW_CURSOR.data(), TermiosUtils::SHOW_CURSOR.size());
+    }
+
+    void TerminalCoreTermios::moveCursor(size_t row, size_t col)
+    {
+        LOG_DEBUG("[TerminalCoreTermios] Move cursor to ( %d, %d )", row, col);
+
+        row = std::clamp(row, static_cast<size_t>(0), m_termConfig.height - 1);
+        col = std::clamp(col, static_cast<size_t>(0), m_termConfig.width  - 1);
+
+        auto ansi = std::format("\x1b[{};{}H", std::to_string(row + 1), std::to_string(col + 1));
+
+        write(STDOUT_FILENO, ansi.data(), ansi.size());
+        
+        m_cpos = {row, col};
+    }
+
+    void TerminalCoreTermios::cursorHome()
+    {  
+        LOG_DEBUG("[TerminalCoreTermios] Cursor home");
+        write(STDOUT_FILENO, TermiosUtils::CURSOR_HOME.data(), TermiosUtils::CURSOR_HOME.size());
+        
+        m_cpos = {0, 0};
+    }
+
+    void TerminalCoreTermios::clearScreen(std::string& frameStr) const
+    {
+        // frameStr += CLEAR_SCROLLBACK.data(); // clear scrollback buffer
+        frameStr += TermiosUtils::CLEAR_SCREEN.data(); // clear screen
+        frameStr += TermiosUtils::CURSOR_HOME.data();  // move cursor to home
+    }
+
+    void TerminalCoreTermios::hideCursor(std::string& frameStr) const
+    {  
+        frameStr += TermiosUtils::HIDE_CURSOR.data();    
+    }
+
+    void TerminalCoreTermios::showCursor(std::string& frameStr) const 
+    {
+        frameStr += TermiosUtils::SHOW_CURSOR.data();  
+    }
+
+    void TerminalCoreTermios::moveCursor(std::string& frameStr, size_t row, size_t col) const
+    {
+        LOG_DEBUG("[TerminalCoreTermios] Move cursor to ( %d, %d )", row, col);
+
+        row = std::clamp(row, static_cast<size_t>(0), m_termConfig.height - 1);
+        col = std::clamp(col, static_cast<size_t>(0), m_termConfig.width  - 1);
+
+        frameStr.reserve(frameStr.size() + 16);
+
+        frameStr += "\x1b[";
+        frameStr += std::to_string(row + 1);
+        frameStr += ";";
+        frameStr += std::to_string(col + 1);
+        frameStr += "H";
+    }
+
+    void TerminalCoreTermios::cursorHome(std::string& frameStr) const 
+    {
+        frameStr += TermiosUtils::CURSOR_HOME.data();  
+    }
+
+    void TerminalCoreTermios::render(const Core::MenuData& menuData)
     {        
         // LOG_DEBUG("[TerminalCoreTermios] Rendering MenuData");
         // todo mise en page
-        std::string frameStr{};
-
-        hideCursor(frameStr);
-        clearScreen(frameStr);
-
-        frameStr += TermiosMenuRenderHelper::to_string(menuData);
-
-        showCursor(frameStr);
-
-        write(STDOUT_FILENO, frameStr.c_str(), frameStr.size());   
+        appendToBuffer(TermiosMenuRenderHelper::to_string(*this, menuData));
+        outputBuffer();
     }
 
-    void TerminalCoreTermios::render(const Game::RulesData& rules) const
+    void TerminalCoreTermios::render(const Game::RulesData& rulesData)
     {
         // LOG_DEBUG("[TerminalCoreTermios] Rendering rules");
-        // todo mise en page
-        std::string frameStr{};
-
-        hideCursor(frameStr);
-        clearScreen(frameStr);
-
-        for (const auto& rule : rules.getRules())
-        {
-            frameStr += rule;
-            frameStr += '\r';
-            frameStr += '\n';
-        }
-
-        write(STDOUT_FILENO, frameStr.c_str(), frameStr.size());   
+        appendToBuffer(TermiosRulesRenderHelper::to_string(*this, rulesData));
+        outputBuffer();
     }
 
-    void TerminalCoreTermios::render(const Core::Grid2D::Frame2D<char>&frame) const
+    void TerminalCoreTermios::render(const Core::Grid2D::Frame2D<char>& frame)
     {        
         // LOG_DEBUG("[TerminalCoreTermios] Rendering Frame2D");
-        
-        std::string frameStr{};
-
-        hideCursor(frameStr);
-        frameStr += TermiosFrameRenderHelper::to_string(frame);
-
-        write(STDOUT_FILENO, frameStr.c_str(), frameStr.size());    
+        appendToBuffer(TermiosFrame2DRenderHelper::to_string(*this, frame));
+        outputBuffer();
     }
 
     bool TerminalCoreTermios::enableRawMode()
@@ -236,48 +316,41 @@ namespace Core::Terminal::Termios {
         return true;
     }
 
-    std::pair<int, int> TerminalCoreTermios::getCursorPosition() const
-    {
-        std::array<char, 32> buf{};
-        size_t i = 0;
-
-        // Send query
-        if (write(STDOUT_FILENO, "\x1b[6n", 4) != 4) 
-        {
-            throw std::runtime_error("Failed to write cursor query");
-        }
-
-        // Read response
-        while (i < buf.size() - 1) 
-        {
-            if (read(STDIN_FILENO, &buf[i], 1) != 1) break;
-            if (buf[i] == 'R') break;
-            i++;
-        }
-        buf[i] = '\0';
-
-        // Parse response
-        if (buf[0] != '\x1b' || buf[1] != '[') 
-        {
-            throw std::runtime_error("Invalid cursor response");
-        }
-
-        int rows = 0, cols = 0;
-        if (sscanf(&buf[2], "%d;%d", &rows, &cols) != 2) 
-        {
-            throw std::runtime_error("Failed to parse cursor position");
-        }
-
-        return {rows, cols};
-    }
-
     bool TerminalCoreTermios::updateCursorPosition()
     {
         try
         {
-            auto [row, col] = getCursorPosition();
-            m_crow = row;
-            m_ccol = col;
+            std::array<char, 32> buf{};
+            size_t i = 0;
+
+            // Send query
+            if (write(STDOUT_FILENO, "\x1b[6n", 4) != 4) 
+            {
+                throw std::runtime_error("Failed to write cursor query");
+            }
+
+            // Read response
+            while (i < buf.size() - 1) 
+            {
+                if (read(STDIN_FILENO, &buf[i], 1) != 1) break;
+                if (buf[i] == 'R') break;
+                i++;
+            }
+            buf[i] = '\0';
+
+            // Parse response
+            if (buf[0] != '\x1b' || buf[1] != '[') 
+            {
+                throw std::runtime_error("Invalid cursor response");
+            }
+
+            int row = 0, col = 0;
+            if (sscanf(&buf[2], "%d;%d", &row, &col) != 2) 
+            {
+                throw std::runtime_error("Failed to parse cursor position");
+            }
+
+            m_cpos = {static_cast<size_t>(row), static_cast<size_t>(col)};
             return true;
         }
         catch(...)
@@ -287,7 +360,7 @@ namespace Core::Terminal::Termios {
         return false;
     }
 
-    bool TerminalCoreTermios::updateWindowSize() 
+    bool TerminalCoreTermios::updateTerminalSize() 
     {
         struct winsize ws;
         if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1 || ws.ws_col == 0) 
@@ -299,9 +372,15 @@ namespace Core::Terminal::Termios {
                 {
                     throw std::runtime_error("Failed to write fallback query");
                 }
-                auto [maxRow, maxCol] = getCursorPosition();
-                m_winHeight = maxRow;
-                m_winWidth = maxCol;
+                
+                auto success = updateCursorPosition();
+
+                if (success)
+                {
+                    m_termConfig.height = m_cpos.row;
+                    m_termConfig.width = m_cpos.col;
+                }
+
                 return true;
             }
             catch(...)
@@ -310,86 +389,11 @@ namespace Core::Terminal::Termios {
             }
             
         }
-        m_winWidth = ws.ws_row;
-        m_winHeight = ws.ws_col;
+
+        m_termConfig.height = ws.ws_row;
+        m_termConfig.width = ws.ws_col;
+
         return true;
-    }
-
-    void TerminalCoreTermios::clearScreen() const
-    {
-        write(STDOUT_FILENO, CLEAR_SCROLLBACK.data(), CURSOR_HOME.size());
-        write(STDOUT_FILENO, CLEAR_SCREEN.data(), CURSOR_HOME.size());
-        write(STDOUT_FILENO, CURSOR_HOME.data(), CURSOR_HOME.size());
-    }
-
-    void TerminalCoreTermios::hideCursor() const
-    {  
-        LOG_DEBUG("[TerminalCoreTermios] Hide cursor");
-        write(STDOUT_FILENO, HIDE_CURSOR.data(), HIDE_CURSOR.size());
-    }
-
-    void TerminalCoreTermios::showCursor() const
-    {  
-        LOG_DEBUG("[TerminalCoreTermios] Show cursor");
-        write(STDOUT_FILENO, SHOW_CURSOR.data(), SHOW_CURSOR.size());
-    }
-
-    void TerminalCoreTermios::moveCursor(int row, int col) const
-    {
-        LOG_DEBUG("[TerminalCoreTermios] Move cursor to ( %d, %d )", row, col);
-
-        row = std::clamp(row, 0, m_winHeight - 1);
-        col = std::clamp(col, 0, m_winWidth  - 1);
-
-        auto ansi = std::format("\x1b[{};{}H", std::to_string(row + 1), std::to_string(col + 1));
-
-        write(STDOUT_FILENO, ansi.data(), ansi.size());
-    }
-
-    void TerminalCoreTermios::clearScreen(std::string& frameStr) const
-    {
-        frameStr += CLEAR_SCROLLBACK.data(); // clear scrollback buffer
-        frameStr += CLEAR_SCREEN.data(); // clear screen
-        frameStr += CURSOR_HOME.data();  // move cursor to home
-    }
-
-    void TerminalCoreTermios::hideCursor(std::string& frameStr) const
-    {  
-        frameStr += HIDE_CURSOR.data();    
-    }
-
-    void TerminalCoreTermios::showCursor(std::string& frameStr) const 
-    {
-        frameStr += SHOW_CURSOR.data();  
-    }
-
-    void TerminalCoreTermios::moveCursor(std::string& frameStr, int row, int col) const
-    {
-        LOG_DEBUG("[TerminalCoreTermios] Move cursor to ( %d, %d )", row, col);
-
-        row = std::clamp(row, 0, m_winHeight - 1);
-        col = std::clamp(col, 0, m_winWidth  - 1);
-
-        frameStr.reserve(frameStr.size() + 16);
-
-        frameStr += "\x1b[";
-        frameStr += std::to_string(row + 1);
-        frameStr += ";";
-        frameStr += std::to_string(col + 1);
-        frameStr += "H";
-
-        // chatgpt should be faster debug dbg
-        // char buf[32];
-        // char* ptr = buf;
-        // *ptr++ = '\x1b';
-        // *ptr++ = '[';
-        // auto [p1, _] = std::to_chars(ptr, buf + sizeof(buf), row + 1);
-        // ptr = p1;
-        // *ptr++ = ';';
-        // auto [p2, _2] = std::to_chars(ptr, buf + sizeof(buf), col + 1);
-        // ptr = p2;
-        // *ptr++ = 'H';
-        //frameStr.append(buf, ptr - buf);
     }
 
     const char* TerminalCoreTermios::caller() const  
@@ -404,7 +408,7 @@ namespace Core::Terminal::Termios {
             throw std::runtime_error("[ERROR] Couldn't init MacOS Terminal.\n");
         }
 
-        clearScreen();
+        updateTerminalConfig();
     }
 
     void TerminalCoreTermios::onTerminate() noexcept
@@ -432,4 +436,4 @@ namespace Core::Terminal::Termios {
         // save data here
 	}
    
-} 
+}

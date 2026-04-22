@@ -33,11 +33,28 @@ namespace Core::Terminal::Termios {
     {
     public:
         std::optional<DeviceEvent> readEvent() const override;
-        
+
+        void update() override;
+        bool updateTerminalConfig() override;
+
+        void outputBuffer() override;
+
+        void clearScreen() override;
+        void hideCursor() override;
+        void showCursor() override;
+        void moveCursor(size_t row, size_t col) override;
+        void cursorHome() override;
+
+        void clearScreen(std::string& framestr) const override;
+        void hideCursor(std::string& framestr) const override;
+        void showCursor(std::string& framestr) const override;
+        void moveCursor(std::string& framestr, size_t row, size_t col) const override;
+        void cursorHome(std::string& framestr) const override;
+
         // rendering
-        void render(const Core::MenuData& menuData) const override;
-        void render(const Game::RulesData& rules) const override;
-        void render(const Core::Grid2D::Frame2D<char>&frame) const override;
+        void render(const Core::MenuData& menuData) override;
+        void render(const Game::RulesData& rules) override;
+        void render(const Core::Grid2D::Frame2D<char>& frame) override;
 
     private:
         struct termios orginalTermios;
@@ -45,19 +62,8 @@ namespace Core::Terminal::Termios {
         bool enableRawMode() override;
         bool disableRawMode() override;
 
-        std::pair<int, int> getCursorPosition() const override;
         bool updateCursorPosition() override;
-        bool updateWindowSize() override;
-
-        void clearScreen() const override;
-        void hideCursor() const override;
-        void showCursor() const override;
-        void moveCursor(int row, int col) const override;
-        
-        void clearScreen(std::string& framestr) const;
-        void hideCursor(std::string& framestr) const;
-        void showCursor(std::string& framestr) const;
-        void moveCursor(std::string& framestr, int row, int col) const;
+        bool updateTerminalSize() override;
         
         const char* caller() const override; // for clearer logging
         void onInit() override;

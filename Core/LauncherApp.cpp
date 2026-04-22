@@ -27,7 +27,7 @@ namespace Core {
 	{
 		MenuData md{};
 
-        md.welcomeMsg = "Welcome ! Please chose a game in the following list:";
+        md.welcomeMsg = "Welcome ! Please chose a game in the following list:";//aaaaa bbbbb cccccc dddddd eeee fffffff ggg hhhhhhhh iiiii jjjj kkkkkk lllll mmmmmmm nnnn oooooo ppppp qqq rrrrrr sssss tttt uuuuuu vvvvv wwwwwww xxx yyyyyy zzzzz aaaaa bbbbb cccccc dddddd eeee fffffff ggg hhhhhhhh iiiii jjjj kkkkkk lllll mmmmmmm nnnn oooooo ppppp qqq rrrrrr sssss tttt uuuuuu vvvvv wwwwwww xxx yyyyyy zzzzz";
 
         for (int i = static_cast<int>(Game::GameType::None) + 1; i < static_cast<int>(Game::GameType::Count); ++i)
         {
@@ -87,6 +87,7 @@ namespace Core {
         do
         {
             renderer->submit(std::make_unique<DataVariant>(std::move(m_menu.getMenuData())));
+            renderer->update();
 		    renderer->render();
 
             // get events from event manager (controller)

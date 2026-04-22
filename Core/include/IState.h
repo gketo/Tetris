@@ -38,6 +38,7 @@ namespace Core {
         virtual std::string dbg_nameYourself() const { return dbg_demangle(typeid(*this).name()); }
         
     protected:
-        IContext *m_context;        
+        IContext *m_context;
+        bool m_isFinished{ false };
     };
 }

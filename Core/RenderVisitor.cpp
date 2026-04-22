@@ -7,17 +7,17 @@ namespace Core {
 
     void TerminalVisitor::operator()(const Core::MenuData& data) const
     {
-        m_renderer.render(std::move(data));
+        m_terminalRenderer.render(std::move(data));
     }
 
     void TerminalVisitor::operator()(const Game::RulesData& data) const
     {
-        m_renderer.render(std::move(data));
+        m_terminalRenderer.render(std::move(data));
     }
     
-    void TerminalVisitor::operator()(const Core::Grid2D::Frame2D<char>&data) const 
+    void TerminalVisitor::operator()(const Core::Grid2D::Frame2D<char>& data) const
     {
-        m_renderer.render(std::move(data));
+        m_terminalRenderer.render(std::move(data));
     }
 
     // void RenderVisitor::operator()(const Core::Grid2D::Frame2D<char>& frame) const {

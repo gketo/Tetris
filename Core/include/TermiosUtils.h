@@ -1,20 +1,43 @@
 #pragma once
 
 #include "GraphicsUtils.h"
+#include "Logger.h"
 
+#include <string>
 #include <string_view>
 
 namespace Core::Terminal::Termios {
     
     namespace GfxUtils = Core::Graphics::Utils;
 
-    constexpr const std::string_view ERASE_RIGHT = "\x1b[K";
+    std::vector<std::string> wrap(const std::string_view& towrap, size_t maxsize)
+    {
+        std::vector<std::string> wrapped;
+        auto offset{ 0 };
+        auto rlen = towrap.size();
+        while (rlen > 0)
+        {
+            auto plen = std::min(rlen, maxsize);
+            wrapped.emplace_back(towrap.substr(offset, plen));
+
+            offset += plen;
+            rlen -= plen;
+        }
+        return wrapped;
+    }
+    
+    constexpr const std::string_view ALTERNATE_SCREEN_ENTER = "\x1b[?1049h";
+    constexpr const std::string_view ALTERNATE_SCREEN_EXIT = "\x1b[?1049l";
     constexpr const std::string_view CLEAR_SCREEN = "\x1b[2J";
     constexpr const std::string_view CLEAR_SCROLLBACK = "\x1b[3J";
     constexpr const std::string_view CURSOR_HOME  = "\x1b[H";
+    constexpr const std::string_view ERASE_LINE_TORIGHT = "\x1b[K";
+    constexpr const std::string_view ERASE_SCREEN_TOBOTTOM = "\x1b[0J";
     constexpr const std::string_view HIDE_CURSOR  = "\x1b[?25l";
     constexpr const std::string_view SHOW_CURSOR  = "\x1b[?25h";
+    constexpr const std::string_view RESET_ATTRS = "\x1b[0m";
     constexpr const std::string_view RESET_COLORS = "\x1b[39m\x1b[49m";
+
 
     inline std::string_view Termios_toAnsiFgColor(GfxUtils::Color c)
     {

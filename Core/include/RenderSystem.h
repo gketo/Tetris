@@ -12,13 +12,16 @@ namespace Core {
     public:
         RenderSystem() = default; 
 
-        void render(const DataVariant& data, const VisitorVariant& visitor) const 
+        void render(const DataVariant& data, const VisitorVariant& visitor) 
         {
             std::visit([&](auto& v) 
             {
                 std::visit(v, data);
             }, visitor);
         }
+    };
+}
+
 
         // void render(const MenuData& menuData, const VisitorVariant& visitor) const 
         // {
@@ -35,5 +38,3 @@ namespace Core {
         //         v(std::move(rules));
         //     }, visitor);
         // }
-    };
-}

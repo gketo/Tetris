@@ -29,6 +29,7 @@ namespace Core::Engine {
             ge->m_eventManager->clearInputBindings();
             ge->m_eventManager->registerInputBindings(GameRunningRegisteredEvents);
             ge->m_renderer->submit(std::move(ge->m_gameMaster.getRenderData()));
+            ge->m_renderer->update();
         }
     }
 
@@ -54,6 +55,7 @@ namespace Core::Engine {
                     {
                     case EngineAction::PAUSE:
                         ge->m_sm.setNextState(std::make_unique<StatePaused>(m_context));
+                        m_isFinished = true;
                         break;
                     default:
                         LOG_ERROR("[GameEngineSM] StateRunning: Unkown action");
@@ -69,11 +71,13 @@ namespace Core::Engine {
                 }
             }
             ge->m_renderer->submit(std::move(ge->m_gameMaster.getRenderData()));
+            ge->m_renderer->update();
+
         }
     }
 
     inline bool StateRunning::isFinished() const 
     { 
-        return true; 
+        return m_isFinished;
     }
 }

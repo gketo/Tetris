@@ -7,7 +7,9 @@
 #include "Logger.h"
 
 #include <memory>
+#include <mutex>
 #include <optional>
+#include <string>
 #include <utility>
 
 // forward declaration
@@ -26,35 +28,69 @@ namespace Core::Grid2D {
 
 namespace Core {
 
+    struct CursorPosition 
+    {
+        size_t row;
+        size_t col;   
+    };
+
+    struct TerminalConfig
+    {
+        size_t height;
+        size_t width;
+    };
+
 	class ITerminalCore : public IEventSource, public IRenderer
 	{
     public:
         virtual ~ITerminalCore() = default;
 
-        // rendering
-        virtual void render(const Core::MenuData& menuData) const = 0;
-        virtual void render(const Game::RulesData& rules) const = 0;
-        virtual void render(const Core::Grid2D::Frame2D<char>&frame) const = 0;
+        virtual bool updateTerminalConfig() = 0;
+
+        void appendToBuffer(const std::string& str);
+        void flushBuffer();
+        virtual void outputBuffer() = 0;
+
+        CursorPosition getCursorPosition() const { return m_cpos; }
+        TerminalConfig getTerminalConfig() const { return m_termConfig; }
+
+        virtual void hideCursor() = 0;
+        virtual void showCursor() = 0;
+        virtual void moveCursor(size_t row, size_t col) = 0;
+        virtual void cursorHome() = 0;
+
+        virtual void clearScreen(std::string& framestr) const = 0;
+        virtual void hideCursor(std::string& framestr) const = 0;
+        virtual void showCursor(std::string& framestr) const = 0;
+        virtual void moveCursor(std::string& framestr, size_t row, size_t col) const = 0;
+        virtual void cursorHome(std::string& framestr) const = 0;
 
     protected:
-        int m_winHeight;   // windows height in rows (starts at 1 in termios)
-        int m_winWidth;   // windows width in cols (starts at 1 in termios)
-        int m_crow;   // cursor pos
-        int m_ccol;   // cursor pos
+        CursorPosition m_cpos;   // cursor pos
+        TerminalConfig m_termConfig;
+
+        std::string m_bufferStr;
+        std::mutex m_bufferMutex;
 
         virtual bool enableRawMode() = 0;
         virtual bool disableRawMode() = 0;
-        
-        virtual std::pair<int, int> getCursorPosition() const = 0;
-        virtual bool updateCursorPosition() = 0;
-        virtual bool updateWindowSize() = 0;
 
-        virtual void clearScreen() const = 0;
-        virtual void hideCursor() const = 0;
-        virtual void showCursor() const = 0;
-        virtual void moveCursor(int row, int col) const = 0;
+        virtual bool updateCursorPosition() = 0;
+        virtual bool updateTerminalSize() = 0;
 	};
  
+    inline void ITerminalCore::appendToBuffer(const std::string& str)
+    {
+        std::lock_guard<std::mutex> lock(m_bufferMutex);
+        m_bufferStr += str;
+    }
+
+    inline void ITerminalCore::flushBuffer()
+    {
+        std::lock_guard<std::mutex> lock(m_bufferMutex);
+        m_bufferStr.clear();
+    }
+
     std::unique_ptr<ITerminalCore> createTerminalCore();
 
 }

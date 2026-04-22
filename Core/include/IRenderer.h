@@ -22,17 +22,24 @@ namespace Core {
 
         void setVisitor(std::unique_ptr<VisitorVariant> v);
 
+        virtual void update() = 0;
+
         void submit(std::unique_ptr<DataVariant> dataVar);
         void render();
+
+        virtual void clearScreen() = 0;
+        
+        // rendering
+        virtual void render(const Core::MenuData& menuData) = 0;
+        virtual void render(const Game::RulesData& rules) = 0;
+        virtual void render(const Core::Grid2D::Frame2D<char>& frame) = 0;
 
     private:
         std::unique_ptr<RenderQueue> m_renderQueue;
         std::unique_ptr<RenderSystem> m_renderSystem;
 		std::unique_ptr<VisitorVariant> m_renderVisitor;
 
-        void render(const DataVariant& dataVar);
-        void render(const MenuData& menuData);
-        void render(const Game::RulesData& rules);
+        // void render(const DataVariant& dataVar);
     };
 
 }

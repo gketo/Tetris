@@ -26,7 +26,7 @@ namespace Core {
     const std::vector<InputBinding> RulesDisplayRegisteredEvents{
         // Keyboard
         InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_ACCEPT }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ENTER } },
-        InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_CANCEL }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'q'} },
+        // InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_CANCEL }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'q'} },
         //
     };
 
@@ -39,6 +39,7 @@ namespace Core {
     const std::vector<InputBinding> GamePausedRegisteredEvents{
         // Keyboard
         InputBinding{ Core::ActionVariant{ std::in_place_type<EngineAction>, EngineAction::RESUME }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'r'} },
+        InputBinding{ Core::ActionVariant{ std::in_place_type<EngineAction>, EngineAction::DISP_RULES }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'h'} },
         InputBinding{ Core::ActionVariant{ std::in_place_type<EngineAction>, EngineAction::QUIT }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'q'} },
         //
     };

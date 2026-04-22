@@ -27,6 +27,7 @@ namespace Core::Engine {
         if (auto ge = dynamic_cast<GameEngine*>(m_context))
         {
             ge->save();
+            m_isFinished = true;
         }
     }
 
@@ -44,7 +45,6 @@ namespace Core::Engine {
 
     inline bool StateQuitted::isFinished() const 
     { 
-        return true; 
+        return m_isFinished;
     }
-
 }

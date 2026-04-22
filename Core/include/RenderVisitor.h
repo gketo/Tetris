@@ -21,8 +21,8 @@ namespace Core {
     class TerminalVisitor
     {
     public:
-        TerminalVisitor(const ITerminalCore& r) 
-        : m_renderer(r) 
+        TerminalVisitor(ITerminalCore& r) 
+        : m_terminalRenderer(r) 
         {}
 
         void operator()(const Core::MenuData& menuData) const;
@@ -31,7 +31,7 @@ namespace Core {
 
         // implement other operator here for each specific type of frame renderable by terminal
     private:
-        const ITerminalCore& m_renderer;
+        ITerminalCore& m_terminalRenderer;
     };
 
 }

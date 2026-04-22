@@ -25,6 +25,7 @@ namespace Core::Engine {
         if (auto ge = dynamic_cast<GameEngine*>(m_context))
         {
 		    ge->m_renderer->terminate();
+            m_isFinished = true;
         }
     }
 
@@ -42,7 +43,7 @@ namespace Core::Engine {
 
     inline bool StateTerminated::isFinished() const 
     { 
-        return true; 
+        return m_isFinished;
     }
 
 }

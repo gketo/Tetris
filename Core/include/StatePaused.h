@@ -53,21 +53,28 @@ namespace Core::Engine {
                     {
                     case EngineAction::RESUME:
                         ge->m_sm.setNextState(std::make_unique<StateResumed>(m_context));
+                        m_isFinished = true;
+                        break;
+                    case EngineAction::DISP_RULES:
+                        ge->m_sm.setNextState(std::make_unique<StateDisplayRules>(m_context));
+                        m_isFinished = true;
                         break;
                     case EngineAction::QUIT: // gerer lorsqu'on sort d'un jeu todo
                         ge->m_sm.setNextState(std::make_unique<StateQuitted>(m_context));
+                        m_isFinished = true;
                         break;
                     default:
                         LOG_ERROR("[GameEngineSM] StatePaused: Unkown action");
                     }
                 }
             }
+            ge->m_renderer->update();
         }
     }
 
     inline bool StatePaused::isFinished() const 
     { 
-        return true; 
+        return m_isFinished;
     }
 
 }

@@ -10,6 +10,6 @@
 namespace Core {
 
     // add type of frame here aswell
-    using DataVariant = std::variant<Game::RulesData, Core::MenuData, Core::Grid2D::Frame2D<char> >;
+    using DataVariant = std::variant<Game::RulesData, Core::MenuData, Core::Grid2D::Frame2D<char>>;
 
 }

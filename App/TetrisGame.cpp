@@ -6,7 +6,6 @@
 #include "EventManager.h"
 #include "IGame.h"
 #include "Logger.h"
-#include "RulesData.h"
 #include "TetrisAction.h"
 
 #include <string>
@@ -44,15 +43,16 @@ namespace Game::Tetris {
 
     void TetrisGame::setRules()
     {
-        m_rules = RulesData{
-            "Welcome to Tetris, here are the rules :)",
-            "Move pieces left/right using arrow keys",
-            "Rotate pieces using up arrow",
-            "Drop pieces faster using down arrow",
-            "Clear lines to score points",
-            "Press P to pause",
-            "Then press R to resume or press Q to quit",
-            "Accept ? Press ENTER to play :D"
+        m_rules = Rules{
+            "Tetris, here are the rules :)", // welcome msg
+            { 
+                "Move pieces left/right using arrow keys",
+                "Rotate pieces using up arrow",
+                "Drop pieces faster using down arrow",
+                "Clear lines to score points",
+                "Press P to pause",
+            }, // rules
+            "Press ENTER and let's play :D" // commands msg
         };
     }
 

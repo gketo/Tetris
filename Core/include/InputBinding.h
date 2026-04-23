@@ -16,6 +16,7 @@ namespace Core {
 
     const std::vector<InputBinding> GameChoiceMenuRegisteredEvents{
         // Keyboard
+        //  Game choice menu
         InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_MOVE_UP }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ARROW_UP } },
         InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_MOVE_DOWN }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ARROW_DOWN } },
         InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_SELECT }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ENTER } },
@@ -25,6 +26,7 @@ namespace Core {
 
     const std::vector<InputBinding> RulesDisplayRegisteredEvents{
         // Keyboard
+        //  Accept rules button
         InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_ACCEPT }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ENTER } },
         // InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_CANCEL }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'q'} },
         //
@@ -32,14 +34,19 @@ namespace Core {
 
     const std::vector<InputBinding> GameRunningRegisteredEvents{
         // Keyboard
+        //  Pause key
         InputBinding{ Core::ActionVariant{ std::in_place_type<EngineAction>, EngineAction::PAUSE }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'p'} },
         //
     };
 
     const std::vector<InputBinding> GamePausedRegisteredEvents{
         // Keyboard
-        InputBinding{ Core::ActionVariant{ std::in_place_type<EngineAction>, EngineAction::RESUME }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'r'} },
-        InputBinding{ Core::ActionVariant{ std::in_place_type<EngineAction>, EngineAction::DISP_RULES }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'h'} },
+        //  Paused menu options
+        InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_MOVE_UP }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ARROW_UP } },
+        InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_MOVE_DOWN }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ARROW_DOWN } },
+        InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_SELECT }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ENTER } },
+        // Keyboard
+        //  Paused menu quit
         InputBinding{ Core::ActionVariant{ std::in_place_type<EngineAction>, EngineAction::QUIT }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'q'} },
         //
     };

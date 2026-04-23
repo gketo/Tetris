@@ -21,6 +21,11 @@ namespace Core {
         m_menuData = std::move(md);
     }
 
+    int Menu::findIndexByName(std::string name) const
+    {
+        return m_menuData.findIndexByName(name);
+    }
+
     const MenuData& Menu::getMenuData() const
     {
         return m_menuData;
@@ -48,5 +53,16 @@ namespace Core {
     {
         return m_menuData.getEntry(m_selectedIndex);
     }
+
+    void Menu::setSelectedIndex(size_t index)
+    {
+        if (m_menuData.isEmpty())
+        {
+            return;
+        }
+        m_selectedIndex = index;
+        m_menuData.setSelectedIndex(index);
+    }
+
     
 }

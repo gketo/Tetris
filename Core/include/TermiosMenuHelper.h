@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ITerminalCore.h"
 #include "MenuData.h"
 #include "TermiosUtils.h"
 #include "GraphicsUtils.h"
@@ -15,13 +16,13 @@ namespace Core::Terminal::Termios {
     {
     public:
         // returns menu as terminal printable string
-        static std::string to_string(const ITerminalCore& terminal, const MenuData& menuData);
+        static std::string to_string(const Core::ITerminalCore& terminal, const MenuData& menuData);
 
     private:
         static void appendColored(std::string& out, std::string_view text, GfxUtils::Color color);
     };
 
-    std::string TermiosMenuRenderHelper::to_string(const ITerminalCore& terminal, const MenuData& menuData)
+    std::string TermiosMenuRenderHelper::to_string(const Core::ITerminalCore& terminal, const MenuData& menuData)
     {
         std::string frameStr; 
 

@@ -32,7 +32,7 @@ namespace Core {
 		void resetGame();
 		bool isGameOver();
 
-		std::unique_ptr<DataVariant> getRules() const;
+		const Game::Rules& getRules() const;
 		std::unique_ptr<DataVariant> getRenderData() const;
 
 	private:

@@ -16,8 +16,6 @@ namespace Core {
         std::optional<std::function<void()>> callback;
     };
 
-    using MenuEntries = std::vector<MenuEntry>;
-
     class MenuData : public IRenderable
     {
     public:
@@ -30,13 +28,14 @@ namespace Core {
 
         void addEntry(MenuEntry entry);
         const MenuEntry& getEntry(size_t index);
-        const MenuEntries& entries() const;
-        
+        const std::vector<MenuEntry>& entries() const;
+        int findIndexByName(std::string name) const;
+
         void setSelectedIndex(size_t index);
         bool isHighlighted(size_t index) const;
 
     private:
-        MenuEntries m_entries;
+        std::vector<MenuEntry> m_entries;
         std::unordered_set<std::string> m_seen;
         size_t m_selectedIndex;
     };
@@ -78,11 +77,30 @@ namespace Core {
         return m_entries[index];
     }
 
-    inline const MenuEntries& MenuData::entries() const
+    inline const std::vector<MenuEntry>& MenuData::entries() const
     {
         return m_entries;
     }
 
+    inline int MenuData::findIndexByName(std::string name) const
+    {
+        if (m_entries.empty())
+        {
+            return -1;
+        }
+
+        auto it = std::find_if(m_entries.begin(), m_entries.end(),
+            [&name](const MenuEntry& e) {
+                return e.name == name;
+            });
+        
+        if (it != m_entries.end())
+        {
+            return static_cast<int>(std::distance(m_entries.begin(), it));
+        }
+
+        return -1;
+    }
 
     inline void MenuData::setSelectedIndex(size_t index)
     {

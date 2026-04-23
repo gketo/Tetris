@@ -1,9 +1,8 @@
 #pragma once
 
-
 #include "GraphicsUtils.h"
+#include "ITerminalCore.h"
 #include "Logger.h"
-#include "RulesData.h"
 #include "TermiosUtils.h"
 
 #include <algorithm>
@@ -17,14 +16,14 @@ namespace Core::Terminal::Termios {
     namespace GfxUtils = Core::Graphics::Utils;
     namespace TermiosUtils = Core::Terminal::Termios;
 
-    struct TermiosRulesRenderHelper
+    struct TermiosFramedTextHelper
     {
     public:
         // returns frame as terminal printable string
-        static std::string to_string(const ITerminalCore& terminal, const Game::RulesData& rulesData);
+        static std::string to_string(const Core::ITerminalCore& terminal, const std::vector<std::string_view>& dataVect);
     };
 
-    std::string TermiosRulesRenderHelper::to_string(const ITerminalCore& terminal, const Game::RulesData& rulesData)
+    std::string TermiosFramedTextHelper::to_string(const Core::ITerminalCore& terminal, const std::vector<std::string_view>& dataVect)
     {
         constexpr const char row_border_cell{ '*' };
         constexpr const size_t row_border_height{ 1 };
@@ -46,15 +45,14 @@ namespace Core::Terminal::Termios {
         auto winHeight = termConfig.height;
         auto winWidth = termConfig.width;
 
-        auto rules = rulesData.getRules();
-        auto rules_count = rules.size();
-        auto max_rule_width = winWidth - 2 * (col_border_outter_padding_width + col_border_width + col_border_inner_padding_width);
+        auto dataVect_count = dataVect.size();
+        auto max_data_width = winWidth - 2 * (col_border_outter_padding_width + col_border_width + col_border_inner_padding_width);
 
         // for each line in window
         for (int row = 0; row < winHeight; )
         {
-            // we are centring the rule display, creating a border before and around, with inner and outter padding (padding is empty row)
-            if (row == (winHeight - rules_count)/2 - row_border_outter_padding_width - row_border_height - row_border_inner_padding_width) 
+            // we are centring the data display, creating a border before and around, with inner and outter padding (padding is empty row)
+            if (row == (winHeight - dataVect_count)/2 - row_border_outter_padding_width - row_border_height - row_border_inner_padding_width) 
             {
                 // top border outter empty padding
                 for (int i = 0; i < row_border_outter_padding_width; i++)
@@ -98,15 +96,15 @@ namespace Core::Terminal::Termios {
                     ++row;
                 }
 
-                // rules
-                std::vector<std::string> rules;
-                // if rule is too long we wrap it vertically
-                for (const auto& rule : rulesData.getRules())
+                // dataVect
+                std::vector<std::string> dataVectWrapped;
+                // if data is too long we wrap it vertically
+                for (const auto& data : dataVect)
                 {
-                    auto wrapped = TermiosUtils::wrap(rule, max_rule_width);
-                    rules.insert(rules.end(), wrapped.begin(), wrapped.end());
+                    auto wrapped = TermiosUtils::wrap(data, max_data_width);
+                    dataVectWrapped.insert(dataVectWrapped.end(), wrapped.begin(), wrapped.end());
                 }
-                for (const auto& rule : rules)
+                for (const auto& data : dataVectWrapped)
                 {
                     
                     terminal.moveCursor(frameStr, row, 0);
@@ -119,11 +117,11 @@ namespace Core::Terminal::Termios {
                     // move after inner padding padding
                     terminal.moveCursor(frameStr, row, col_border_outter_padding_width + col_border_width + col_border_inner_padding_width);
 
-                    //todo, implement scrolling (only during rules)
-                    // move cursor to center rule 
-                    terminal.moveCursor(frameStr, row, (winWidth - rule.size()) / 2);
-                    // print rule
-                    frameStr += rule;
+                    //todo, implement scrolling (only during dataVect)
+                    // move cursor to center data 
+                    terminal.moveCursor(frameStr, row, (winWidth - data.size()) / 2);
+                    // print data
+                    frameStr += data;
                     // move to next border
                     terminal.moveCursor(frameStr, row, winWidth - col_border_outter_padding_width - col_border_width);
                     // print border

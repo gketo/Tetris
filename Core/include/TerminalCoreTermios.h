@@ -9,7 +9,7 @@
 #include <utility>
 
 // NOTE dbg debug : DOESN'T HANDLE TERMINAL RESTORE MODE ON CRASH. TODO todo
-
+//todo vertical wrapping
 // forward declaration
 namespace Core {
     class MenuData;

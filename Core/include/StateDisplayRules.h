@@ -21,11 +21,51 @@ namespace Core::Engine {
         void update() override;
 
         bool isFinished() const override;
+
+    private:
+        Menu m_menu;
+        void buildDisplayRulesMenu();
     };
+
+    void StateDisplayRules::buildDisplayRulesMenu()
+	{
+        if (auto ge = dynamic_cast<GameEngine*>(m_context))
+        {
+            auto rules = ge->m_gameMaster.getRules();
+            MenuData md{};
+
+            md.welcomeMsg = rules.welcomeMsg;
+
+            for (const auto& rule : rules.rules)
+            {
+                if (rule == "Accept")
+                {
+                    throw std::runtime_error("DisplayRulesMenu : can't find another name than 'Accept' jackass ?");
+                }
+                MenuEntry entry;
+                entry.name = rule;
+                md.addEntry(std::move(entry));
+            }
+            
+            MenuEntry accept;
+            accept.name = "Accept";
+            md.addEntry(std::move(accept));
+
+            md.commandsMsg = rules.commandsMsg;
+        
+		    m_menu.build(md);
+            
+            if (auto found = m_menu.findIndexByName("Accept"); found != -1)
+            {
+                m_menu.setSelectedIndex(static_cast<size_t>(found));
+            }
+        }
+	}
 
     inline void StateDisplayRules::enter()
     {
         LOG_DEBUG("[GameEngineSM] StateDisplayRules : enter()...");
+        buildDisplayRulesMenu();
         if (auto ge = dynamic_cast<GameEngine*>(m_context))
         {
             ge->m_eventManager->clearInputBindings();
@@ -42,7 +82,6 @@ namespace Core::Engine {
     inline void StateDisplayRules::update()
     {
         LOG_DEBUG("[GameEngineSM] StateDisplayRules : update()...");
-
         if (auto ge = dynamic_cast<GameEngine*>(m_context))
         {
             auto actionVariantOpt = ge->m_eventManager->popEvent();
@@ -52,20 +91,19 @@ namespace Core::Engine {
                 if (std::holds_alternative<MenuAction>(*actionVariantOpt))
                 {
                     switch (std::get<MenuAction>(*actionVariantOpt))
-                    {
-                    case MenuAction::MENU_ACCEPT:
-                        ge->m_sm.setNextState(std::make_unique<StatePaused>(m_context));
-                        m_isFinished = true;
-                        return;
-                    // case MenuAction::MENU_CANCEL:
-                        // ge->m_sm.setNextState(std::make_unique<StateQuitted>(m_context));
-                        return;
-                    default:
-                        LOG_ERROR("[GameEngineSM] StateDisplayRules: Unkown action");
-                    }
+                        {
+                        case MenuAction::MENU_ACCEPT:
+                            ge->m_sm.setNextState(std::make_unique<StatePaused>(m_context));
+                            m_isFinished = true;
+                            break;
+                        default:
+                            LOG_ERROR("[GameEngineSM] StateDisplayRules : update() Invalid menu input");
+                            break;
+                        }
                 }
             }
-            ge->m_renderer->submit(std::move(ge->m_gameMaster.getRules()));
+
+            ge->m_renderer->submit(std::make_unique<DataVariant>(std::move(m_menu.getMenuData())));
             ge->m_renderer->update();
         }
     }

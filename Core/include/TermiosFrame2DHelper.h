@@ -2,8 +2,9 @@
 
 #include "Cell.h"
 #include "Frame2D.h"
-#include "TermiosUtils.h"
 #include "GraphicsUtils.h"
+#include "ITerminalCore.h"
+#include "TermiosUtils.h"
 
 #include <algorithm>
 #include <optional>
@@ -22,7 +23,7 @@ namespace Core::Terminal::Termios {
     public:
         // returns frame as terminal printable string
         template<typename TCell>
-        static std::string to_string(const ITerminalCore& terminal, const Core::Grid2D::Frame2D<TCell>& frame);
+        static std::string to_string(const Core::ITerminalCore& terminal, const Core::Grid2D::Frame2D<TCell>& frame);
 
     private:
         template<typename TCell>
@@ -31,7 +32,7 @@ namespace Core::Terminal::Termios {
     };
 
     template<typename TCell>
-    std::string TermiosFrame2DRenderHelper::to_string(const ITerminalCore& terminal, const Core::Grid2D::Frame2D<TCell>& frame)
+    std::string TermiosFrame2DRenderHelper::to_string(const Core::ITerminalCore& terminal, const Core::Grid2D::Frame2D<TCell>& frame)
     {
         // Ensure the cell content is printable (char for terminal)
         static_assert(std::is_same_v<decltype(frame.getCell(0,0).content), char>, "Frame2D Render: to_string only works with Cell<stringable>");

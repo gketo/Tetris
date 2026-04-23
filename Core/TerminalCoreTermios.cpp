@@ -5,9 +5,8 @@
 #include "KeyCode.h"
 #include "Logger.h"
 #include "MenuData.h"
-#include "RulesData.h"
 #include "TermiosMenuHelper.h"
-#include "TermiosRulesHelper.h"
+#include "TermiosFramedTextHelper.h"
 #include "TermiosFrame2DHelper.h"
 #include "TermiosUtils.h"
 
@@ -266,8 +265,8 @@ namespace Core::Terminal::Termios {
     void TerminalCoreTermios::render(const Game::RulesData& rulesData)
     {
         // LOG_DEBUG("[TerminalCoreTermios] Rendering rules");
-        appendToBuffer(TermiosRulesRenderHelper::to_string(*this, rulesData));
-        outputBuffer();
+        // appendToBuffer(TermiosFramedTextHelper::to_string(*this, rulesData.getRules()));
+        // outputBuffer();
     }
 
     void TerminalCoreTermios::render(const Core::Grid2D::Frame2D<char>& frame)

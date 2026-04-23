@@ -5,7 +5,6 @@
 #include "EventManager.h"
 #include "GameType.h"
 #include "IGame.h"
-#include "RulesData.h"
 #include "TetrisGame.h"
 
 #include <memory>
@@ -56,15 +55,16 @@ namespace Core {
 		return m_currentGame->isGameOver();
 	}
 
-	std::unique_ptr<DataVariant> GameMaster::getRules() const
+	const Game::Rules& GameMaster::getRules() const
 	{
-		return std::make_unique<DataVariant>(m_currentGame->getRules());
+		return m_currentGame->getRules();
 	}
 
  	std::unique_ptr<DataVariant> GameMaster::getRenderData() const
 	{
 		return std::make_unique<DataVariant>(m_currentGame->getData());
 	}
+
 
 	// void GameMaster::onTerminate() noexcept
 	// {

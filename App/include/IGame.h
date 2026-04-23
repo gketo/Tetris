@@ -2,17 +2,22 @@
 
 #include "ActionVariant.h"
 #include "DataVariant.h"
-#include "Logger.h"
-#include "RulesData.h"
 
 #include <string>
-#include <string_view>
+#include <vector>
 
 namespace Core {
     class EventManager; // forward declaration
 }
 
 namespace Game {
+
+    struct Rules
+    {
+        std::string welcomeMsg;
+        std::vector<std::string> rules;
+        std::string commandsMsg;
+    };
 
     class IGame
 	{
@@ -28,7 +33,7 @@ namespace Game {
         virtual const Core::DataVariant& getData() const = 0;
 
 		std::string_view getName() const;
-        const Game::RulesData& getRules() const;
+        const Rules& getRules() const;
 
         // void launch();
         // void resume();
@@ -36,7 +41,7 @@ namespace Game {
         // void terminate();
 
     protected:
-        RulesData m_rules;
+        Rules m_rules;
         Core::DataVariant m_data;    
         int m_minWindowHeight; // todo assert this exists
         int m_minWindowWidth;
@@ -44,7 +49,7 @@ namespace Game {
         virtual void setRules() = 0;
 	};
 
-	inline const Game::RulesData& IGame::getRules() const
+	inline const Rules& IGame::getRules() const
     {
         return m_rules;
     }

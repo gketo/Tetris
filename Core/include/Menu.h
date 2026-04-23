@@ -18,8 +18,10 @@ namespace Core {
         void moveUp();
         void moveDown();
         
+        int findIndexByName(std::string name) const;
         const MenuData& getMenuData() const;
         const MenuEntry& getSelectedEntry();
+        void setSelectedIndex(size_t index);
 
     private:
         MenuData m_menuData;

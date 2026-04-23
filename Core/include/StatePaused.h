@@ -20,11 +20,49 @@ namespace Core::Engine {
         void update() override;
 
         bool isFinished() const override;
+    
+    private:
+        Menu m_menu;
+        void buildPausedMenu();
     };
+
+    void StatePaused::buildPausedMenu()
+	{
+		MenuData md{};
+
+        md.welcomeMsg = "Paused.";
+
+        MenuEntry resume;
+        resume.name = "Resume";
+        // store a callback
+        resume.callback = [this]() {
+            if (auto ge = dynamic_cast<GameEngine*>(m_context))
+            {
+                ge->m_sm.setNextState(std::make_unique<StateResumed>(m_context));
+            }
+        };
+        md.addEntry(std::move(resume));
+
+        MenuEntry showRules;
+        showRules.name = "Rules";
+        // store a callback
+        showRules.callback = [this]() {
+            if (auto ge = dynamic_cast<GameEngine*>(m_context))
+            {
+                ge->m_sm.setNextState(std::make_unique<StateDisplayRules>(m_context));
+            }
+        };
+        md.addEntry(std::move(showRules));
+
+        md.commandsMsg = "Use ARROW Up/Down to navigate. Press ENTER to select. Press Q to exit app.";
+
+		m_menu.build(md);
+	}
 
     inline void StatePaused::enter()
     {
         LOG_DEBUG("[GameEngineSM] StatePaused : enter()...");
+        buildPausedMenu();
         if (auto ge = dynamic_cast<GameEngine*>(m_context))
         {
             ge->m_eventManager->clearInputBindings();
@@ -47,18 +85,36 @@ namespace Core::Engine {
 
             if (actionVariantOpt)
             {
-                if (std::holds_alternative<EngineAction>(*actionVariantOpt))
+                if (std::holds_alternative<MenuAction>(*actionVariantOpt))
+                {
+                    switch (std::get<MenuAction>(*actionVariantOpt))
+                        {
+                        case MenuAction::MENU_ACCEPT: break;
+                        case MenuAction::MENU_CANCEL: break;
+                        case MenuAction::MENU_MOVE_UP: 
+                            m_menu.moveUp(); 
+                            break;
+                        case MenuAction::MENU_MOVE_DOWN: 
+                            m_menu.moveDown();
+                            break;
+                        case MenuAction::MENU_SELECT:
+                            auto entry = m_menu.getSelectedEntry();
+                            if (entry.callback)
+                            {
+                                (*entry.callback)();
+                                m_isFinished = true;
+                            }
+                            else
+                            {
+                                throw std::runtime_error("StatePaused: Couldn't proceed action");
+                            }
+                            break;
+                        }
+                }
+                else if (std::holds_alternative<EngineAction>(*actionVariantOpt))
                 {
                     switch (std::get<EngineAction>(*actionVariantOpt))
                     {
-                    case EngineAction::RESUME:
-                        ge->m_sm.setNextState(std::make_unique<StateResumed>(m_context));
-                        m_isFinished = true;
-                        break;
-                    case EngineAction::DISP_RULES:
-                        ge->m_sm.setNextState(std::make_unique<StateDisplayRules>(m_context));
-                        m_isFinished = true;
-                        break;
                     case EngineAction::QUIT: // gerer lorsqu'on sort d'un jeu todo
                         ge->m_sm.setNextState(std::make_unique<StateQuitted>(m_context));
                         m_isFinished = true;
@@ -68,6 +124,8 @@ namespace Core::Engine {
                     }
                 }
             }
+
+            ge->m_renderer->submit(std::make_unique<DataVariant>(std::move(m_menu.getMenuData())));
             ge->m_renderer->update();
         }
     }

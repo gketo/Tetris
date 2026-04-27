@@ -17,9 +17,9 @@ namespace Core {
     class MenuData;
 }
 
-namespace Game {
-    class RulesData;
-}
+// namespace Game {
+//     class RulesData;
+// }
 
 namespace Core::Grid2D {
     template<typename T>

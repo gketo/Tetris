@@ -10,10 +10,10 @@ namespace Core {
         m_terminalRenderer.render(std::move(data));
     }
 
-    void TerminalVisitor::operator()(const Game::RulesData& data) const
-    {
-        m_terminalRenderer.render(std::move(data));
-    }
+    // void TerminalVisitor::operator()(const Game::RulesData& data) const
+    // {
+    //     m_terminalRenderer.render(std::move(data));
+    // }
     
     void TerminalVisitor::operator()(const Core::Grid2D::Frame2D<char>& data) const
     {

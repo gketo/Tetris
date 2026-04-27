@@ -31,7 +31,7 @@ namespace Core {
         
         // rendering
         virtual void render(const Core::MenuData& menuData) = 0;
-        virtual void render(const Game::RulesData& rules) = 0;
+        // virtual void render(const Game::RulesData& rules) = 0;
         virtual void render(const Core::Grid2D::Frame2D<char>& frame) = 0;
 
     private:

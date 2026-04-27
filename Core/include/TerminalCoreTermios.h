@@ -15,9 +15,9 @@ namespace Core {
     class MenuData;
 }
 
-namespace Game {
-    class RulesData;
-}
+// namespace Game {
+//     class RulesData;
+// }
 
 namespace Core::Grid2D {
     template<typename T>
@@ -53,7 +53,7 @@ namespace Core::Terminal::Termios {
 
         // rendering
         void render(const Core::MenuData& menuData) override;
-        void render(const Game::RulesData& rules) override;
+        // void render(const Game::RulesData& rules) override;
         void render(const Core::Grid2D::Frame2D<char>& frame) override;
 
     private:

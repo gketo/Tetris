@@ -262,12 +262,12 @@ namespace Core::Terminal::Termios {
         outputBuffer();
     }
 
-    void TerminalCoreTermios::render(const Game::RulesData& rulesData)
-    {
-        // LOG_DEBUG("[TerminalCoreTermios] Rendering rules");
-        // appendToBuffer(TermiosFramedTextHelper::to_string(*this, rulesData.getRules()));
-        // outputBuffer();
-    }
+    // void TerminalCoreTermios::render(const Game::RulesData& rulesData)
+    // {
+    //     // LOG_DEBUG("[TerminalCoreTermios] Rendering rules");
+    //     // appendToBuffer(TermiosFramedTextHelper::to_string(*this, rulesData.getRules()));
+    //     // outputBuffer();
+    // }
 
     void TerminalCoreTermios::render(const Core::Grid2D::Frame2D<char>& frame)
     {        

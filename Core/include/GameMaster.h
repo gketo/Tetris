@@ -9,9 +9,9 @@
 #include <memory>
 #include <string>
 
-namespace Game {
-	class RulesData;
-}
+// namespace Game {
+// 	class RulesData;
+// }
 
 namespace Core {
 	// forward declaration

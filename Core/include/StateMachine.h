@@ -3,6 +3,7 @@
 #include "IState.h"
 
 #include <memory>
+#include <stack>
 
 namespace Core {
 // to do add mutex for transition
@@ -10,56 +11,119 @@ namespace Core {
     {
     public:
         void update();
+
         const IState* getState();
 
         template <typename TState>
-        void setNextState(std::unique_ptr<TState> state);
+        void push(std::unique_ptr<TState> state);
+
+        template <typename TState>
+        void clearAndPush(std::unique_ptr<TState> state);
 
     private:
-        std::unique_ptr<IState> m_state;
-        std::unique_ptr<IState> m_nextState;
-        bool m_isTransitioning{ false };
+        std::stack<std::unique_ptr<IState>> m_stack;
+        IState* m_currState;
 
-        void transitionTo(std::unique_ptr<IState> state); 
+        void transitionUp(); 
+        void transitionDown(); 
     };
 
     inline void StateMachine::update() 
     {
-        if (m_isTransitioning)
+        if (!m_stack.empty() && m_stack.top().get() != m_currState)
         {
+            transitionUp();
             return;
         }
-        if (m_state)
+        else if (m_currState && m_currState->isFinished())
         {
-            m_state->update();
+            transitionDown();
+            return;
         }
-        if (m_nextState && m_nextState != m_state)
+
+        if (m_currState)
         {
-            transitionTo(std::move(m_nextState));
-            m_nextState = nullptr;
+            m_currState->update();
         }
     }
 
     inline const IState* StateMachine::getState() 
     { 
-        return m_state.get();
+        return m_currState;
     }
 
-    // todo attention if we want overwrite ignore or queue. currently overwriting
     template <typename TState>
-    inline void StateMachine::setNextState(std::unique_ptr<TState> state)
+    inline void StateMachine::push(std::unique_ptr<TState> state)
     {
-        static_assert(std::is_base_of<IState, TState>::value, "StateMachine::setNextState() TState must inherit from IState");
-        m_nextState = std::move(state);
+        static_assert(std::is_base_of<IState, TState>::value, "StateMachine::push() TState must inherit from IState");
+        m_stack.push(std::move(state));
     }
 
-    inline void StateMachine::transitionTo(std::unique_ptr<IState> state) 
+    template <typename TState>
+    inline void StateMachine::clearAndPush(std::unique_ptr<TState> state)
     {
-        if (m_state && !m_state->isFinished()) { return; }
-        m_isTransitioning = true;
-        if (m_state) { m_state->exit(); }
-        m_state = std::move(state);
-        if (m_state) { m_state->enter(); }
-        m_isTransitioning = false;
+        static_assert(std::is_base_of<IState, TState>::value, "StateMachine::clearAndPush() TState must inherit from IState");
+
+        while (!m_stack.empty())
+        {
+            if (m_stack.top())
+            {
+                m_stack.top()->exit();
+            }
+            m_stack.pop();
+        }
+
+        m_currState = nullptr;
+        
+        m_stack.push(std::move(state));
+        
+        m_currState = m_stack.top().get();
+
+        if (m_currState)
+        {
+            m_currState->enter();
+        }
+    }
+
+    inline void StateMachine::transitionUp() 
+    {
+        if (m_stack.empty() || m_stack.top().get() == m_currState)
+        {
+            return;
+        }
+
+        if (m_currState)
+        { 
+            m_currState->pause();
+        }
+
+        m_currState = m_stack.top().get();
+
+        if (m_currState) 
+        { 
+            m_currState->enter();
+        }
+    }
+
+    inline void StateMachine::transitionDown() 
+    {
+        if (m_currState) 
+        { 
+            m_currState->exit(); 
+        }
+
+        m_stack.pop();
+
+        m_currState = nullptr;
+
+        if (!m_stack.empty())
+        {
+            m_currState = m_stack.top().get();
+        }
+
+        if (m_currState)
+        {
+            m_currState->resume();
+        }
     }
 }

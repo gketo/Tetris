@@ -196,7 +196,7 @@ namespace Core::Terminal::Termios {
 
     void TerminalCoreTermios::moveCursor(size_t row, size_t col)
     {
-        LOG_DEBUG("[TerminalCoreTermios] Move cursor to ( %d, %d )", row, col);
+        // LOG_DEBUG("[TerminalCoreTermios] Move cursor to ( %d, %d )", row, col);
 
         row = std::clamp(row, static_cast<size_t>(0), m_termConfig.height - 1);
         col = std::clamp(col, static_cast<size_t>(0), m_termConfig.width  - 1);
@@ -235,7 +235,7 @@ namespace Core::Terminal::Termios {
 
     void TerminalCoreTermios::moveCursor(std::string& frameStr, size_t row, size_t col) const
     {
-        LOG_DEBUG("[TerminalCoreTermios] Move cursor to ( %d, %d )", row, col);
+        // LOG_DEBUG("[TerminalCoreTermios] Move cursor to ( %d, %d )", row, col);
 
         row = std::clamp(row, static_cast<size_t>(0), m_termConfig.height - 1);
         col = std::clamp(col, static_cast<size_t>(0), m_termConfig.width  - 1);

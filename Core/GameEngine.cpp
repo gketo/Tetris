@@ -22,8 +22,7 @@ namespace Core::Engine {
         m_gameMaster.setCurrentGame(gameType);
         m_gameMaster.initGame(*m_eventManager);
 
-        m_sm.setNextState(std::make_unique<StateInitialized>(this));
-       // m_sm.update();
+        m_sm.push(std::make_unique<StateInitialized>(this));
     }
 
 	void GameEngine::run()
@@ -43,10 +42,24 @@ namespace Core::Engine {
             update();
             render();
 		}
-
-        m_sm.setNextState(std::make_unique<StateTerminated>(this));
-        m_sm.update();
 	}
+
+    void GameEngine::reset()
+	{
+		LOG_DEBUG("[GameEngine] Reset requested... ========TODO");
+		m_eventManager->clearPendingEvents();
+		m_gameMaster.unsetCurrentGame();
+		m_menu.clear();
+	}
+
+    void GameEngine::terminate()
+    {
+        // todo
+		LOG_DEBUG("[GameEngine] Termination requested... ========TODO");
+        m_eventManager->clearPendingEvents();
+		m_gameMaster.unsetCurrentGame();
+		m_menu.clear();
+    }
 
 	bool GameEngine::shouldExit()
 	{
@@ -75,11 +88,4 @@ namespace Core::Engine {
 		LOG_DEBUG("[GameEngine] Save requested... ========TODO");
 	}
 
-	void GameEngine::reset()
-	{
-		LOG_DEBUG("[GameEngine] Reset requested... ========TODO");
-		m_eventManager->clearPendingEvents();
-		m_gameMaster.unsetCurrentGame();
-		m_menu.clear();
-	}
 }

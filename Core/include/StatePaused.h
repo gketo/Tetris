@@ -5,7 +5,6 @@
 #include "InputBinding.h"
 #include "IState.h"
 #include "Logger.h"
-#include "StateResumed.h"
 #include "StateQuitted.h"
 
 namespace Core::Engine {
@@ -21,6 +20,9 @@ namespace Core::Engine {
 
         bool isFinished() const override;
     
+        void pause() override;
+        void resume() override;
+
     private:
         Menu m_menu;
         void buildPausedMenu();
@@ -38,7 +40,7 @@ namespace Core::Engine {
         resume.callback = [this]() {
             if (auto ge = dynamic_cast<GameEngine*>(m_context))
             {
-                ge->m_sm.setNextState(std::make_unique<StateResumed>(m_context));
+                m_isFinished = true;
             }
         };
         md.addEntry(std::move(resume));
@@ -49,7 +51,7 @@ namespace Core::Engine {
         showRules.callback = [this]() {
             if (auto ge = dynamic_cast<GameEngine*>(m_context))
             {
-                ge->m_sm.setNextState(std::make_unique<StateDisplayRules>(m_context));
+                ge->m_sm.push(std::make_unique<StateDisplayRules>(m_context));
             }
         };
         md.addEntry(std::move(showRules));
@@ -102,7 +104,6 @@ namespace Core::Engine {
                             if (entry.callback)
                             {
                                 (*entry.callback)();
-                                m_isFinished = true;
                             }
                             else
                             {
@@ -116,8 +117,8 @@ namespace Core::Engine {
                     switch (std::get<EngineAction>(*actionVariantOpt))
                     {
                     case EngineAction::QUIT: // gerer lorsqu'on sort d'un jeu todo
-                        ge->m_sm.setNextState(std::make_unique<StateQuitted>(m_context));
                         m_isFinished = true;
+                        ge->m_sm.clearAndPush(std::make_unique<StateQuitted>(m_context));
                         break;
                     default:
                         LOG_ERROR("[GameEngineSM] StatePaused: Unkown action");
@@ -133,6 +134,23 @@ namespace Core::Engine {
     inline bool StatePaused::isFinished() const 
     { 
         return m_isFinished;
+    }
+
+    inline void StatePaused::pause()
+    {
+        LOG_DEBUG("[GameEngineSM] StatePaused : pause()...");
+        m_isFinished = true;
+    }
+
+    inline void StatePaused::resume()
+    {
+        LOG_DEBUG("[GameEngineSM] StatePaused : resume()...");
+        m_isFinished = false;
+        if (auto ge = dynamic_cast<GameEngine*>(m_context))
+        {
+            ge->m_eventManager->clearInputBindings();
+            ge->m_eventManager->registerInputBindings(GamePausedRegisteredEvents);
+        }
     }
 
 }

@@ -19,6 +19,9 @@ namespace Core::Engine {
         void update() override;
 
         bool isFinished() const override;
+
+        void pause() override;
+        void resume() override;
     };
 
     inline void StateRunning::enter()
@@ -54,8 +57,7 @@ namespace Core::Engine {
                     switch (std::get<EngineAction>(*actionVariantOpt))
                     {
                     case EngineAction::PAUSE:
-                        ge->m_sm.setNextState(std::make_unique<StatePaused>(m_context));
-                        m_isFinished = true;
+                        ge->m_sm.push(std::make_unique<StatePaused>(m_context));
                         break;
                     default:
                         LOG_ERROR("[GameEngineSM] StateRunning: Unkown action");
@@ -80,4 +82,22 @@ namespace Core::Engine {
     { 
         return m_isFinished;
     }
+
+    inline void StateRunning::pause()
+    {
+        LOG_DEBUG("[GameEngineSM] StateRunning : pause()...");
+        m_isFinished = true;
+    }
+
+    inline void StateRunning::resume()
+    {
+        LOG_DEBUG("[GameEngineSM] StateRunning : resume()...");
+        m_isFinished = false;
+        if (auto ge = dynamic_cast<GameEngine*>(m_context))
+        {
+            ge->m_eventManager->clearInputBindings();
+            ge->m_eventManager->registerInputBindings(GameRunningRegisteredEvents);
+        }
+    }
+
 }

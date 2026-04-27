@@ -9,7 +9,7 @@ namespace Core {
         KEYBOARD
     };
 
-    class LauncherApp
+    class AppLauncher
     {
     public:
         void launch();

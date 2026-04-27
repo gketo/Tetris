@@ -4,7 +4,6 @@
 #include "IContext.h"
 #include "IState.h"
 #include "Logger.h"
-#include "StateTerminated.h"
 
 namespace Core::Engine {
 
@@ -27,14 +26,14 @@ namespace Core::Engine {
         if (auto ge = dynamic_cast<GameEngine*>(m_context))
         {
             ge->save();
-            m_isFinished = true;
+            exit();
         }
     }
 
     inline void StateQuitted::exit() 
     { 
         LOG_DEBUG("[GameEngineSM] StateQuitted : exit()...");
-        // do nothing
+        m_isFinished = true;
     }
 
     inline void StateQuitted::update() 

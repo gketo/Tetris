@@ -20,9 +20,7 @@ namespace Core::Engine {
     class StateDisplayRules;
     class StateRunning;
     class StatePaused;
-    class StateResumed;
     class StateQuitted;
-    class StateTerminated;
 
 	class GameEngine : public IContext
 	{
@@ -31,20 +29,20 @@ namespace Core::Engine {
         friend class StateDisplayRules;
         friend class StateRunning;
         friend class StatePaused;
-        friend class StateResumed;
         friend class StateQuitted;
-        friend class StateTerminated;
 
 	public:
 		GameEngine(EventManager* em, IRenderer* re)
 			: m_eventManager{ em }
 			, m_renderer{ re }
 		{
-            m_sm.setNextState(std::make_unique<StateUninitialized>(this));
+            m_sm.push(std::make_unique<StateUninitialized>(this));
         }
 
 		void init(Game::GameType gameType);
 		void run();
+		void reset();
+        void terminate();
 
 	private: // todo ensure right order destruction because renderer owns terminal and evenmanager uses it
         StateMachine m_sm;
@@ -61,7 +59,6 @@ namespace Core::Engine {
 		void render();
 
 		void save();
-		void reset();
 	};
 
 }

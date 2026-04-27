@@ -39,10 +39,9 @@ namespace Core::Engine {
         LOG_DEBUG("[GameEngineSM] StateInitialized : update()...");
         if (auto ge = dynamic_cast<GameEngine*>(m_context))
         {
-            ge->m_sm.setNextState(std::make_unique<StateRunning>(m_context));
             m_isFinished = true;
+            ge->m_sm.push(std::make_unique<StateRunning>(m_context));
         }
-
     }
 
     inline bool StateInitialized::isFinished() const

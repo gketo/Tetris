@@ -1,6 +1,6 @@
 // Main.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-#include "LauncherApp.h"
+#include "AppLauncher.h"
 #include "Logger.h"
 
 /* DEBUG */
@@ -27,7 +27,7 @@ int main()
 
     LOG_DEBUG("[Main.cpp] Hello World!");
     
-    Core::LauncherApp laucher{};
+    Core::AppLauncher laucher{};
 
     try 
     {

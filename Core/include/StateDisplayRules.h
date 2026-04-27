@@ -93,7 +93,6 @@ namespace Core::Engine {
                     switch (std::get<MenuAction>(*actionVariantOpt))
                         {
                         case MenuAction::MENU_ACCEPT:
-                            ge->m_sm.setNextState(std::make_unique<StatePaused>(m_context));
                             m_isFinished = true;
                             break;
                         default:

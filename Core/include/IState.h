@@ -6,7 +6,6 @@
 #include <string>
 #include <cxxabi.h> // For demangling (GCC/Clang)
 
-
 namespace Core {
 
     class IContext;
@@ -34,6 +33,9 @@ namespace Core {
         virtual void exit() = 0;
         virtual void update() = 0;
         virtual bool isFinished() const = 0;
+
+        virtual void pause() {};
+        virtual void resume() {};
 
         virtual std::string dbg_nameYourself() const { return dbg_demangle(typeid(*this).name()); }
         

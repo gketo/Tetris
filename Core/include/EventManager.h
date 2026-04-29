@@ -1,7 +1,9 @@
 #pragma once
 
-#include "ActionVariant.h"
-#include "DeviceEvent.h" // KeyCode
+#include "EventContext.h"
+#include "EventLayer.h"
+#include "EventPriorityQueue.h"
+#include "CommandVariant.h"
 #include "InputBinding.h"
 #include "IController.h"
 
@@ -15,9 +17,7 @@
 
 namespace Core {
 
-
 	using IControllerPtr = std::unique_ptr<IController>;
-	using ActionQueue = std::queue<Core::ActionVariant>;
 
 	class EventManager
 	{
@@ -26,23 +26,27 @@ namespace Core {
 		// 	: m_controller{ci}
 		// { }
 
-		void addController(IControllerPtr ci);
+		void addController(IControllerPtr ctrlPtr);
 
-		void clearInputBindings();
-		void registerInputBindings(std::vector<InputBinding> bindings);
-		// void bindKey(KeyCode code, ActionVariant action);
+	    void bindInputs(const std::vector<InputBinding>& toBind);
+        void unbindInputs(const std::vector<InputBinding>& toUnbind);
+		void clearInputs();
 
-		void pollEvents();
-		std::optional<Core::ActionVariant> popEvent();
-		void clearPendingEvents();
+        void pushActiveLayer(EventLayer layer);
+        void popActiveLayer(EventLayer layer);
+
+		void pollInputEvents();
+		std::optional<Core::CommandVariant> popEvent();
+		void clearInputEvents();
 	
 	private:
-		std::map<KeyCode, Core::ActionVariant> m_eventMapping;
-		std::vector<InputBinding> m_registeredInputBindings;
 		std::vector<IControllerPtr> m_controllers;
-		ActionQueue m_pendingEvents;
+		std::vector<InputBinding> m_inputBindings;
+        std::unordered_set<EventLayer> m_activeLayers; // todo maybe later lower level need to ask higher levels if they can change event context layer
+		EventPriorityQueue m_inputEvents; // ephemeral
 
 		void bindController();
+        bool isActive(EventLayer layer) const;
 	};
 
 }

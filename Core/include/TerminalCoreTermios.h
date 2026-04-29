@@ -65,10 +65,9 @@ namespace Core::Terminal::Termios {
         bool updateCursorPosition() override;
         bool updateTerminalSize() override;
         
-        const char* caller() const override; // for clearer logging
-        void onInit() override;
-        void onTerminate() noexcept override;
-		void onQuit() noexcept override;
+        void init() override;
+        void terminate() noexcept override;
+		void quit() noexcept override;
     };
 
 }

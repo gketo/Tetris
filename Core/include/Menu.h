@@ -5,7 +5,7 @@
 
 // forward declaration
 namespace Core {
-    class GameMaster;
+    class GameSession;
 }
 
 namespace Core {

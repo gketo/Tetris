@@ -6,64 +6,84 @@
 #include <stack>
 
 namespace Core {
-// to do add mutex for transition
+// todo add mutex for transition
+
+    template<typename TContext>
     class StateMachine 
     {
     public:
+        bool handleEvent(const CommandVariant& e);
+        bool collectRenderData(RenderQueue& out) const;
         void update();
 
-        const IState* getState();
+        const IState<TContext>* getState();
 
         template <typename TState>
         void push(std::unique_ptr<TState> state);
 
+        void clear();
+
         template <typename TState>
         void clearAndPush(std::unique_ptr<TState> state);
 
+
     private:
-        std::stack<std::unique_ptr<IState>> m_stack;
-        IState* m_currState;
+        std::stack<std::unique_ptr<IState<TContext>>> m_stack;
+        IState<TContext>* m_currentState;
 
         void transitionUp(); 
         void transitionDown(); 
     };
 
-    inline void StateMachine::update() 
+    template<typename TContext>
+    inline bool StateMachine<TContext>::handleEvent(const CommandVariant& e)
     {
-        if (!m_stack.empty() && m_stack.top().get() != m_currState)
+        return m_currentState->handleEvent(e);
+    }
+    
+    template<typename TContext>
+    inline bool StateMachine<TContext>::collectRenderData(RenderQueue& out) const
+    {
+        return m_currentState->collectRenderData(out);
+    }
+
+    template<typename TContext>
+    inline void StateMachine<TContext>::update() 
+    {
+        if (!m_stack.empty() && m_stack.top().get() != m_currentState)
         {
             transitionUp();
             return;
         }
-        else if (m_currState && m_currState->isFinished())
+        else if (m_currentState && m_currentState->isFinished())
         {
             transitionDown();
             return;
         }
 
-        if (m_currState)
+        if (m_currentState)
         {
-            m_currState->update();
+            m_currentState->update();
         }
     }
 
-    inline const IState* StateMachine::getState() 
+    template<typename TContext>
+    inline const IState<TContext>* StateMachine<TContext>::getState() 
     { 
-        return m_currState;
+        return m_currentState;
     }
 
+    template<typename TContext>
     template <typename TState>
-    inline void StateMachine::push(std::unique_ptr<TState> state)
+    inline void StateMachine<TContext>::push(std::unique_ptr<TState> state)
     {
-        static_assert(std::is_base_of<IState, TState>::value, "StateMachine::push() TState must inherit from IState");
+        static_assert(std::is_base_of<IState<TContext>, TState>::value, "StateMachine::push() TState must inherit from IState");
         m_stack.push(std::move(state));
     }
 
-    template <typename TState>
-    inline void StateMachine::clearAndPush(std::unique_ptr<TState> state)
+    template<typename TContext>
+    inline void StateMachine<TContext>::clear()
     {
-        static_assert(std::is_base_of<IState, TState>::value, "StateMachine::clearAndPush() TState must inherit from IState");
-
         while (!m_stack.empty())
         {
             if (m_stack.top())
@@ -73,57 +93,68 @@ namespace Core {
             m_stack.pop();
         }
 
-        m_currState = nullptr;
-        
+        m_currentState = nullptr;
+    }
+
+    template<typename TContext>
+    template <typename TState>
+    inline void StateMachine<TContext>::clearAndPush(std::unique_ptr<TState> state)
+    {
+        static_assert(std::is_base_of<IState<TContext>, TState>::value, "StateMachine::clearAndPush() TState must inherit from IState");
+
+        clear();
+
         m_stack.push(std::move(state));
         
-        m_currState = m_stack.top().get();
+        m_currentState = m_stack.top().get();
 
-        if (m_currState)
+        if (m_currentState)
         {
-            m_currState->enter();
+            m_currentState->enter();
         }
     }
 
-    inline void StateMachine::transitionUp() 
+    template<typename TContext>
+    inline void StateMachine<TContext>::transitionUp() 
     {
-        if (m_stack.empty() || m_stack.top().get() == m_currState)
+        if (m_stack.empty() || m_stack.top().get() == m_currentState)
         {
             return;
         }
 
-        if (m_currState)
+        if (m_currentState)
         { 
-            m_currState->pause();
+            m_currentState->pause();
         }
 
-        m_currState = m_stack.top().get();
+        m_currentState = m_stack.top().get();
 
-        if (m_currState) 
+        if (m_currentState) 
         { 
-            m_currState->enter();
+            m_currentState->enter();
         }
     }
 
-    inline void StateMachine::transitionDown() 
+    template<typename TContext>
+    inline void StateMachine<TContext>::transitionDown() 
     {
-        if (m_currState) 
+        if (m_currentState) 
         { 
-            m_currState->exit(); 
+            m_currentState->exit(); 
         }
 
         m_stack.pop();
 
-        m_currState = nullptr;
+        m_currentState = nullptr;
 
         if (!m_stack.empty())
         {
-            m_currState = m_stack.top().get();
+            m_currentState = m_stack.top().get();
         }
 
-        if (m_currState)
+        if (m_currentState)
         {
-            m_currState->resume();
+            m_currentState->resume();
         }
     }
 }

@@ -1,43 +1,31 @@
 #pragma once
 
 #include "EventManager.h"
-#include "GameMaster.h"
+#include "GameSession.h"
+#include "IEngineStateContext.h"
 #include "IRenderer.h"
-#include "Menu.h"
-
-#include "IContext.h"
 #include "IState.h"
+#include "Menu.h"
 #include "StateMachine.h"
-#include "StateUninitialized.h"
 
 #include <memory>
 #include <string>
 
 namespace Core::Engine {
 
-    class StateUninitialized;
-    class StateInitialized;
-    class StateDisplayRules;
-    class StateRunning;
-    class StatePaused;
-    class StateQuitted;
-
-	class GameEngine : public IContext
+	class GameEngine : public IEngineStateContext
 	{
-        friend class StateUninitialized;
-        friend class StateInitialized;
-        friend class StateDisplayRules;
-        friend class StateRunning;
-        friend class StatePaused;
-        friend class StateQuitted;
-
 	public:
 		GameEngine(EventManager* em, IRenderer* re)
 			: m_eventManager{ em }
+            , m_gameSession{ *em }
 			, m_renderer{ re }
-		{
-            m_sm.push(std::make_unique<StateUninitialized>(this));
-        }
+		{}
+        
+        EventManager& getEventManager() override { return *m_eventManager; }
+        Core::Session::GameSession& getGameSession() override { return m_gameSession; }
+        IRenderer& getRenderer() override { return *m_renderer; }
+        StateMachine<IEngineStateContext>& getStateMachine() override { return m_sm; }
 
 		void init(Game::GameType gameType);
 		void run();
@@ -45,16 +33,15 @@ namespace Core::Engine {
         void terminate();
 
 	private: // todo ensure right order destruction because renderer owns terminal and evenmanager uses it
-        StateMachine m_sm;
-
-		GameMaster m_gameMaster;
+        StateMachine<IEngineStateContext> m_sm;
 		EventManager* m_eventManager{ nullptr };
-		IRenderer* m_renderer{ nullptr };
+		Core::Session::GameSession m_gameSession;
+        IRenderer* m_renderer{ nullptr };
 		Menu m_menu;
 		
 		bool shouldExit();
 
-		void pollEvents();
+		void pollInputEvents();
         void update();
 		void render();
 

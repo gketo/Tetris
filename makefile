@@ -35,7 +35,7 @@ clean:
 # Named pipe for logs
 LOG_PIPE = /tmp/my_log_pipe
 
-run-with-log: $(TARGET)
+run-log: $(TARGET)
 	# create FIFO if it doesn't exist
 	@mkfifo $(LOG_PIPE) || true
 	# open a new terminal to read logs
@@ -47,3 +47,10 @@ run-with-log: $(TARGET)
 
 clean-pipe:
 	rm -f /tmp/my_log_pipe
+
+run-log-extra: CXXFLAGS += -D LOG_DEBUG_EXTRA
+run-log-extra: $(TARGET)
+	@mkfifo $(LOG_PIPE) || true
+	@osascript -e 'tell application "Terminal" to do script "cat $(LOG_PIPE)"'
+	@sleep 0.5
+	@export DEBUG_TTY=$(LOG_PIPE); ./$(TARGET)

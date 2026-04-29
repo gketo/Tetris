@@ -1,7 +1,7 @@
 #include "Menu.h"
 
 #include "DataVariant.h"
-#include "GameMaster.h"
+#include "GameSession.h"
 #include "MenuData.h"
 
 #include <variant>

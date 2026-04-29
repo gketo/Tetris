@@ -1,11 +1,12 @@
 #include "AppLauncher.h"
 
+#include "Config_CoreInputBindings.h"
 #include "CtrlKeyboard.h"
 #include "EventManager.h"
+#include "EventLayer.h"
 #include "GameEngine.h"
-#include "GameMaster.h"
+#include "GameSession.h"
 #include "GameType.h"
-#include "InputBinding.h"
 #include "IRenderer.h"
 #include "Logger.h"
 #include "Menu.h"
@@ -83,8 +84,9 @@ namespace Core {
         while (!exitLauncher)
         {
             buildGameChoiceMenu();
-            em->clearInputBindings();
-            em->registerInputBindings(GameChoiceMenuRegisteredEvents);
+            em->clearInputs();
+            em->bindInputs(GameChoiceMenuRegisteredEvents);
+            em->pushActiveLayer(EventLayer::Menu);
 
             bool userAnswered{ false };
             do
@@ -94,7 +96,7 @@ namespace Core {
                 renderer->render();
 
                 // get events from event manager (controller)
-                em->pollEvents();
+                em->pollInputEvents();
                 auto actionVariantOpt = em->popEvent();
 
                 if (actionVariantOpt)
@@ -104,22 +106,22 @@ namespace Core {
                     {
                         using actionType = std::decay_t<decltype(action)>;
 
-                        if constexpr (std::is_same_v<actionType, MenuAction>) 
+                        if constexpr (std::is_same_v<actionType, MenuCommand>) 
                         {
                             switch (action)
                             {
-                            case MenuAction::MENU_ACCEPT: break;
-                            case MenuAction::MENU_CANCEL:
+                            case MenuCommand::MENU_ACCEPT: break;
+                            case MenuCommand::MENU_CANCEL:
                                 exitLauncher = true;
                                 userAnswered = true;
                                 break;
-                            case MenuAction::MENU_MOVE_UP: 
+                            case MenuCommand::MENU_MOVE_UP: 
                                 m_menu.moveUp(); 
                                 break;
-                            case MenuAction::MENU_MOVE_DOWN: 
+                            case MenuCommand::MENU_MOVE_DOWN: 
                                 m_menu.moveDown();
                                 break;
-                            case MenuAction::MENU_SELECT:
+                            case MenuCommand::MENU_SELECT:
                                 auto entry = m_menu.getSelectedEntry();
                                 if (entry.callback)
                                 {
@@ -148,13 +150,16 @@ namespace Core {
                 break;
             }
 
+            em->unbindInputs(GameChoiceMenuRegisteredEvents);
+            em->popActiveLayer(EventLayer::Menu);
+
             m_gameEngine = std::make_unique<Core::Engine::GameEngine>(em.get() , renderer.get());
 
             m_gameEngine->init(m_gameChoice);
             m_gameEngine->run();
 
             // user quitted game
-            m_gameEngine->reset();
+            LOG_DEBUG("[AppLauncher] User quitted. Back to choice menu...");
             m_gameChoice = Game::GameType::None;
         }
 

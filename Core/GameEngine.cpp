@@ -1,12 +1,11 @@
 #include "GameEngine.h"
 
 #include "EventManager.h"
-#include "GameMaster.h"
+#include "GameSession.h"
 #include "Logger.h"
 #include "Menu.h"
-#include "StateUninitialized.h"
-#include "StateInitialized.h"
-#include "StateQuitted.h"
+#include "EngineStateInitialized.h"
+#include "EngineStateTerminated.h"
 
 #include <memory>
 #include <string>
@@ -15,40 +14,41 @@ namespace Core::Engine {
 
     void GameEngine::init(Game::GameType gameType)
 	{
-
-		LOG_DEBUG("[GameEngine] Initializing...");        
-
-        m_eventManager->clearInputBindings();
-        m_gameMaster.setCurrentGame(gameType);
-        m_gameMaster.initGame(*m_eventManager);
-
-        m_sm.push(std::make_unique<StateInitialized>(this));
+		LOG_DEBUG("[GameEngine] Initializing...");  
+        // m_sm.clearAndPush(std::make_unique<EngineStateUninitialized>(*this));
+        m_eventManager->clearInputs();
+        m_sm.clearAndPush(std::make_unique<EngineStateInitialized>(*this, gameType));
     }
 
 	void GameEngine::run()
 	{		
-        if (dynamic_cast<const StateUninitialized*>(m_sm.getState()))
+        if (!dynamic_cast<const EngineStateInitialized*>(m_sm.getState()))
 		{
-			throw std::runtime_error("GameEngine: run() called but Engine is uninitialized");
+			throw std::runtime_error("GameEngine: run() called but Engine is not initialized");
 		}
 
-		LOG_DEBUG("[GameEngine] Engine running...");
+		LOG_DEBUG("[GameEngine] Engine run()...");
 
 		// main loop on game
+        LOG_DEBUG("LOOOP");
 		while (!shouldExit())
 		{
-            LOG_DEBUG("LOOOP");
-			pollEvents();
+			pollInputEvents();
             update();
             render();
 		}
+    
+        save();
+        terminate();
 	}
 
     void GameEngine::reset()
 	{
 		LOG_DEBUG("[GameEngine] Reset requested... ========TODO");
-		m_eventManager->clearPendingEvents();
-		m_gameMaster.unsetCurrentGame();
+		m_gameSession.clear();
+        m_sm.clear();
+        m_eventManager->clearInputs();
+		m_eventManager->clearInputEvents();
 		m_menu.clear();
 	}
 
@@ -56,30 +56,53 @@ namespace Core::Engine {
     {
         // todo
 		LOG_DEBUG("[GameEngine] Termination requested... ========TODO");
-        m_eventManager->clearPendingEvents();
-		m_gameMaster.unsetCurrentGame();
-		m_menu.clear();
+        reset();
     }
 
 	bool GameEngine::shouldExit()
 	{
-		return m_gameMaster.isGameOver() || dynamic_cast<const StateQuitted*>(m_sm.getState());
+		return m_gameSession.shouldExit() || dynamic_cast<const EngineStateTerminated*>(m_sm.getState());
 	}
 
-	void GameEngine::pollEvents()
+	void GameEngine::pollInputEvents()
 	{
 		// get events from event manager (controller)
-		m_eventManager->pollEvents();
+		LOG_EXTRA("[GameEngine] Engine pollInputEvents()...");
+		m_eventManager->pollInputEvents();
+        while (auto eventOpt = m_eventManager->popEvent())
+        {
+            const auto& event = *eventOpt;
+
+            if (m_sm.handleEvent(event))
+            {
+		        LOG_DEBUG("[GameEngine] Event consumed by engine SM");
+                continue;
+            }
+
+            if (m_gameSession.handleEvent(event))
+            {
+		        LOG_DEBUG("[GameEngine] Event consumed by gamesession SM");
+                continue;
+            }
+        }
 	}
 
     void GameEngine::update()
     {
+		LOG_EXTRA("[GameEngine] Engine update()...");
         m_sm.update();
     }
 
     //todo safe rendering with data empty
 	void GameEngine::render()
 	{
+		LOG_EXTRA("[GameEngine] Engine render()...");
+        auto& queue = m_renderer->getRenderQueue();
+        if (!m_sm.collectRenderData(queue))
+        {
+            m_gameSession.collectRenderData(queue);
+        }
+
         m_renderer->render(); 
     }
 

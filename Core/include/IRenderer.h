@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Lifecycle.h"
 #include "DataVariant.h"
 #include "RenderQueue.h"
 #include "RenderSystem.h"
@@ -10,7 +9,7 @@
 
 namespace Core {
 
-    class IRenderer : virtual public Lifecycle
+    class IRenderer
     {
     public:
         IRenderer()
@@ -24,6 +23,7 @@ namespace Core {
 
         virtual void update() = 0;
 
+        RenderQueue& getRenderQueue();
         void submit(std::unique_ptr<DataVariant> dataVar);
         void render();
 
@@ -34,6 +34,10 @@ namespace Core {
         // virtual void render(const Game::RulesData& rules) = 0;
         virtual void render(const Core::Grid2D::Frame2D<char>& frame) = 0;
 
+        virtual void init() = 0;
+        virtual void terminate() noexcept = 0;
+        virtual void quit() noexcept = 0;
+
     private:
         std::unique_ptr<RenderQueue> m_renderQueue;
         std::unique_ptr<RenderSystem> m_renderSystem;
@@ -42,4 +46,8 @@ namespace Core {
         // void render(const DataVariant& dataVar);
     };
 
+    inline RenderQueue& IRenderer::getRenderQueue()
+    {
+        return *m_renderQueue;
+    }
 }

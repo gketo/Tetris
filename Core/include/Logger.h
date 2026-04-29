@@ -83,4 +83,10 @@ inline void log(const char* level, const char* fmt, ...) {
 #define LOG_WARNING(fmt, ...) Logger::log("WARNING", fmt, ##__VA_ARGS__)
 #define LOG_ERROR(fmt, ...)   Logger::log("ERROR", fmt, ##__VA_ARGS__)
 
+#ifdef LOG_DEBUG_EXTRA
+#define LOG_EXTRA(fmt, ...) Logger::log("DEBUG_EXTRA", fmt, ##__VA_ARGS__)
+#else
+#define LOG_EXTRA(fmt, ...) ((void)0)
+#endif
+
 } // namespace Logger

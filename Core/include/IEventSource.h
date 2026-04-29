@@ -1,13 +1,12 @@
 #pragma once
 
 #include "DeviceEvent.h"
-#include "Lifecycle.h"
 
 #include <optional>
 
 namespace Core {
 
-    class IEventSource : virtual public Lifecycle
+    class IEventSource
     {
     public:
         virtual ~IEventSource() = default;

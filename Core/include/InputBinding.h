@@ -1,63 +1,70 @@
 #pragma once
 
+#include "CommandVariant.h"
 #include "DeviceEvent.h"
-#include "DeviceType.h"
-#include "ActionVariant.h"
-#include "KeyCode.h"
-#include "SourceType.h"
+#include "Event.h"
+#include "Timestamp.h"
+
+// to_string
+#include "EngineCommand.h"
+#include "EventLayer.h"
+#include "MenuCommand.h"
+#include "TetrisCommand.h"
 
 namespace Core {
 
     struct InputBinding 
     {
-        ActionVariant action;
-        DeviceEvent event;
+        InputBinding(EventLayer layer, CommandVariant commandVar, SourceType source, DeviceType device, KeyCode code, std::optional<char> ch = std::nullopt, KeyModifier modifiers = KeyModifier::None)
+        : layer{ layer }
+        , commandVar{ commandVar } 
+        , source{ source }
+        , device{ device }
+        , code{ code }
+        , ch{ ch }
+        , modifiers{ modifiers }
+        {}
+
+        // app event
+        EventLayer layer;
+        CommandVariant commandVar;
+
+        // device event
+        SourceType source{ SourceType::None };
+        DeviceType device{ DeviceType::None };
+        KeyCode code{ KeyCode::None };
+        std::optional<char> ch;
+        KeyModifier modifiers{ KeyModifier::None };
+
+        bool operator==(const InputBinding& other) const = default;
+
+        bool weakCompare(const Event& other) const
+        {
+            return layer == other.layer &&
+                commandVar == other.commandVar;
+        }
+
+        bool weakCompare(const DeviceEvent& other) const
+        {
+            return source == other.source &&
+                device == other.device &&
+                code == other.code &&
+                ch == other.ch &&
+                modifiers == other.modifiers;
+        }
+
+        inline std::string to_string() const
+        {
+            return std::format("[InputBinding] -> Layer: {}, CommandVar: {}, Source: {}, Device: {}, KeyCode: {}, KeyModifiers: {}, ch (opt): {}"
+                , dbg_to_string(layer)
+                , dbg_to_string(commandVar)
+                , source_to_string(source)
+                , device_to_string(device)
+                , keycode_to_string(code)
+                , keymodifier_to_string(modifiers)
+                , (ch ? std::string{1, *ch} : "None")
+            );
+        }
     };
 
-    const std::vector<InputBinding> GameChoiceMenuRegisteredEvents{
-        // Keyboard
-        //  Game choice menu
-        InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_MOVE_UP }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ARROW_UP } },
-        InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_MOVE_DOWN }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ARROW_DOWN } },
-        InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_SELECT }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ENTER } },
-        InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_CANCEL }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'q' } },
-        //
-    };
-
-    const std::vector<InputBinding> RulesDisplayRegisteredEvents{
-        // Keyboard
-        //  Accept rules button
-        InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_ACCEPT }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ENTER } },
-        // InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_CANCEL }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'q'} },
-        //
-    };
-
-    const std::vector<InputBinding> GameRunningRegisteredEvents{
-        // Keyboard
-        //  Pause key
-        InputBinding{ Core::ActionVariant{ std::in_place_type<EngineAction>, EngineAction::PAUSE }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'p'} },
-        //
-    };
-
-    const std::vector<InputBinding> GamePausedRegisteredEvents{
-        // Keyboard
-        //  Paused menu options
-        InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_MOVE_UP }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ARROW_UP } },
-        InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_MOVE_DOWN }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ARROW_DOWN } },
-        InputBinding{ Core::ActionVariant{ std::in_place_type<MenuAction>, MenuAction::MENU_SELECT }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ENTER } },
-        // Keyboard
-        //  Paused menu quit
-        InputBinding{ Core::ActionVariant{ std::in_place_type<EngineAction>, EngineAction::QUIT }, DeviceEvent{ SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'q'} },
-        //
-    };
-} 
-
-    // DeviceEvent(SourceType source, DeviceType device, KeyCode code, std::optional<char> ch = std::nullopt, KeyModifier modifiers = KeyModifier::None)
-
-// em.bindKey( Core::KeyCode::ENTER, Core::ActionVariant{ std::in_place_type<EngineAction>, EngineAction::SELECT });
-// em.bindKey( Core::KeyCode::ENTER, Core::ActionVariant{ std::in_place_type<EngineAction>, EngineAction::PLAY });
-// em.bindKey( Core::KeyCode::KEY_R, Core::ActionVariant{ std::in_place_type<EngineAction>, EngineAction::RESUME });
-// em.bindKey( Core::KeyCode::KEY_P, Core::ActionVariant{ std::in_place_type<EngineAction>, EngineAction::PAUSE });
-// em.bindKey( Core::KeyCode::KEY_Q, Core::ActionVariant{ std::in_place_type<EngineAction>, EngineAction::QUIT });
-// em.bindKey( Core::KeyCode::ARROW_UP, Core::ActionVariant{ std::in_place_type<EngineAction>, EngineAction::MOVE_UP });
-// em.bindKey( Core::KeyCode::ARROW_DOWN, Core::ActionVariant{ std::in_place_type<EngineAction>, EngineAction::MOVE_DOWN });
+}

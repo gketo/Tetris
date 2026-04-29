@@ -1,7 +1,6 @@
 #include "IRenderer.h"
 
 #include "DataVariant.h"
-#include "Lifecycle.h"
 #include "RenderSystem.h"
 #include "VisitorVariant.h"
 

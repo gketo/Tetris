@@ -1,12 +1,12 @@
 #include "TetrisGame.h"
 
-#include "ActionVariant.h"
+#include "CommandVariant.h"
+#include "Config_AppInputBindings.h"
 #include "DataVariant.h"
 #include "DeviceEvent.h"
 #include "EventManager.h"
 #include "IGame.h"
 #include "Logger.h"
-#include "TetrisAction.h"
 
 #include <string>
 #include <variant>
@@ -16,47 +16,23 @@
 
 namespace Game::Tetris {
 
-    void TetrisGame::init(Core::EventManager& em)
+    void TetrisGame::init()
     {
 		LOG_DEBUG("[TetrisGame] Initializing...");
-
-        m_minWindowHeight = 24;
-        m_minWindowWidth = 20;
-
-        bindKeys(em);
-        setRules();
-        // dbg
-        setData();
     }
 
-    void TetrisGame::reset()
+    void TetrisGame::pause(Core::EventManager&)
+    {}
+
+    void TetrisGame::resume(Core::EventManager& em)
+    {}
+
+    void TetrisGame::reset(Core::EventManager&)
     {
         // todo
     }
 
-    void TetrisGame::bindKeys(Core::EventManager& em)
-    {
-		LOG_DEBUG("[TetrisGame] Binding keys...");
-         
-        //em.bindKey( Core::KeyCode::ARROW_UP, Core::ActionVariant{ std::in_place_type<TetrisAction>, TetrisAction::ROTATE_LEFT });
-    }
-
-    void TetrisGame::setRules()
-    {
-        m_rules = Rules{
-            "Tetris, here are the rules :)", // welcome msg
-            { 
-                "Move pieces left/right using arrow keys",
-                "Rotate pieces using up arrow",
-                "Drop pieces faster using down arrow",
-                "Clear lines to score points",
-                "Press P to pause",
-            }, // rules
-            "Press ENTER and let's play :D" // commands msg
-        };
-    }
-
-    bool TetrisGame::update(Core::ActionVariant action)
+    bool TetrisGame::update(Core::CommandVariant action)
     {
         return false;
     }
@@ -66,6 +42,12 @@ namespace Game::Tetris {
         return false;
     }
 
+    void TetrisGame::collectRenderData(Core::RenderQueue& out) const
+    {
+        out.submit(std::make_unique<Core::DataVariant>(m_data));
+    }
+
+    
     //debug 
     void TetrisGame::setData()
     {
@@ -83,11 +65,6 @@ namespace Game::Tetris {
                 std::in_place_type<Core::Grid2D::Frame2D<char>>,
                 Core::Debug::dbg_createComprehensiveTestFrame<char>(20, 50)
             };
-    }
-
-    const Core::DataVariant& TetrisGame::getData() const
-    {
-        return m_data;
     }
 
 }

@@ -3,7 +3,6 @@
 #include "DeviceEvent.h"
 #include "IEventSource.h"
 #include "IRenderer.h"
-#include "Lifecycle.h"
 #include "Logger.h"
 
 #include <memory>

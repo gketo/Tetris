@@ -395,13 +395,10 @@ namespace Core::Terminal::Termios {
         return true;
     }
 
-    const char* TerminalCoreTermios::caller() const  
+    void TerminalCoreTermios::init()
     {
-        return "TerminalCoreTermios";
-    }
+        LOG_DEBUG("[TerminalCoreTermios] Initializing...");
 
-    void TerminalCoreTermios::onInit()
-    {
         if (!enableRawMode())
         {
             throw std::runtime_error("[ERROR] Couldn't init MacOS Terminal.\n");
@@ -410,7 +407,7 @@ namespace Core::Terminal::Termios {
         updateTerminalConfig();
     }
 
-    void TerminalCoreTermios::onTerminate() noexcept
+    void TerminalCoreTermios::terminate() noexcept
     {
         LOG_DEBUG("[TerminalCoreTermios] Shutting down...");
         try 
@@ -427,12 +424,11 @@ namespace Core::Terminal::Termios {
         LOG_DEBUG("[TerminalCoreTermios] Shutdown complete...");
     }
 
-    void TerminalCoreTermios::onQuit() noexcept
+    void TerminalCoreTermios::quit() noexcept
 	{
 		LOG_DEBUG("[TerminalCoreTermios] Quitting...");
         // clear screen
         clearScreen(); 
-        // save data here
 	}
    
 }

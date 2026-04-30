@@ -1,9 +1,20 @@
 #pragma once
 
+#include "CommandVariant.h"
+#include "Config_CoreInputBindings.h"
+#include "EngineCommand.h"
+#include "EventLayer.h"
+#include "EventManager.h"
+#include "GameSession.h"
 #include "GameStatePaused.h"
+#include "IGame.h"
 #include "IGameStateContext.h"
 #include "IState.h"
 #include "Logger.h"
+#include "RenderQueue.h"
+#include "StateMachine.h"
+
+#include <memory>
 
 namespace Core::Session {
 
@@ -68,7 +79,7 @@ namespace Core::Session {
         if (m_context.getGameSession().getGame()->isGameOver())
         {
             m_isFinished = true;
-            m_context.getStateMachine().push(std::make_unique<GameStateGameover>(m_context));
+            m_context.getStateMachine().push(std::make_unique<GameStateGameOver>(m_context));
         }
     }
 

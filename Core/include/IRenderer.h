@@ -7,6 +7,15 @@
 
 #include <memory>
 
+namespace Core::Grid2D {
+    template<typename TCell>
+    class Frame2D;  // forward declaration
+}
+
+namespace Core {
+    class MenuData; // forward declaration
+}
+
 namespace Core {
 
     class IRenderer
@@ -31,7 +40,6 @@ namespace Core {
         
         // rendering
         virtual void render(const Core::MenuData& menuData) = 0;
-        // virtual void render(const Game::RulesData& rules) = 0;
         virtual void render(const Core::Grid2D::Frame2D<char>& frame) = 0;
 
         virtual void init() = 0;
@@ -43,7 +51,6 @@ namespace Core {
         std::unique_ptr<RenderSystem> m_renderSystem;
 		std::unique_ptr<VisitorVariant> m_renderVisitor;
 
-        // void render(const DataVariant& dataVar);
     };
 
     inline RenderQueue& IRenderer::getRenderQueue()

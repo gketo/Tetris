@@ -1,10 +1,12 @@
 #include "IRenderer.h"
 
 #include "DataVariant.h"
+#include "RenderQueue.h"
 #include "RenderSystem.h"
 #include "VisitorVariant.h"
 
-#include "Frame2D.h"
+#include <memory>
+#include <utility>
 
 namespace Core {
 

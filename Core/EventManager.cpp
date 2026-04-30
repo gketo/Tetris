@@ -1,15 +1,15 @@
 #include "EventManager.h"
 
+#include "Event.h"
 #include "EventLayer.h"
 #include "CommandVariant.h"
-#include "DeviceEvent.h" // KeyCode
+#include "DeviceEvent.h"
 #include "InputBinding.h"
 #include "IController.h"
 #include "Logger.h"
 
-#include <algorithm>
-#include <queue>
 #include <unordered_set>
+#include <utility>
 
 namespace Core {
 
@@ -53,7 +53,7 @@ namespace Core {
         }
     }
 
-	void EventManager::clearInputs()
+	void EventManager::unbindAllInputs()
 	{
 		m_inputBindings.clear();
 	}
@@ -111,7 +111,7 @@ namespace Core {
         }
 	}
 	
-	std::optional<Core::CommandVariant> EventManager::popEvent()
+	std::optional<Core::CommandVariant> EventManager::popInputEvent()
 	{
         while (!m_inputEvents.empty())
         {

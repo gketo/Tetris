@@ -2,25 +2,25 @@
 
 #include "CommandVariant.h"
 #include "DeviceEvent.h"
+#include "DeviceType.h"
 #include "Event.h"
-#include "Timestamp.h"
-
-// to_string
-#include "EngineCommand.h"
 #include "EventLayer.h"
-#include "MenuCommand.h"
-#include "TetrisCommand.h"
+#include "InputType.h"
+#include "SourceType.h"
+
+#include <optional>
+#include <string>
 
 namespace Core {
 
     struct InputBinding 
     {
-        InputBinding(EventLayer layer, CommandVariant commandVar, SourceType source, DeviceType device, KeyCode code, std::optional<char> ch = std::nullopt, KeyModifier modifiers = KeyModifier::None)
+        InputBinding(EventLayer layer, CommandVariant commandVar, SourceType source, DeviceType device, InputType input, std::optional<char> ch = std::nullopt, InputModifier modifiers = InputModifier::None)
         : layer{ layer }
         , commandVar{ commandVar } 
         , source{ source }
         , device{ device }
-        , code{ code }
+        , input{ input }
         , ch{ ch }
         , modifiers{ modifiers }
         {}
@@ -32,9 +32,9 @@ namespace Core {
         // device event
         SourceType source{ SourceType::None };
         DeviceType device{ DeviceType::None };
-        KeyCode code{ KeyCode::None };
+        InputType input{ InputType::None };
         std::optional<char> ch;
-        KeyModifier modifiers{ KeyModifier::None };
+        InputModifier modifiers{ InputModifier::None };
 
         bool operator==(const InputBinding& other) const = default;
 
@@ -48,20 +48,20 @@ namespace Core {
         {
             return source == other.source &&
                 device == other.device &&
-                code == other.code &&
+                input == other.input &&
                 ch == other.ch &&
                 modifiers == other.modifiers;
         }
 
         inline std::string to_string() const
         {
-            return std::format("[InputBinding] -> Layer: {}, CommandVar: {}, Source: {}, Device: {}, KeyCode: {}, KeyModifiers: {}, ch (opt): {}"
+            return std::format("[InputBinding] -> Layer: {}, CommandVar: {}, Source: {}, Device: {}, InputType: {}, KeyModifiers: {}, ch (opt): {}"
                 , dbg_to_string(layer)
                 , dbg_to_string(commandVar)
-                , source_to_string(source)
-                , device_to_string(device)
-                , keycode_to_string(code)
-                , keymodifier_to_string(modifiers)
+                , dbg_to_string(source)
+                , dbg_to_string(device)
+                , dbg_to_string(input)
+                , dbg_to_string(modifiers)
                 , (ch ? std::string{1, *ch} : "None")
             );
         }

@@ -1,11 +1,14 @@
 #pragma once
 
 #include "CommandVariant.h"
-#include "RenderQueue.h"
 
 #include <iostream>
 #include <typeinfo>
 #include <string>
+
+namespace Core {
+    class RenderQueue;  // forward declaration
+}
 
 namespace Core {
 
@@ -32,7 +35,7 @@ namespace Core {
         virtual void resume() {};
 
     protected:
-        TContext &m_context;
+        TContext& m_context;
         bool m_isFinished{ false };
     };
 }

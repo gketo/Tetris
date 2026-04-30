@@ -1,10 +1,12 @@
 #pragma once
 
 #include "GraphicsUtils.h"
-#include "Logger.h"
 
+#include <algorithm>
+#include <cstddef>
 #include <string>
 #include <string_view>
+#include <vector>
 
 namespace Core::Terminal::Termios {
     
@@ -94,7 +96,6 @@ namespace Core::Terminal::Termios {
         case GfxUtils::Attr::UNDERLINED:  return "\x1b[4m";
         case GfxUtils::Attr::Default:     return "\x1b[0m"; // reset all
         }
+        return "\x1b[0m"; // default
     }
-
-    
 }

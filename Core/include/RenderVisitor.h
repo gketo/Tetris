@@ -1,23 +1,20 @@
 #pragma once
 
-// forward declaration
 namespace Core {
-    class MenuData;
+    class ITerminalCore;    // forward declaration
+    class MenuData; // forward declaration
 }
 
 namespace Game {
-    class RulesData;
+    class RulesData;    // forward declaration
 }
 
 namespace Core::Grid2D {
-    template<typename T>
-    class Frame2D;
+    template<typename TCell>
+    class Frame2D;  // forward declaration
 }
 
 namespace Core {
-
-    class ITerminalCore; // forward declare
-
     class TerminalVisitor
     {
     public:
@@ -26,7 +23,6 @@ namespace Core {
         {}
 
         void operator()(const Core::MenuData& menuData) const;
-        // void operator()(const Game::RulesData& rules) const;
         void operator()(const Core::Grid2D::Frame2D<char>&frame) const;
 
         // implement other operator here for each specific type of frame renderable by terminal

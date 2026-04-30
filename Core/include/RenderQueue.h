@@ -2,8 +2,9 @@
 
 #include "DataVariant.h"
 
+#include <memory>
 #include <queue>
-#include <variant>
+#include <utility>
 
 namespace Core {
 

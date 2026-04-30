@@ -10,14 +10,15 @@ namespace Core {
         TERMINAL
     };
 
-    // Helper function to convert SourceType enum to string
-	inline std::string_view source_to_string(SourceType source)
+    // Helper function to convert SourceType to string
+	inline std::string_view dbg_to_string(SourceType source)
 	{
 		switch (source)
 		{
 		case SourceType::None: return "None";
 		case SourceType::TERMINAL: return "TERMINAL";
 		}
+        return "Unknown";
 	}
 
 }

@@ -1,11 +1,10 @@
 #include "Menu.h"
 
-#include "DataVariant.h"
-#include "GameSession.h"
 #include "MenuData.h"
+#include "MenuEntry.h"
 
-#include <variant>
-#include <vector>
+#include <utility>
+#include <string>
 
 namespace Core {
 

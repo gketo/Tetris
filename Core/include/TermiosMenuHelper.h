@@ -5,7 +5,9 @@
 #include "TermiosUtils.h"
 #include "GraphicsUtils.h"
 
+#include <cstddef>
 #include <string>
+#include <string_view>
 
 namespace Core::Terminal::Termios {
 
@@ -41,11 +43,13 @@ namespace Core::Terminal::Termios {
         for (const auto& line : TermiosUtils::wrap(menuData.welcomeMsg, winWidth))
         {
             frameStr += line;
-            terminal.moveCursor(frameStr, ++row, 0);
+            ++row;
+            terminal.moveCursor(frameStr, row, 0);
             frameStr += TermiosUtils::ERASE_LINE_TORIGHT;
         }
 
-        terminal.moveCursor(frameStr, ++row, 0);
+        ++row;
+        terminal.moveCursor(frameStr, row, 0);
         frameStr += TermiosUtils::ERASE_LINE_TORIGHT;
 
         for (size_t i = 0; i < menuData.size(); i++)
@@ -60,7 +64,8 @@ namespace Core::Terminal::Termios {
                 frameStr += entry.name;
             }
 
-            terminal.moveCursor(frameStr, ++row, 0);
+            ++row;
+            terminal.moveCursor(frameStr, row, 0);
             frameStr += TermiosUtils::ERASE_LINE_TORIGHT;
         }
 
@@ -69,7 +74,8 @@ namespace Core::Terminal::Termios {
         for (const auto& line : TermiosUtils::wrap(menuData.commandsMsg, winWidth))
         {
             frameStr += line;
-            terminal.moveCursor(frameStr, ++row, 0);
+            ++row;
+            terminal.moveCursor(frameStr, row, 0);
             frameStr += TermiosUtils::ERASE_LINE_TORIGHT;
         }
 

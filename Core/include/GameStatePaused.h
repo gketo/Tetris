@@ -3,13 +3,23 @@
 #include "CommandVariant.h"
 #include "Config_CoreInputBindings.h"
 #include "DataVariant.h"
+#include "EngineCommand.h"
+#include "EventLayer.h"
+#include "EventManager.h"
 #include "GameStatePausedRules.h"
 #include "GameStateQuitted.h"
 #include "IGameStateContext.h"
 #include "IState.h"
 #include "Logger.h"
 #include "Menu.h"
+#include "MenuCommand.h"
 #include "MenuData.h"
+#include "RenderQueue.h"
+#include "StateMachine.h"
+
+#include <memory>
+#include <stdexcept>
+#include <utility>
 
 namespace Core::Session {
 
@@ -43,7 +53,6 @@ namespace Core::Session {
 
         MenuEntry resume;
         resume.name = "Resume";
-        // store a callback
         resume.callback = [this]() {
             m_isFinished = true;
         };
@@ -51,7 +60,6 @@ namespace Core::Session {
 
         MenuEntry showRules;
         showRules.name = "Rules";
-        // store a callback
         showRules.callback = [this]() {
             m_context.getStateMachine().push(std::make_unique<GameStatePausedRules>(m_context));
         };
@@ -99,7 +107,7 @@ namespace Core::Session {
         {
             switch (*action)
             {
-            case EngineCommand::QUIT: // gerer lorsqu'on sort d'un jeu todo
+            case EngineCommand::QUIT:
                 m_isFinished = true;
                 m_context.getStateMachine().push(std::make_unique<GameStateQuitted>(m_context));
                 return true;

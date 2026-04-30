@@ -2,13 +2,12 @@
 
 #include "EventManager.h"
 #include "GameSession.h"
+#include "GameType.h"
 #include "IEngineStateContext.h"
 #include "IRenderer.h"
-#include "IState.h"
 #include "Menu.h"
 #include "StateMachine.h"
 
-#include <memory>
 #include <string>
 
 namespace Core::Engine {

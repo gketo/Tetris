@@ -1,11 +1,23 @@
 #pragma once
 
+#include "CommandVariant.h"
 #include "Config_CoreInputBindings.h"
-#include "GameEngine.h"
+#include "DataVariant.h"
+#include "EventLayer.h"
+#include "EventManager.h"
+#include "GameSession.h"
 #include "IGameStateContext.h"
 #include "IState.h"
 #include "Logger.h"
+#include "Menu.h"
 #include "MenuCommand.h"
+#include "MenuData.h"
+#include "RenderQueue.h"
+
+#include <cstddef>
+#include <memory>
+#include <stdexcept>
+#include <utility>
 
 namespace Core::Session {
 
@@ -40,7 +52,7 @@ namespace Core::Session {
         {
             if (rule == "Accept")
             {
-                throw std::runtime_error("DisplayRulesMenu : can't find another rule's name than 'Accept' jackass ?");
+                throw std::runtime_error("GameStatePausedRules : can't find another rule's name than 'Accept' jackass ?");
             }
             MenuEntry entry;
             entry.name = rule;

@@ -6,10 +6,11 @@
 #include "ITerminalCore.h"
 #include "TermiosUtils.h"
 
-#include <algorithm>
+#include <cstddef>
 #include <optional>
 #include <string>
 #include <type_traits>
+#include <unordered_set>
 
 namespace Core::Terminal::Termios {
 

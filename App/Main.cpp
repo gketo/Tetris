@@ -4,6 +4,7 @@
 #include "Logger.h"
 
 /* DEBUG */
+#include <cstddef>
 #include <execinfo.h>
 #include <signal.h>
 #include <stdlib.h>
@@ -26,7 +27,7 @@ int main()
     signal(SIGFPE, crashHandler);
 
     LOG_DEBUG("[Main.cpp] Hello World!");
-    
+
     Core::AppLauncher laucher{};
 
     try 

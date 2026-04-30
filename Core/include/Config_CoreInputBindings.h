@@ -1,10 +1,9 @@
 #pragma once
 
 #include "CommandVariant.h"
-#include "DeviceEvent.h"
 #include "DeviceType.h"
 #include "InputBinding.h"
-#include "KeyCode.h"
+#include "InputType.h"
 #include "SourceType.h"
 
 #include <vector>
@@ -13,41 +12,40 @@ namespace Core {
 
     const std::vector<InputBinding> GameChoiceMenuRegisteredEvents
     {
-        // Keyboard
+        /*  Keyboard    */
         //  Game choice menu
-        InputBinding{ Core::EventLayer::Menu, CommandVariant{ std::in_place_type<MenuCommand>, MenuCommand::MENU_MOVE_UP }, SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ARROW_UP },
-        InputBinding{ Core::EventLayer::Menu, CommandVariant{ std::in_place_type<MenuCommand>, MenuCommand::MENU_MOVE_DOWN }, SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ARROW_DOWN },
-        InputBinding{ Core::EventLayer::Menu, CommandVariant{ std::in_place_type<MenuCommand>, MenuCommand::MENU_SELECT }, SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ENTER },
-        InputBinding{ Core::EventLayer::Menu, CommandVariant{ std::in_place_type<MenuCommand>, MenuCommand::MENU_CANCEL }, SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'q' },
+        InputBinding{ Core::EventLayer::Menu, CommandVariant{ std::in_place_type<MenuCommand>, MenuCommand::MENU_MOVE_UP }, SourceType::TERMINAL, DeviceType::KEYBOARD, InputType::ARROW_UP },
+        InputBinding{ Core::EventLayer::Menu, CommandVariant{ std::in_place_type<MenuCommand>, MenuCommand::MENU_MOVE_DOWN }, SourceType::TERMINAL, DeviceType::KEYBOARD, InputType::ARROW_DOWN },
+        InputBinding{ Core::EventLayer::Menu, CommandVariant{ std::in_place_type<MenuCommand>, MenuCommand::MENU_SELECT }, SourceType::TERMINAL, DeviceType::KEYBOARD, InputType::ENTER },
+        InputBinding{ Core::EventLayer::Menu, CommandVariant{ std::in_place_type<MenuCommand>, MenuCommand::MENU_CANCEL }, SourceType::TERMINAL, DeviceType::KEYBOARD, InputType::CHAR, 'q' },
         //
     };
 
     const std::vector<InputBinding> GameStatePlayingRegisteredEvents
     {
-        // Keyboard
+        /*  Keyboard    */
         //  Pause key
-        InputBinding{ Core::EventLayer::Engine, CommandVariant{ std::in_place_type<EngineCommand>, EngineCommand::PAUSE }, SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'p' },
+        InputBinding{ Core::EventLayer::EngineRunning, CommandVariant{ std::in_place_type<EngineCommand>, EngineCommand::PAUSE }, SourceType::TERMINAL, DeviceType::KEYBOARD, InputType::CHAR, 'p' },
         //
     };
 
     const std::vector<InputBinding> GameStatePausedRegisteredEvents
     {
-        // Keyboard
+        /*  Keyboard    */
         //  Paused menu options
-        InputBinding{ Core::EventLayer::GameMenu, CommandVariant{ std::in_place_type<MenuCommand>, MenuCommand::MENU_MOVE_UP }, SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ARROW_UP },
-        InputBinding{ Core::EventLayer::GameMenu, CommandVariant{ std::in_place_type<MenuCommand>, MenuCommand::MENU_MOVE_DOWN }, SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ARROW_DOWN },
-        InputBinding{ Core::EventLayer::GameMenu, CommandVariant{ std::in_place_type<MenuCommand>, MenuCommand::MENU_SELECT }, SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ENTER },
-        // Keyboard
+        InputBinding{ Core::EventLayer::GameMenu, CommandVariant{ std::in_place_type<MenuCommand>, MenuCommand::MENU_MOVE_UP }, SourceType::TERMINAL, DeviceType::KEYBOARD, InputType::ARROW_UP },
+        InputBinding{ Core::EventLayer::GameMenu, CommandVariant{ std::in_place_type<MenuCommand>, MenuCommand::MENU_MOVE_DOWN }, SourceType::TERMINAL, DeviceType::KEYBOARD, InputType::ARROW_DOWN },
+        InputBinding{ Core::EventLayer::GameMenu, CommandVariant{ std::in_place_type<MenuCommand>, MenuCommand::MENU_SELECT }, SourceType::TERMINAL, DeviceType::KEYBOARD, InputType::ENTER },
         //  Paused menu quit
-        InputBinding{ Core::EventLayer::GameMenu, CommandVariant{ std::in_place_type<EngineCommand>, EngineCommand::QUIT }, SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::CHAR, 'q' },
+        InputBinding{ Core::EventLayer::GameMenu, CommandVariant{ std::in_place_type<EngineCommand>, EngineCommand::QUIT }, SourceType::TERMINAL, DeviceType::KEYBOARD, InputType::CHAR, 'q' },
         //
     };
 
     const std::vector<InputBinding> GameStatePausedRulesRegisteredEvents
     {
-        // Keyboard
+        /*  Keyboard    */
         //  Accept rules button
-        InputBinding{ Core::EventLayer::GameMenu, CommandVariant{ std::in_place_type<MenuCommand>, MenuCommand::MENU_ACCEPT }, SourceType::TERMINAL, DeviceType::KEYBOARD, KeyCode::ENTER },
+        InputBinding{ Core::EventLayer::GameMenu, CommandVariant{ std::in_place_type<MenuCommand>, MenuCommand::MENU_ACCEPT }, SourceType::TERMINAL, DeviceType::KEYBOARD, InputType::ENTER },
         //
     };
 }

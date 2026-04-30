@@ -1,17 +1,14 @@
 #include "GameSession.h"
 
 #include "CommandVariant.h"
-#include "DataVariant.h"
-#include "EventManager.h"
-#include "GameStateGameover.h"
+#include "GameStateGameOver.h"
 #include "GameStateLoading.h"
 #include "GameType.h"
 #include "IGame.h"
-#include "TetrisGame.h"
+#include "StateMachine.h"
 
 #include <memory>
-#include <string>
-#include <vector>
+#include <utility>
 
 namespace Core::Session {
 
@@ -27,7 +24,7 @@ namespace Core::Session {
 
     void GameSession::loadGame(Game::GameType gameType)
     {
-        LOG_DEBUG("[GameSession] Trying to load <%s> as current game...", Game::gametype_to_string(gameType)); 
+        LOG_DEBUG("[GameSession] Trying to load <%s> as current game...", Game::dbg_to_string(gameType)); 
         m_sm.clearAndPush(std::make_unique<GameStateLoading>(*this, gameType));
     }
 
@@ -59,7 +56,7 @@ namespace Core::Session {
 
 	bool GameSession::shouldExit()
 	{
-		return dynamic_cast<const GameStateGameover*>(m_sm.getState()) ||
+		return dynamic_cast<const GameStateGameOver*>(m_sm.getState()) ||
             dynamic_cast<const GameStateQuitted*>(m_sm.getState());
 	}
 }

@@ -14,8 +14,6 @@ namespace Core::Session {
 
 namespace Core::Engine {
 
-    class GameEngine; // forward declaration
-
     class IEngineStateContext
     {
     public:

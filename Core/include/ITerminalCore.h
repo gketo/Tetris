@@ -1,30 +1,14 @@
 #pragma once
 
-#include "DeviceEvent.h"
 #include "IEventSource.h"
 #include "IRenderer.h"
-#include "Logger.h"
 
+#include <cstddef>
 #include <memory>
 #include <mutex>
-#include <optional>
 #include <string>
-#include <utility>
 
-// forward declaration
-namespace Core {
-    class MenuData;
-}
-
-// namespace Game {
-//     class RulesData;
-// }
-
-namespace Core::Grid2D {
-    template<typename T>
-    class Frame2D;
-}
-
+// todo mutex
 namespace Core {
 
     struct CursorPosition 
@@ -65,7 +49,7 @@ namespace Core {
         virtual void cursorHome(std::string& framestr) const = 0;
 
     protected:
-        CursorPosition m_cpos;   // cursor pos
+        CursorPosition m_cpos;
         TerminalConfig m_termConfig;
 
         std::string m_bufferStr;

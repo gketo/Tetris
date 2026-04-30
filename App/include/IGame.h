@@ -4,6 +4,7 @@
 #include "DataVariant.h"
 #include "InputBinding.h"
 #include "RenderQueue.h"
+#include "Rules.h"
 
 #include <string>
 #include <vector>
@@ -13,13 +14,6 @@ namespace Core {
 }
 
 namespace Game {
-
-    struct Rules
-    {
-        std::string welcomeMsg;
-        std::vector<std::string> rules;
-        std::string commandsMsg;
-    };
 
     class IGame
 	{
@@ -32,9 +26,6 @@ namespace Game {
         virtual ~IGame() = default;
 
         virtual void init() = 0;
-        virtual void pause(Core::EventManager& em) = 0;
-        virtual void resume(Core::EventManager& em) = 0;
-        virtual void reset(Core::EventManager& em) = 0;
         virtual bool update(Core::CommandVariant action) = 0;
         virtual bool isGameOver() const = 0;
 
@@ -50,8 +41,4 @@ namespace Game {
         int m_minWindowWidth;
 	};
 
-	// inline const Rules& IGame::getRules() const
-    // {
-    //     return m_rules;
-    // }
 }

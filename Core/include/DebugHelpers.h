@@ -5,6 +5,8 @@
 #include "Frame2D.h"
 #include "GraphicsUtils.h"
 
+#include <cstddef>
+
 namespace Core::Debug {
 
     namespace GfxUtils = Core::Graphics::Utils;

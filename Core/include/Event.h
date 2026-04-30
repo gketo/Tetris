@@ -2,7 +2,6 @@
 
 #include "EventLayer.h"
 #include "CommandVariant.h"
-#include "Logger.h"
 #include "Timestamp.h"
 
 #include <format>

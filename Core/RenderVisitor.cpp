@@ -1,7 +1,10 @@
 #include "RenderVisitor.h"
 
 #include "Frame2D.h"
+#include "MenuData.h"
 #include "ITerminalCore.h"
+
+#include <utility>
 
 namespace Core {
 
@@ -10,11 +13,6 @@ namespace Core {
         m_terminalRenderer.render(std::move(data));
     }
 
-    // void TerminalVisitor::operator()(const Game::RulesData& data) const
-    // {
-    //     m_terminalRenderer.render(std::move(data));
-    // }
-    
     void TerminalVisitor::operator()(const Core::Grid2D::Frame2D<char>& data) const
     {
         m_terminalRenderer.render(std::move(data));

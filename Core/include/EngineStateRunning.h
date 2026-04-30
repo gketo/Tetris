@@ -1,11 +1,8 @@
 #pragma once
 
-#include "Config_CoreInputBindings.h"
-#include "GameEngine.h"
 #include "IEngineStateContext.h"
 #include "IState.h"
 #include "Logger.h"
-#include "EngineStateSuspended.h"
 
 namespace Core::Engine {
 
@@ -22,12 +19,13 @@ namespace Core::Engine {
 
         void pause() override;
         void resume() override;
+
     };
 
     inline void EngineStateRunning::enter()
     {
         LOG_DEBUG("[GameEngineSM] EngineStateRunning : enter()...");
-        m_context.getEventManager().pushActiveLayer(EventLayer::Engine);
+        m_context.getEventManager().pushActiveLayer(EventLayer::EngineRunning);
     }
 
     inline void EngineStateRunning::update()
@@ -39,6 +37,7 @@ namespace Core::Engine {
     inline void EngineStateRunning::exit()
     {
         LOG_DEBUG("[GameEngineSM] EngineStateRunning : exit()...");
+        m_context.getEventManager().popActiveLayer(EventLayer::EngineRunning);
     }
 
     inline bool EngineStateRunning::isFinished() const 
@@ -50,12 +49,14 @@ namespace Core::Engine {
     {
         LOG_DEBUG("[GameEngineSM] EngineStateRunning : pause()...");
         m_isFinished = true;
+        m_context.getEventManager().popActiveLayer(EventLayer::EngineRunning);
     }
 
     inline void EngineStateRunning::resume()
     {
         LOG_DEBUG("[GameEngineSM] EngineStateRunning : resume()...");
         m_isFinished = false;
+        m_context.getEventManager().pushActiveLayer(EventLayer::EngineRunning);
     }
 
 }

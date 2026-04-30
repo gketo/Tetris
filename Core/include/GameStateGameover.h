@@ -6,10 +6,10 @@
 
 namespace Core::Session {
 
-    class GameStateGameover : public IState<IGameStateContext>
+    class GameStateGameOver : public IState<IGameStateContext>
     {
     public:
-        GameStateGameover(IGameStateContext& context) : IState(context) {}
+        GameStateGameOver(IGameStateContext& context) : IState(context) {}
 
         void enter() override;
         void update() override;
@@ -18,25 +18,25 @@ namespace Core::Session {
         bool isFinished() const override;
     };
 
-    inline void GameStateGameover::enter()
+    inline void GameStateGameOver::enter()
     {
-        LOG_DEBUG("[GameSessionSM] GameStateGameover : enter()...");
+        LOG_DEBUG("[GameSessionSM] GameStateGameOver : enter()...");
         // do nothing
     }
 
-    inline void GameStateGameover::update() 
+    inline void GameStateGameOver::update() 
     { 
-        LOG_EXTRA("[GameSessionSM] GameStateGameover : update()...");
+        LOG_EXTRA("[GameSessionSM] GameStateGameOver : update()...");
         // do nothing
     }
 
-    inline void GameStateGameover::exit() 
+    inline void GameStateGameOver::exit() 
     { 
-        LOG_DEBUG("[GameSessionSM] GameStateGameover : exit()...");
+        LOG_DEBUG("[GameSessionSM] GameStateGameOver : exit()...");
         // do nothing
     }
 
-    inline bool GameStateGameover::isFinished() const 
+    inline bool GameStateGameOver::isFinished() const 
     { 
         return m_isFinished;
     }

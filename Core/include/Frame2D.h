@@ -4,6 +4,9 @@
 #include "IRenderable.h"
 #include "Logger.h"
 
+#include <cstddef>
+#include <stdexcept>
+#include <utility>
 #include <vector>
 
 namespace Core::Grid2D {

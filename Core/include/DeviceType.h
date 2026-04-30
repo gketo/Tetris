@@ -10,13 +10,14 @@ namespace Core
         KEYBOARD,
     }; 
 
-    // Helper function to convert DeviceType enum to string
-	inline std::string_view device_to_string(DeviceType device)
+    // Helper function to convert DeviceType to string
+	inline std::string_view dbg_to_string(DeviceType device)
 	{
 		switch (device)
 		{
-		case DeviceType::None: return "None";
-		case DeviceType::KEYBOARD: return "KEYBOARD";
+		case DeviceType::None:      return "None";
+		case DeviceType::KEYBOARD:  return "KEYBOARD";
 		}
+        return "Unknown";
 	}
 }

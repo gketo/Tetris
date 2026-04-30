@@ -16,17 +16,18 @@ namespace Core {
        //
     };
 
-    // Helper function to convert MenuCommand enum to string
+    // Helper function to convert MenuCommand to string
     inline std::string_view dbg_to_string(MenuCommand action)
     {
         switch (action)
         {
-        case MenuCommand::MENU_ACCEPT: return "ACCEPT";
-        case MenuCommand::MENU_CANCEL: return "MENU_CANCEL";
-        case MenuCommand::MENU_MOVE_UP: return "MENU_MOVE_UP";
-        case MenuCommand::MENU_MOVE_DOWN: return "MENU_MOVE_DOWN";
-        case MenuCommand::MENU_SELECT: return "MENU_SELECT";
+        case MenuCommand::MENU_ACCEPT:      return "ACCEPT";
+        case MenuCommand::MENU_CANCEL:      return "MENU_CANCEL";
+        case MenuCommand::MENU_MOVE_UP:     return "MENU_MOVE_UP";
+        case MenuCommand::MENU_MOVE_DOWN:   return "MENU_MOVE_DOWN";
+        case MenuCommand::MENU_SELECT:      return "MENU_SELECT";
         }
+        return "Unknown";
     }
 
 }

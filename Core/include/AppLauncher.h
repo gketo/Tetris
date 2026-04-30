@@ -1,13 +1,10 @@
 #pragma once 
 
+#include "GameType.h"
 #include "GameEngine.h"
 #include "Menu.h"
 
 namespace Core {
-    enum class Devices
-    {
-        KEYBOARD
-    };
 
     class AppLauncher
     {

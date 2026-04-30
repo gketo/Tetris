@@ -18,8 +18,6 @@ namespace Core::Engine {
 
         bool isFinished() const override;
     
-    private:
-        Menu m_menu;
     };
 
     inline void EngineStateTerminated::enter()

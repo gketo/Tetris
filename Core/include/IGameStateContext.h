@@ -8,8 +8,10 @@ namespace Core {
 }
 
 namespace Core::Session {
-
     class GameSession; // forward declaration
+}
+
+namespace Core::Session {
 
     class IGameStateContext
     {

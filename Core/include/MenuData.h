@@ -1,20 +1,16 @@
 #pragma once
 
-#include "GameType.h"
+#include "MenuEntry.h"
 #include "IRenderable.h"
 
-#include <functional>
-#include <optional>
+#include <cstddef>
+#include <stdexcept>
 #include <string>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 
 namespace Core {
-
-    struct MenuEntry {
-        std::string name;
-        std::optional<std::function<void()>> callback;
-    };
 
     class MenuData : public IRenderable
     {

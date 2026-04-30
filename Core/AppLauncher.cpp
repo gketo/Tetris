@@ -5,7 +5,6 @@
 #include "EventManager.h"
 #include "EventLayer.h"
 #include "GameEngine.h"
-#include "GameSession.h"
 #include "GameType.h"
 #include "IRenderer.h"
 #include "Logger.h"
@@ -13,10 +12,11 @@
 #include "TerminalCoreTermios.h"
 #include "VisitorVariant.h"
 
-// Games
-#include "TetrisGame.h"
-
 #include <memory>
+#include <stdexcept>
+#include <type_traits>
+#include <utility>
+#include <variant>
 
 namespace Core {
     void AppLauncher::setGameChoice(Game::GameType gameType)
@@ -35,7 +35,7 @@ namespace Core {
             Game::GameType gameType = static_cast<Game::GameType>(i);
 
             MenuEntry entry;
-            entry.name = gametype_to_string(gameType);
+            entry.name = dbg_to_string(gameType);
 
             // store a callback to set current game
             entry.callback = [this, gameType]() {
@@ -84,7 +84,7 @@ namespace Core {
         while (!exitLauncher)
         {
             buildGameChoiceMenu();
-            em->clearInputs();
+            em->unbindAllInputs();
             em->bindInputs(GameChoiceMenuRegisteredEvents);
             em->pushActiveLayer(EventLayer::Menu);
 
@@ -97,7 +97,7 @@ namespace Core {
 
                 // get events from event manager (controller)
                 em->pollInputEvents();
-                auto actionVariantOpt = em->popEvent();
+                auto actionVariantOpt = em->popInputEvent();
 
                 if (actionVariantOpt)
                 {

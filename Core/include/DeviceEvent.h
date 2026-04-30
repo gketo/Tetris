@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DeviceType.h"
-#include "KeyCode.h"
+#include "InputType.h"
 #include "SourceType.h"
 #include "Timestamp.h"
 
@@ -15,10 +15,10 @@ namespace Core {
     {
         DeviceEvent() = default;
 
-        DeviceEvent(SourceType source, DeviceType device, KeyCode code, std::optional<char> ch = std::nullopt, KeyModifier modifiers = KeyModifier::None)
+        DeviceEvent(SourceType source, DeviceType device, InputType input, std::optional<char> ch = std::nullopt, InputModifier modifiers = InputModifier::None)
         : source{ source }
         , device{ device }
-        , code{ code }
+        , input{ input }
         , ch{ ch }
         , modifiers{ modifiers }
         , timestamp {} // automatic
@@ -26,9 +26,9 @@ namespace Core {
 
         SourceType source{ SourceType::None };
         DeviceType device{ DeviceType::None };
-        KeyCode code{ KeyCode::None };
+        InputType input{ InputType::None };
         std::optional<char> ch;
-        KeyModifier modifiers{ KeyModifier::None };
+        InputModifier modifiers{ InputModifier::None };
         Timestamp timestamp;
 
         bool operator==(const DeviceEvent& other) const
@@ -36,19 +36,19 @@ namespace Core {
             return timestamp.value == other.timestamp.value &&
                 source == other.source &&
                 device == other.device &&
-                code == other.code &&
+                input == other.input &&
                 ch == other.ch &&
                 modifiers == other.modifiers;
         }
 
         std::string to_string() const
         {
-            return std::format("[DeviceEvent] -> Timestamp: {}, Source: {}, Device: {}, KeyCode: {}, KeyModifiers: {}, ch (opt): {}"
+            return std::format("[DeviceEvent] -> Timestamp: {}, Source: {}, Device: {}, InputType: {}, KeyModifiers: {}, ch (opt): {}"
                 , timestamp.to_ms()
-                , source_to_string(source)
-                , device_to_string(device)
-                , keycode_to_string(code)
-                , keymodifier_to_string(modifiers)
+                , dbg_to_string(source)
+                , dbg_to_string(device)
+                , dbg_to_string(input)
+                , dbg_to_string(modifiers)
                 , (ch ? std::string{1, *ch} : "None")
             );
         }

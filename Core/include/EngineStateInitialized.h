@@ -1,10 +1,10 @@
 #pragma once
 
 #include "EngineStateRunning.h"
-#include "GameEngine.h"
 #include "GameType.h"
 #include "IEngineStateContext.h"
 #include "IState.h"
+#include "Logger.h"
 
 namespace Core::Engine {
 
@@ -21,6 +21,7 @@ namespace Core::Engine {
         void exit() override;
 
         bool isFinished() const override;
+
     private:
         Game::GameType m_gameType;
     };

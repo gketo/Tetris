@@ -1,12 +1,10 @@
 #pragma once
 
-#include "DataVariant.h"
 #include "MenuData.h"
+#include "MenuEntry.h"
 
-// forward declaration
-namespace Core {
-    class GameSession;
-}
+#include <cstddef>
+#include <string>
 
 namespace Core {
 

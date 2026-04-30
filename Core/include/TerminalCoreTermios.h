@@ -2,31 +2,27 @@
 
 #include "ITerminalCore.h"
 
+#include <cstddef>
 #include <memory>
 #include <optional>
+#include <string>
 #include <termios.h>
-#include <unistd.h>
-#include <utility>
 
 // NOTE dbg debug : DOESN'T HANDLE TERMINAL RESTORE MODE ON CRASH. TODO todo
 //todo vertical wrapping
-// forward declaration
-namespace Core {
-    class MenuData;
-}
 
-// namespace Game {
-//     class RulesData;
-// }
+namespace Core {
+    class MenuData; // forward declaration
+}
 
 namespace Core::Grid2D {
     template<typename T>
-    class Frame2D;
+    class Frame2D;  // forward declaration
 }
 
 namespace Core::Terminal::Termios {
     
-    // non member function
+    // non-member function
     std::unique_ptr<ITerminalCore> createTerminalCore();
 
     class TerminalCoreTermios : public ITerminalCore 
@@ -53,7 +49,6 @@ namespace Core::Terminal::Termios {
 
         // rendering
         void render(const Core::MenuData& menuData) override;
-        // void render(const Game::RulesData& rules) override;
         void render(const Core::Grid2D::Frame2D<char>& frame) override;
 
     private:

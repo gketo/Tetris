@@ -1,6 +1,5 @@
 #pragma once
 
-#include "GameEngine.h"
 #include "IEngineStateContext.h"
 #include "IState.h"
 #include "Logger.h"
@@ -17,16 +16,13 @@ namespace Core::Engine {
         void exit() override;
 
         bool isFinished() const override;
-    
-    private:
-        Menu m_menu;
+
     };
 
     inline void EngineStateSuspended::enter()
     {
         LOG_DEBUG("[GameEngineSM] EngineStateSuspended : enter()...");
-        m_context.getEventManager().popActiveLayer(EventLayer::Engine);
-        m_isFinished = true;
+        //do nothing
     }
 
     inline void EngineStateSuspended::update()

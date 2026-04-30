@@ -2,7 +2,7 @@
 
 #include "DeviceEvent.h"
 #include "Frame2D.h"
-#include "KeyCode.h"
+#include "InputType.h"
 #include "Logger.h"
 #include "MenuData.h"
 #include "TermiosMenuHelper.h"
@@ -11,6 +11,7 @@
 #include "TermiosUtils.h"
 
 #include <array>
+#include <cstddef>
 #include <cstdio>
 #include <errno.h>
 #include <format>
@@ -18,6 +19,7 @@
 #include <mutex>
 #include <optional>
 #include <stdexcept>
+#include <string>
 #include <sys/ioctl.h>
 #include <termios.h>
 #include <unistd.h>
@@ -66,12 +68,12 @@ namespace Core::Terminal::Termios {
             char seq[3];
             if ((nread = read(STDIN_FILENO, &seq[0], 1)) != 1)
             {
-                event.code = KeyCode::ESCAPE;
+                event.input = InputType::ESCAPE;
                 return event;
             }
             if ((nread = read(STDIN_FILENO, &seq[1], 1)) != 1)
             {
-                event.code = KeyCode::ESCAPE;
+                event.input = InputType::ESCAPE;
                 return event;
             }                
 
@@ -81,20 +83,20 @@ namespace Core::Terminal::Termios {
                 {
                     if (read(STDIN_FILENO, &seq[2], 1) != 1)
                     {
-                        event.code = KeyCode::ESCAPE;
+                        event.input = InputType::ESCAPE;
                         return event;
                     }
                     if (seq[2] == '~') 
                     {
                         switch (seq[1]) 
                         {
-                        case '1': event.code = KeyCode::HOME_KEY; break;
-                        case '3': event.code = KeyCode::DEL_KEY; break;
-                        case '4': event.code = KeyCode::END_KEY; break;
-                        case '5': event.code = KeyCode::PAGE_UP; break;
-                        case '6': event.code = KeyCode::PAGE_DOWN; break;
-                        case '7': event.code = KeyCode::HOME_KEY; break;
-                        case '8': event.code = KeyCode::END_KEY; break;
+                        case '1': event.input = InputType::HOME_KEY; break;
+                        case '3': event.input = InputType::DEL_KEY; break;
+                        case '4': event.input = InputType::END_KEY; break;
+                        case '5': event.input = InputType::PAGE_UP; break;
+                        case '6': event.input = InputType::PAGE_DOWN; break;
+                        case '7': event.input = InputType::HOME_KEY; break;
+                        case '8': event.input = InputType::END_KEY; break;
                         }
                         return event;
                     }
@@ -103,12 +105,12 @@ namespace Core::Terminal::Termios {
                 {
                     switch (seq[1]) 
                     {
-                    case 'A': event.code = KeyCode::ARROW_UP; break;
-                    case 'B': event.code = KeyCode::ARROW_DOWN; break;
-                    case 'C': event.code = KeyCode::ARROW_RIGHT; break;
-                    case 'D': event.code = KeyCode::ARROW_LEFT; break;
-                    case 'F': event.code = KeyCode::END_KEY; break;
-                    case 'H': event.code = KeyCode::HOME_KEY; break;
+                    case 'A': event.input = InputType::ARROW_UP; break;
+                    case 'B': event.input = InputType::ARROW_DOWN; break;
+                    case 'C': event.input = InputType::ARROW_RIGHT; break;
+                    case 'D': event.input = InputType::ARROW_LEFT; break;
+                    case 'F': event.input = InputType::END_KEY; break;
+                    case 'H': event.input = InputType::HOME_KEY; break;
                     }
                     return event;
                 }
@@ -117,36 +119,36 @@ namespace Core::Terminal::Termios {
             {            
                 switch (seq[1])
                 {
-                case 'H': event.code = KeyCode::HOME_KEY; break;
-                case 'F': event.code = KeyCode::END_KEY; break;
+                case 'H': event.input = InputType::HOME_KEY; break;
+                case 'F': event.input = InputType::END_KEY; break;
                 }
                 return event;
             }     
             
-            event.code = KeyCode::ESCAPE;
+            event.input = InputType::ESCAPE;
             return event;     
         }
         
         if (c == ' ')
         {
-            event.code = KeyCode::SPACEBAR;
+            event.input = InputType::SPACEBAR;
             return event;
         }
 
         if (c == '\r')
         {
-            event.code = KeyCode::ENTER;
+            event.input = InputType::ENTER;
             return event;
         }
 
         if (c >= 1 && c <= 26)
         {
-            event.modifiers &= KeyModifier::Ctrl;
+            event.modifiers &= InputModifier::Ctrl;
             event.ch = 'a' + (c - 1);
             return event;
         }
 
-        event.code = KeyCode::CHAR;
+        event.input = InputType::CHAR;
         event.ch = c;
         return event;
     }

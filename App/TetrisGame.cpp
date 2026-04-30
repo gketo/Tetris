@@ -1,7 +1,6 @@
 #include "TetrisGame.h"
 
 #include "CommandVariant.h"
-#include "Config_AppInputBindings.h"
 #include "DataVariant.h"
 #include "DeviceEvent.h"
 #include "EventManager.h"
@@ -21,17 +20,6 @@ namespace Game::Tetris {
 		LOG_DEBUG("[TetrisGame] Initializing...");
     }
 
-    void TetrisGame::pause(Core::EventManager&)
-    {}
-
-    void TetrisGame::resume(Core::EventManager& em)
-    {}
-
-    void TetrisGame::reset(Core::EventManager&)
-    {
-        // todo
-    }
-
     bool TetrisGame::update(Core::CommandVariant action)
     {
         return false;
@@ -46,7 +34,6 @@ namespace Game::Tetris {
     {
         out.submit(std::make_unique<Core::DataVariant>(m_data));
     }
-
     
     //debug 
     void TetrisGame::setData()

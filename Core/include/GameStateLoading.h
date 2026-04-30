@@ -1,12 +1,18 @@
 #pragma once
 
+#include "EventManager.h"
 #include "GameSession.h"
 #include "GameStatePlaying.h"
 #include "GameType.h"
 #include "IGameStateContext.h"
 #include "IState.h"
 #include "Logger.h"
+#include "StateMachine.h"
 #include "TetrisGame.h"
+
+#include <memory>
+#include <stdexcept>
+#include <utility>
 
 namespace Core::Session {
 
@@ -32,8 +38,8 @@ namespace Core::Session {
     inline void GameStateLoading::enter()
     {
         LOG_DEBUG("[GameSessionSM] GameStateLoading : enter()...");
-        LOG_DEBUG("[GameSessionSM] Setting <%s> as current game...", Game::gametype_to_string(m_gameType));
-        auto& gm = m_context.getGameSession();
+        LOG_DEBUG("[GameSessionSM] Setting <%s> as current game...", Game::dbg_to_string(m_gameType));
+        auto& gs = m_context.getGameSession();
         auto& em = m_context.getEventManager();
         switch (m_gameType)
         {
@@ -42,7 +48,7 @@ namespace Core::Session {
             auto game = std::make_unique<Game::Tetris::TetrisGame>();
             em.bindInputs(game->getBindings());
             game->init();
-            gm.setGame(std::move(game));
+            gs.setGame(std::move(game));
             break;
         }
         case Game::GameType::TEST:
@@ -50,7 +56,7 @@ namespace Core::Session {
             auto game = std::make_unique<Game::Tetris::TetrisGame>();
             game->init();
             em.bindInputs(game->getBindings());
-            gm.setGame(std::move(game));
+            gs.setGame(std::move(game));
             break;
         }
         default:

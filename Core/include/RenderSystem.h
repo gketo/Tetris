@@ -21,20 +21,3 @@ namespace Core {
         }
     };
 }
-
-
-        // void render(const MenuData& menuData, const VisitorVariant& visitor) const 
-        // {
-        //     std::visit([&](auto& v) 
-        //     {
-        //         v(std::move(menuData));
-        //     }, visitor);
-        // }
-
-        // void render(const Game::RulesData& rules, const VisitorVariant& visitor) const 
-        // {
-        //     std::visit([&](auto& v) 
-        //     {
-        //         v(std::move(rules));
-        //     }, visitor);
-        // }

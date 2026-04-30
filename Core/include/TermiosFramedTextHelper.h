@@ -2,14 +2,12 @@
 
 #include "GraphicsUtils.h"
 #include "ITerminalCore.h"
-#include "Logger.h"
 #include "TermiosUtils.h"
 
-#include <algorithm>
-#include <optional>
+#include <cstddef>
 #include <string>
 #include <string_view>
-#include <type_traits>
+#include <vector>
 
 namespace Core::Terminal::Termios {
 
@@ -69,7 +67,7 @@ namespace Core::Terminal::Termios {
                 {
                     terminal.moveCursor(frameStr, row, 0);
                     // clear line
-                    frameStr += ERASE_LINE_TORIGHT;
+                    frameStr += TermiosUtils::ERASE_LINE_TORIGHT;
                     // move after col padding
                     terminal.moveCursor(frameStr, row, col_border_outter_padding_width);
                     // print border
@@ -83,7 +81,7 @@ namespace Core::Terminal::Termios {
                 {
                     terminal.moveCursor(frameStr, row, 0);
                     // clear line
-                    frameStr += ERASE_LINE_TORIGHT;
+                    frameStr += TermiosUtils::ERASE_LINE_TORIGHT;
                     // move after col padding
                     terminal.moveCursor(frameStr, row, col_border_outter_padding_width);
                     // print border
@@ -109,7 +107,7 @@ namespace Core::Terminal::Termios {
                     
                     terminal.moveCursor(frameStr, row, 0);
                     // clear line
-                    frameStr += ERASE_LINE_TORIGHT;
+                    frameStr += TermiosUtils::ERASE_LINE_TORIGHT;
                     // move after col padding
                     terminal.moveCursor(frameStr, row, col_border_outter_padding_width);
                     // print border
@@ -135,7 +133,7 @@ namespace Core::Terminal::Termios {
                 {
                     terminal.moveCursor(frameStr, row, 0);
                     // clear line
-                    frameStr += ERASE_LINE_TORIGHT;
+                    frameStr += TermiosUtils::ERASE_LINE_TORIGHT;
                     // move after col padding
                     terminal.moveCursor(frameStr, row, col_border_outter_padding_width);
                     // print border
@@ -153,7 +151,7 @@ namespace Core::Terminal::Termios {
                 {
                     terminal.moveCursor(frameStr, row, 0);
                     // clear line
-                    frameStr += ERASE_LINE_TORIGHT;
+                    frameStr += TermiosUtils::ERASE_LINE_TORIGHT;
                     // move after col padding
                     terminal.moveCursor(frameStr, row, col_border_outter_padding_width);
                     // print border

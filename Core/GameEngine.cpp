@@ -1,22 +1,23 @@
 #include "GameEngine.h"
 
-#include "EventManager.h"
-#include "GameSession.h"
-#include "Logger.h"
-#include "Menu.h"
 #include "EngineStateInitialized.h"
 #include "EngineStateTerminated.h"
+#include "EventManager.h"
+#include "GameSession.h"
+#include "IRenderer.h"
+#include "Logger.h"
+#include "Menu.h"
+#include "StateMachine.h"
 
 #include <memory>
-#include <string>
+#include <stdexcept>
 
 namespace Core::Engine {
 
     void GameEngine::init(Game::GameType gameType)
 	{
 		LOG_DEBUG("[GameEngine] Initializing...");  
-        // m_sm.clearAndPush(std::make_unique<EngineStateUninitialized>(*this));
-        m_eventManager->clearInputs();
+        m_eventManager->unbindAllInputs();
         m_sm.clearAndPush(std::make_unique<EngineStateInitialized>(*this, gameType));
     }
 
@@ -47,7 +48,7 @@ namespace Core::Engine {
 		LOG_DEBUG("[GameEngine] Reset requested... ========TODO");
 		m_gameSession.clear();
         m_sm.clear();
-        m_eventManager->clearInputs();
+        m_eventManager->unbindAllInputs();
 		m_eventManager->clearInputEvents();
 		m_menu.clear();
 	}
@@ -69,7 +70,7 @@ namespace Core::Engine {
 		// get events from event manager (controller)
 		LOG_EXTRA("[GameEngine] Engine pollInputEvents()...");
 		m_eventManager->pollInputEvents();
-        while (auto eventOpt = m_eventManager->popEvent())
+        while (auto eventOpt = m_eventManager->popInputEvent())
         {
             const auto& event = *eventOpt;
 

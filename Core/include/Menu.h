@@ -1,10 +1,13 @@
 #pragma once
 
 #include "MenuData.h"
-#include "MenuEntry.h"
 
 #include <cstddef>
 #include <string>
+
+namespace Core {
+    class MenuEntry;
+}
 
 namespace Core {
 

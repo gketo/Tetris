@@ -1,9 +1,12 @@
 #pragma once
 
 #include "DeviceEvent.h"
-#include "IEventSource.h"
 
 #include <optional>
+
+namespace Core {
+    class IEventSource; // forward declaration
+}
 
 namespace Core {
 	

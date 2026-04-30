@@ -1,5 +1,7 @@
 #pragma once
 
+#include "EventManager.h"
+#include "GameSession.h"
 #include "IEngineStateContext.h"
 #include "IState.h"
 #include "Logger.h"

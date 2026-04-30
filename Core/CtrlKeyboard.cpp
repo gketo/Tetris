@@ -1,6 +1,7 @@
 #include "CtrlKeyboard.h"
 
 #include "DeviceEvent.h"
+#include "IEventSource.h"
 
 #include <optional>
 

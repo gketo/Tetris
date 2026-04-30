@@ -1,10 +1,13 @@
 #pragma once
 
 #include "EngineStateRunning.h"
+#include "GameSession.h"
 #include "GameType.h"
 #include "IEngineStateContext.h"
+#include "IRenderer.h"
 #include "IState.h"
 #include "Logger.h"
+#include "StateMachine.h"
 
 namespace Core::Engine {
 

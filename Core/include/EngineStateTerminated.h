@@ -1,6 +1,5 @@
 #pragma once
 
-#include "GameEngine.h"
 #include "IEngineStateContext.h"
 #include "IState.h"
 #include "Logger.h"

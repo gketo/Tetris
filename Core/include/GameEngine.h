@@ -1,14 +1,17 @@
 #pragma once
 
-#include "EventManager.h"
-#include "GameSession.h"
 #include "GameType.h"
+#include "GameSession.h"
 #include "IEngineStateContext.h"
-#include "IRenderer.h"
 #include "Menu.h"
 #include "StateMachine.h"
 
 #include <string>
+
+namespace Core {
+    class EventManager; // forward declaration
+    class IRenderer;    // forward declaration
+}
 
 namespace Core::Engine {
 

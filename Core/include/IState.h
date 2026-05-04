@@ -22,7 +22,7 @@ namespace Core {
         
         virtual ~IState() = default;
 
-        virtual bool handleEvent(const CommandVariant& e) { return false; }
+        virtual bool handleEvent(CommandVariant e) { return false; }
         virtual bool collectRenderData(RenderQueue& out) const { return false ;}
 
         virtual void enter() = 0;

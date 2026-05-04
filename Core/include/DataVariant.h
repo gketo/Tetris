@@ -11,7 +11,7 @@ namespace Core {
     using DataVariant = std::variant<Core::MenuData, Core::Grid2D::Frame2D<char>>;
 
     // Helper function to convert DataVariant to string
-    inline std::string dbg_to_string(DataVariant dataVar)
+    inline std::string dbg_to_string(const DataVariant& dataVar)
     {
         std::string dataStr = std::visit([](auto&& dataVar) -> std::string
             {

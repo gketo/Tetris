@@ -25,7 +25,7 @@ namespace Core {
         void addEntry(MenuEntry entry);
         const MenuEntry& getEntry(size_t index);
         const std::vector<MenuEntry>& entries() const;
-        int findIndexByName(std::string name) const;
+        int findIndexByName(const std::string& name) const;
 
         void setSelectedIndex(size_t index);
         bool isHighlighted(size_t index) const;
@@ -78,7 +78,7 @@ namespace Core {
         return m_entries;
     }
 
-    inline int MenuData::findIndexByName(std::string name) const
+    inline int MenuData::findIndexByName(const std::string& name) const
     {
         if (m_entries.empty())
         {

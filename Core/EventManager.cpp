@@ -13,7 +13,7 @@
 
 namespace Core {
 
-	void EventManager::addController(IControllerPtr ctrlPtr)
+	void EventManager::addController(std::unique_ptr<IController> ctrlPtr)
 	{
 		// add if not exists
 		if (std::find(m_controllers.begin(), m_controllers.end(), ctrlPtr) == m_controllers.end()) 

@@ -9,7 +9,9 @@ namespace Core::Session {
     class GameStateQuitted : public IState<IGameStateContext>
     {
     public:
-        GameStateQuitted(IGameStateContext& context) : IState(context) {}
+        GameStateQuitted(IGameStateContext& context)
+        : IState(context)
+        {}
 
         void enter() override;
         void update() override;

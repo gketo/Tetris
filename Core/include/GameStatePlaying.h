@@ -21,9 +21,11 @@ namespace Core::Session {
     class GameStatePlaying : public IState<IGameStateContext>
     {
     public:
-        GameStatePlaying(IGameStateContext& context) : IState(context) {}
+        GameStatePlaying(IGameStateContext& context)
+        : IState(context)
+        {}
 
-        bool handleEvent(const CommandVariant& e) override;
+        bool handleEvent(CommandVariant e) override;
         bool collectRenderData(RenderQueue& out) const override;
 
         void enter() override;
@@ -36,7 +38,7 @@ namespace Core::Session {
         void resume() override;
     };
 
-    inline bool GameStatePlaying::handleEvent(const CommandVariant& e)
+    inline bool GameStatePlaying::handleEvent(CommandVariant e)
     {
         LOG_EXTRA("[GameSessionSM] GameStatePlaying : handleEvent()...");
         if (auto* action = std::get_if<Core::EngineCommand>(&e))

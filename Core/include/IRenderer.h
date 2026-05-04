@@ -28,23 +28,22 @@ namespace Core {
 
         virtual ~IRenderer() = default;
 
+        RenderQueue& getRenderQueue() { return *m_renderQueue; }
+
         void setVisitor(std::unique_ptr<VisitorVariant> v);
-
-        virtual void update() = 0;
-
-        RenderQueue& getRenderQueue();
+        
         void submit(std::unique_ptr<DataVariant> dataVar);
         void render();
 
         virtual void clearScreen() = 0;
         
-        // rendering
         virtual void render(const Core::MenuData& menuData) = 0;
         virtual void render(const Core::Grid2D::Frame2D<char>& frame) = 0;
 
         virtual void init() = 0;
-        virtual void terminate() noexcept = 0;
+        virtual void update() = 0;
         virtual void quit() noexcept = 0;
+        virtual void terminate() noexcept = 0;
 
     private:
         std::unique_ptr<RenderQueue> m_renderQueue;
@@ -53,8 +52,4 @@ namespace Core {
 
     };
 
-    inline RenderQueue& IRenderer::getRenderQueue()
-    {
-        return *m_renderQueue;
-    }
 }

@@ -18,15 +18,16 @@ namespace Core::Engine {
 	class GameEngine : public IEngineStateContext
 	{
 	public:
-		GameEngine(EventManager* em, IRenderer* re)
+		GameEngine(EventManager& em, IRenderer& re)
 			: m_eventManager{ em }
-            , m_gameSession{ *em }
+            , m_gameSession{ em }
 			, m_renderer{ re }
 		{}
         
-        EventManager& getEventManager() override { return *m_eventManager; }
+        // IEngineStateContext
+        EventManager& getEventManager() override { return m_eventManager; }
         Core::Session::GameSession& getGameSession() override { return m_gameSession; }
-        IRenderer& getRenderer() override { return *m_renderer; }
+        IRenderer& getRenderer() override { return m_renderer; }
         StateMachine<IEngineStateContext>& getStateMachine() override { return m_sm; }
 
 		void init(Game::GameType gameType);
@@ -36,9 +37,9 @@ namespace Core::Engine {
 
 	private: // todo ensure right order destruction because renderer owns terminal and evenmanager uses it
         StateMachine<IEngineStateContext> m_sm;
-		EventManager* m_eventManager{ nullptr };
+		EventManager& m_eventManager;
 		Core::Session::GameSession m_gameSession;
-        IRenderer* m_renderer{ nullptr };
+        IRenderer& m_renderer;
 		Menu m_menu;
 		
 		bool shouldExit();

@@ -13,12 +13,10 @@
 
 namespace Core {
 
-	using IControllerPtr = std::unique_ptr<IController>;
-
 	class EventManager
 	{
 	public: 
-		void addController(IControllerPtr ctrlPtr);
+		void addController(std::unique_ptr<IController> ctrlPtr);
 
 	    void bindInputs(const std::vector<InputBinding>& toBind);
         void unbindInputs(const std::vector<InputBinding>& toUnbind);
@@ -32,7 +30,7 @@ namespace Core {
 		void clearInputEvents();
 	
 	private:
-		std::vector<IControllerPtr> m_controllers;
+		std::vector<std::unique_ptr<IController>> m_controllers;
 		std::vector<InputBinding> m_inputBindings;
         std::unordered_set<EventLayer> m_activeLayers; // todo maybe later lower level need to ask higher levels if they can change event context layer
 		EventPriorityQueue m_inputEvents; // ephemeral events/inputs in there

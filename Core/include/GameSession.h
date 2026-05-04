@@ -21,11 +21,12 @@ namespace Core::Session {
         : m_eventManager{ em }
         {}
 
+        // IGameStateContext
         GameSession& getGameSession() override { return *this; }
         EventManager& getEventManager() override { return m_eventManager; }
         StateMachine<IGameStateContext>& getStateMachine() override { return m_sm; }
 
-        bool handleEvent(const CommandVariant& e);
+        bool handleEvent(CommandVariant e);
         void collectRenderData(RenderQueue& out) const;
 
         void loadGame(Game::GameType gameType);
@@ -38,7 +39,7 @@ namespace Core::Session {
 
 	private:
         StateMachine<IGameStateContext> m_sm;
-		std::unique_ptr<Game::IGame> m_game{ nullptr };
+		std::unique_ptr<Game::IGame> m_game;
         EventManager& m_eventManager;
 	};
 

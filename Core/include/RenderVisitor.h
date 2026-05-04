@@ -23,7 +23,7 @@ namespace Core {
         {}
 
         void operator()(const Core::MenuData& menuData) const;
-        void operator()(const Core::Grid2D::Frame2D<char>&frame) const;
+        void operator()(const Core::Grid2D::Frame2D<char>& frame) const;
 
         // implement other operator here for each specific type of frame renderable by terminal
     private:

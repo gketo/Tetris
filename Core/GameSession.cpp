@@ -12,7 +12,7 @@
 
 namespace Core::Session {
 
-    bool GameSession::handleEvent(const CommandVariant& e)
+    bool GameSession::handleEvent(CommandVariant e)
     {
         return m_sm.handleEvent(e);
     }

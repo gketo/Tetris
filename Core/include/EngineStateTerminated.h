@@ -9,7 +9,9 @@ namespace Core::Engine {
     class EngineStateTerminated : public IState<IEngineStateContext>
     {
     public:
-        EngineStateTerminated(IEngineStateContext& context) : IState(context) {}
+        EngineStateTerminated(IEngineStateContext& context)
+        : IState(context)
+        {}
 
         void enter() override;
         void update() override;

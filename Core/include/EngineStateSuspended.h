@@ -9,7 +9,9 @@ namespace Core::Engine {
     class EngineStateSuspended : public IState<IEngineStateContext>
     {
     public:
-        EngineStateSuspended(IEngineStateContext& context) : IState(context) {}
+        EngineStateSuspended(IEngineStateContext& context)
+        : IState(context)
+        {}
 
         void enter() override;
         void update() override;

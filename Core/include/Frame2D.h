@@ -39,11 +39,9 @@ namespace Core::Grid2D {
         
         const CellGrid<TCell>& getGrid() const;
 
-        void safeSetCell(Frame2D& frame, size_t row, size_t col, const Cell<TCell>& cell);        
-
         void resize(size_t nrows, size_t ncols, const Cell<TCell>& defaultCell = Cell<TCell>{});
 
-        void appendRow(CellRow<TCell> row);
+        void appendRow(CellRow<TCell>& row);
         void appendColumn(const Cell<TCell>& defaultCell = Cell<TCell>{});
         
         void clear(const Cell<TCell>& fillCell = Cell<TCell>{});
@@ -105,21 +103,6 @@ namespace Core::Grid2D {
     {
         return m_grid;
     }
-    
-    // set a specific cell without error handling
-    template<typename TCell>
-    void Frame2D<TCell>::safeSetCell(Frame2D& frame, size_t row, size_t col, const Cell<TCell>& cell) 
-    {
-        try 
-        {
-            frame.setCell(row, col, cell);
-        } 
-        catch (const std::out_of_range& e) 
-        {
-            LOG_ERROR("[Warning] Could not set cell at (%s, %s): %s", row, col, e.what());
-            // optionally clamp coordinates or ignore
-        }
-    }
 
     // resize cells vector and initialize
     template<typename TCell>
@@ -137,7 +120,7 @@ namespace Core::Grid2D {
 
     // add a row at the end
     template<typename TCell>
-    void Frame2D<TCell>::appendRow(CellRow<TCell> row) // pass by value because we don't want to modify caller's row
+    void Frame2D<TCell>::appendRow(CellRow<TCell>& row) // pass by value because we don't want to modify caller's row
     {
         size_t newCols = std::max(m_cols, row.size());
 

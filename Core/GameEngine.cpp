@@ -17,7 +17,7 @@ namespace Core::Engine {
     void GameEngine::init(Game::GameType gameType)
 	{
 		LOG_DEBUG("[GameEngine] Initializing...");  
-        m_eventManager->unbindAllInputs();
+        m_eventManager.unbindAllInputs();
         m_sm.clearAndPush(std::make_unique<EngineStateInitialized>(*this, gameType));
     }
 
@@ -48,8 +48,8 @@ namespace Core::Engine {
 		LOG_DEBUG("[GameEngine] Reset requested... ========TODO");
 		m_gameSession.clear();
         m_sm.clear();
-        m_eventManager->unbindAllInputs();
-		m_eventManager->clearInputEvents();
+        m_eventManager.unbindAllInputs();
+		m_eventManager.clearInputEvents();
 		m_menu.clear();
 	}
 
@@ -69,8 +69,8 @@ namespace Core::Engine {
 	{
 		// get events from event manager (controller)
 		LOG_EXTRA("[GameEngine] Engine pollInputEvents()...");
-		m_eventManager->pollInputEvents();
-        while (auto eventOpt = m_eventManager->popInputEvent())
+		m_eventManager.pollInputEvents();
+        while (auto eventOpt = m_eventManager.popInputEvent())
         {
             const auto& event = *eventOpt;
 
@@ -98,13 +98,13 @@ namespace Core::Engine {
 	void GameEngine::render()
 	{
 		LOG_EXTRA("[GameEngine] Engine render()...");
-        auto& queue = m_renderer->getRenderQueue();
+        auto& queue = m_renderer.getRenderQueue();
         if (!m_sm.collectRenderData(queue))
         {
             m_gameSession.collectRenderData(queue);
         }
 
-        m_renderer->render(); 
+        m_renderer.render(); 
     }
 
 	void GameEngine::save()

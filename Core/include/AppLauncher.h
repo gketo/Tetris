@@ -14,7 +14,7 @@ namespace Core {
     private:
         Menu m_menu;
         Game::GameType m_gameChoice{ Game::GameType::None };
-        std::unique_ptr<Core::Engine::GameEngine> m_gameEngine{ nullptr };
+        std::unique_ptr<Core::Engine::GameEngine> m_gameEngine;
         
         void setGameChoice(Game::GameType gameType);
 		void buildGameChoiceMenu();

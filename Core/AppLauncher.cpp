@@ -153,7 +153,7 @@ namespace Core {
             em->unbindInputs(GameChoiceMenuRegisteredEvents);
             em->popActiveLayer(EventLayer::Menu);
 
-            m_gameEngine = std::make_unique<Core::Engine::GameEngine>(em.get() , renderer.get());
+            m_gameEngine = std::make_unique<Core::Engine::GameEngine>(*em, *renderer);
 
             m_gameEngine->init(m_gameChoice);
             m_gameEngine->run();

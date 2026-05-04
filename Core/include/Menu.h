@@ -19,7 +19,7 @@ namespace Core {
         void moveUp();
         void moveDown();
         
-        int findIndexByName(std::string name) const;
+        int findIndexByName(const std::string& name) const;
         const MenuData& getMenuData() const;
         const MenuEntry& getSelectedEntry();
         void setSelectedIndex(size_t index);

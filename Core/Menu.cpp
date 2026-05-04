@@ -20,7 +20,7 @@ namespace Core {
         m_menuData = std::move(md);
     }
 
-    int Menu::findIndexByName(std::string name) const
+    int Menu::findIndexByName(const std::string& name) const
     {
         return m_menuData.findIndexByName(name);
     }

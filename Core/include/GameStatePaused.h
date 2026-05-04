@@ -26,9 +26,11 @@ namespace Core::Session {
     class GameStatePaused : public IState<IGameStateContext> 
     {
     public:
-        GameStatePaused(IGameStateContext& context) : IState(context) {}
+        GameStatePaused(IGameStateContext& context)
+        : IState(context)
+        {}
 
-        bool handleEvent(const CommandVariant& e) override;
+        bool handleEvent(CommandVariant e) override;
         bool collectRenderData(RenderQueue& out) const override;
         
         void enter() override;
@@ -70,7 +72,7 @@ namespace Core::Session {
 		m_menu.build(md);
 	}
 
-    inline bool GameStatePaused::handleEvent(const CommandVariant& e)
+    inline bool GameStatePaused::handleEvent(CommandVariant e)
     {
         LOG_EXTRA("[GameSessionSM] GameStatePaused : handleEvent()...");
         if (auto* action = std::get_if<Core::MenuCommand>(&e))

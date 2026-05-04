@@ -11,7 +11,9 @@ namespace Core::Engine {
     class EngineStateRunning : public IState<IEngineStateContext>
     {
     public:
-        EngineStateRunning(IEngineStateContext& context) : IState(context) {}
+        EngineStateRunning(IEngineStateContext& context)
+        : IState(context)
+        {}
 
         void enter() override;
         void update() override;

@@ -15,15 +15,15 @@ namespace Core::Grid2D {
         T content;
 
         // getter
-        const GfxUtils::Color& fg() const { return m_style.fg; }
-        const GfxUtils::Color& bg() const { return m_style.bg; }
+        GfxUtils::Color fg() const { return m_style.fg; }
+        GfxUtils::Color bg() const { return m_style.bg; }
         const std::unordered_set<GfxUtils::Attr>& attrs() const { return m_style.attrs; }
 
         // setter
         void setFg(GfxUtils::Color color) { m_style.fg = color; }
         void setBg(GfxUtils::Color color) { m_style.bg = color; }
 
-        void addAttr(const GfxUtils::Attr& attr)
+        void addAttr(GfxUtils::Attr attr)
         {
             if (attr == GfxUtils::Attr::Default)
             {
@@ -39,7 +39,7 @@ namespace Core::Grid2D {
             }
         }
 
-        void removeAttr(const GfxUtils::Attr& attr)
+        void removeAttr(GfxUtils::Attr attr)
         {
             // erase the attribute if it exists
             m_style.attrs.erase(attr);
@@ -57,7 +57,7 @@ namespace Core::Grid2D {
             m_style.attrs.insert(GfxUtils::Attr::Default);
         }
 
-        bool hasAttr(const GfxUtils::Attr& attr) const { return m_style.attrs.contains(attr); }
+        bool hasAttr(GfxUtils::Attr attr) const { return m_style.attrs.contains(attr); }
 
     private:
         GfxUtils::Style m_style;

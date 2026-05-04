@@ -13,7 +13,7 @@ namespace Core {
     class StateMachine 
     {
     public:
-        bool handleEvent(const CommandVariant& e);
+        bool handleEvent(CommandVariant e);
         bool collectRenderData(RenderQueue& out) const;
         void update();
 
@@ -37,7 +37,7 @@ namespace Core {
     };
 
     template<typename TContext>
-    inline bool StateMachine<TContext>::handleEvent(const CommandVariant& e)
+    inline bool StateMachine<TContext>::handleEvent(CommandVariant e)
     {
         return m_currentState->handleEvent(e);
     }

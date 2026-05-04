@@ -9,7 +9,9 @@ namespace Core::Session {
     class GameStateGameOver : public IState<IGameStateContext>
     {
     public:
-        GameStateGameOver(IGameStateContext& context) : IState(context) {}
+        GameStateGameOver(IGameStateContext& context)
+        : IState(context)
+        {}
 
         void enter() override;
         void update() override;

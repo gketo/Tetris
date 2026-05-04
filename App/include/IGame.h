@@ -37,7 +37,7 @@ namespace Game {
     protected:
         Rules m_rules;
         Core::DataVariant m_data;    
-        int m_minWindowHeight; // todo assert this exists
+        int m_minWindowHeight; // todo assert this exists and use it
         int m_minWindowWidth;
 	};
 

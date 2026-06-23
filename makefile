@@ -1,56 +1,100 @@
 # ============================
-# Basic Makefile (unchanged)
+# Compiler
 # ============================
 
-# Compiler
 CXX = clang++
-CXXFLAGS = -fcolor-diagnostics -fansi-escape-codes -std=c++20 -IApp/include -ICore/include
 
-# Source files
-APP_SRC = $(wildcard App/*.cpp)
-CORE_SRC = $(wildcard Core/*.cpp)
-SRC = $(APP_SRC) $(CORE_SRC)
+CXXFLAGS = \
+	-fcolor-diagnostics \
+	-fansi-escape-codes \
+	-std=c++20 \
+	-I. \
+	-Wall \
+	-Wextra \
+	-Wpedantic \
+	-Werror \
+	-fsanitize=address,undefined \
+	-fno-omit-frame-pointer \
+	-g
 
-# Target name: use first .cpp in App/ as default
-TARGET = $(basename $(notdir $(firstword $(APP_SRC))))
+# ============================
+# Source files (recursive, excluding ZExclude)
+# ============================
 
-# Default: build the executable
+APP_SRC := $(shell find App -name '*.cpp' -not -path '*/ZExclude/*')
+CORE_SRC := $(shell find Core -name '*.cpp' -not -path '*/ZExclude/*')
+
+SRC := $(APP_SRC) $(CORE_SRC)
+
+# ============================
+# Target
+# ============================
+
+TARGET := $(basename $(notdir $(firstword $(APP_SRC))))
+
+# ============================
+# Default build
+# ============================
+
 all: $(TARGET)
 
 $(TARGET): $(SRC)
 	$(CXX) $(CXXFLAGS) $(SRC) -o $(TARGET)
 
-# Build and run in one command
+# ============================
+# Run
+# ============================
+
 run: $(TARGET)
 	./$(TARGET)
 
-# Clean executable
-clean:
-	rm -f $(TARGET)
-
 # ============================
-# Enhanced section: run-with-log
+# Logging support
 # ============================
 
-# Named pipe for logs
 LOG_PIPE = /tmp/my_log_pipe
 
 run-log: $(TARGET)
-	# create FIFO if it doesn't exist
-	@mkfifo $(LOG_PIPE) || true
-	# open a new terminal to read logs
+	@mkfifo $(LOG_PIPE) 2>/dev/null || true
 	@osascript -e 'tell application "Terminal" to do script "cat $(LOG_PIPE)"'
-	# small delay to ensure terminal is ready
 	@sleep 0.5
-	# run program with DEBUG_TTY pointing to FIFO
+	@export DEBUG_TTY=$(LOG_PIPE); ./$(TARGET)
+
+run-log-extra: CXXFLAGS += -DLOG_DEBUG_EXTRA
+run-log-extra: $(TARGET)
+	@mkfifo $(LOG_PIPE) 2>/dev/null || true
+	@osascript -e 'tell application "Terminal" to do script "cat $(LOG_PIPE)"'
+	@sleep 0.5
 	@export DEBUG_TTY=$(LOG_PIPE); ./$(TARGET)
 
 clean-pipe:
-	rm -f /tmp/my_log_pipe
+	rm -f $(LOG_PIPE)
 
-run-log-extra: CXXFLAGS += -D LOG_DEBUG_EXTRA
-run-log-extra: $(TARGET)
-	@mkfifo $(LOG_PIPE) || true
-	@osascript -e 'tell application "Terminal" to do script "cat $(LOG_PIPE)"'
-	@sleep 0.5
-	@export DEBUG_TTY=$(LOG_PIPE); ./$(TARGET)
+# ============================
+# Clean
+# ============================
+
+clean:
+	rm -f $(TARGET)
+
+re: clean all
+
+# ============================
+# Debug helpers
+# ============================
+
+print-src:
+	@echo $(SRC)
+
+print-app:
+	@echo $(APP_SRC)
+
+print-core:
+	@echo $(CORE_SRC)
+
+# ============================
+# Phony targets
+# ============================
+
+.PHONY: all run clean re run-log run-log-extra clean-pipe \
+	print-src print-app print-core

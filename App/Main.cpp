@@ -1,7 +1,7 @@
 // Main.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-#include "AppLauncher.h"
-#include "Logger.h"
+#include "App/AppLauncher/AppLauncher.h"
+#include "Core/Utils/Logger.h"
 
 /* DEBUG */
 #include <cstddef>
@@ -28,7 +28,7 @@ int main()
 
     LOG_DEBUG("[Main.cpp] Hello World!");
 
-    Core::AppLauncher laucher{};
+    App::Launcher::AppLauncher laucher{};
 
     try 
     {
@@ -36,11 +36,11 @@ int main()
     } 
     catch (const std::exception& e) 
     {
-        LOG_DEBUG("[Main.cpp] Can't launch Launcher: %s", e.what());
+        LOG_ERROR("[Main.cpp] Can't launch Launcher: %s", e.what());
     }
     catch (...) 
     {
-        LOG_DEBUG("[Main.cpp] Can't launch Launcher: unknown exception");
+        LOG_ERROR("[Main.cpp] Can't launch Launcher: unknown exception");
     }
 
     return 0;

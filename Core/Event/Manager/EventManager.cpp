@@ -1,13 +1,17 @@
 #include "Core/Event/Manager/EventManager.h"
 
+// ==================== Includes ====================
+#include "Core/Controller/IController.h"
+
+#include "Core/Event/CommandVariant.h"
+#include "Core/Event/Binding/InputBinding.h"
+#include "Core/Event/Events/DeviceEvent.h"
 #include "Core/Event/Events/Event.h"
 #include "Core/Event/Manager/EventLayer.h"
-#include "Core/Event/CommandVariant.h"
-#include "Core/Event/Events/DeviceEvent.h"
-#include "Core/Event/Binding/InputBinding.h"
-#include "Core/Controller/IController.h"
+
 #include "Core/Utils/Logger.h"
 
+// ==================== Includes ====================
 #include <unordered_set>
 #include <utility>
 

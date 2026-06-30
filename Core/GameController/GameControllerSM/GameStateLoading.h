@@ -1,15 +1,21 @@
 #pragma once
 
-#include "Core/Event/Manager/EventManager.h"
-#include "Core/GameController/GameController.h"
-#include "Core/GameController/GameControllerSM/GameStatePlaying.h"
+// ==================== Includes ====================
 #include "App/Game/GameType.h"
-#include "Core/GameController/GameControllerSM/GameStateContext.h"
-#include "Core/StateMachine/IState.h"
-#include "Core/Utils/Logger.h"
-#include "Core/StateMachine/StateMachine.h"
 #include "App/Game/Tetris/TetrisGame.h"
 
+#include "Core/Event/Manager/EventManager.h"
+
+#include "Core/GameController/GameController.h"
+#include "Core/GameController/GameControllerSM/GameStatePlaying.h"
+#include "Core/GameController/GameControllerSM/GameStateContext.h"
+
+#include "Core/StateMachine/IState.h"
+#include "Core/StateMachine/StateMachine.h"
+
+#include "Core/Utils/Logger.h"
+
+// ==================== Includes ====================
 #include <memory>
 #include <stdexcept>
 #include <utility>

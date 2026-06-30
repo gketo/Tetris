@@ -1,9 +1,13 @@
 #include "App/Game/Tetris/TetrominoBlock.h"
 
-#include "Core/Types/Index2D.h"
+// ==================== Includes ====================
 #include "Core/Graphics/GfxUtils.h"
+
 #include "Core/Lib/Matrix/Matrix.h"
 
+#include "Core/Types/Index2D.h"
+
+// ==================== Includes ====================
 #include <cstddef>
 #include <stdexcept>
 #include <vector>

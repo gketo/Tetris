@@ -1,5 +1,6 @@
 #pragma once
 
+// ==================== Includes ====================
 #include <string_view>
 
 namespace Core {
@@ -17,9 +18,9 @@ namespace Core {
     };
 
     // Helper function to convert MenuCommand to string
-    inline std::string_view dbg_to_string(MenuCommand action)
+    inline std::string_view dbg_to_string(MenuCommand cmd)
     {
-        switch (action)
+        switch (cmd)
         {
         case MenuCommand::MENU_ACCEPT:      return "ACCEPT";
         case MenuCommand::MENU_CANCEL:      return "MENU_CANCEL";

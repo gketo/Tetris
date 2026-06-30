@@ -1,14 +1,20 @@
 #pragma once
 
-#include "Core/Lib/Matrix/Matrix.h"
+// ==================== Includes ====================
 #include "Core/Geometry/Point.h"
-#include "Core/Types/Index2D.h"
-#include "Core/Types/Size2D.h"
+
+#include "Core/Lib/Matrix/Matrix.h"
+
 #include "Core/Render/Surface.h"
+
 #include "Core/Terminal/TerminalChar.h"
 #include "Core/Terminal/TerminalString.h"
 #include "Core/Terminal/TerminalUtils.h"
 
+#include "Core/Types/Index2D.h"
+#include "Core/Types/Size2D.h"
+
+// ==================== Includes ====================
 #include <algorithm>
 #include <cstddef>
 #include <span>
@@ -52,10 +58,6 @@ namespace Core::Terminal {
         return isValidIndex({ point.y, point.x });
     }
     
-        //todo
-    // check if rect cant be fitting inside surface ( start pos + cols etc )
-    // wrap into the rectangle 
-    // fit rect and given position
     inline void TerminalSurface::drawText(Core::Type::Index2D at, Core::Type::Size2D bounds, const std::vector<TerminalChar>& vect)
     {
         // out of range

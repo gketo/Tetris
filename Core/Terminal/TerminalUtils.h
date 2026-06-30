@@ -1,9 +1,13 @@
 #pragma once
 
-#include "Core/Graphics/Style.h"
-#include "Core/Terminal/TerminalChar.h"
+// ==================== Includes ====================
 #include "Core/Containers/Board/CellVisual.h"
 
+#include "Core/Graphics/Style.h"
+
+#include "Core/Terminal/TerminalChar.h"
+
+// ==================== Includes ====================
 #include <string>
 #include <string_view>
 #include <vector>

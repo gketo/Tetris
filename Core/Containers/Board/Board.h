@@ -1,11 +1,16 @@
 #pragma once
 
-#include "Core/Types/Size2D.h"
+// ==================== Includes ====================
 #include "Core/Containers/Board/Cell.h"
-#include "Core/Render/IRenderable.h"
+
 #include "Core/Lib/Matrix/Matrix.h"
 #include "Core/Lib/Matrix/MatrixStridedSpan.h"
 
+#include "Core/Render/IRenderable.h"
+
+#include "Core/Types/Size2D.h"
+
+// ==================== Includes ====================
 #include <concepts>
 #include <cstddef>
 
@@ -18,9 +23,6 @@ namespace Core::Container {
         : m_matrix{ rows, cols }
         {}
 
-        // template <typename U = TCellContent>
-        // requires (!std::same_as<U, void>) // to avoid situation void defaultCell which doesnt make sense
-        // Board(size_t rows, size_t cols, const U& defaultCell)
         Board(size_t rows, size_t cols, const Cell& defaultCell)
             : m_matrix{ rows, cols, Cell(defaultCell) }
         {}

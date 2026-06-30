@@ -1,13 +1,19 @@
 #pragma once
 
-#include "Core/Engine/EngineSM/EngineStateRunning.h"
-#include "Core/GameController/GameController.h"
+// ==================== Includes ====================
 #include "App/Game/GameType.h"
+
 #include "Core/Engine/EngineSM/EngineStateContext.h"
+#include "Core/Engine/EngineSM/EngineStateRunning.h"
+
+#include "Core/GameController/GameController.h"
+
 #include "Core/Render/IRenderer.h"
+
 #include "Core/StateMachine/IState.h"
-#include "Core/Utils/Logger.h"
 #include "Core/StateMachine/StateMachine.h"
+
+#include "Core/Utils/Logger.h"
 
 namespace Core::Engine {
 

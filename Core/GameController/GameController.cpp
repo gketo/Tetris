@@ -1,12 +1,18 @@
 #include "Core/GameController/GameController.h"
 
+// ==================== Includes ====================
+#include "App/Game/GameType.h"
+
 #include "Core/Event/CommandVariant.h"
+
+#include "Core/Game/IGame.h"
+
 #include "Core/GameController/GameControllerSM/GameStateGameOver.h"
 #include "Core/GameController/GameControllerSM/GameStateLoading.h"
-#include "App/Game/GameType.h"
-#include "Core/Game/IGame.h"
+
 #include "Core/StateMachine/StateMachine.h"
 
+// ==================== Includes ====================
 #include <memory>
 #include <utility>
 

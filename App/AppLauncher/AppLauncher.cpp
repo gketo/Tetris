@@ -1,17 +1,26 @@
 #include "App/AppLauncher/AppLauncher.h"
 
-#include "Core/Event/Binding/Config_CoreInputBindings.h"
+// ==================== Includes ====================
+#include "App/Game/GameType.h"
+
 #include "Core/Controller/Keyboard/CtrlKeyboard.h"
+
+#include "Core/Engine/Engine.h"
+
+#include "Core/Event/Binding/Config_CoreInputBindings.h"
 #include "Core/Event/Manager/EventManager.h"
 #include "Core/Event/Manager/EventLayer.h"
-#include "Core/Engine/Engine.h"
-#include "App/Game/GameType.h"
-#include "Core/Render/IRenderer.h"
-#include "Core/Utils/Logger.h"
+
 #include "Core/Menu/Menu.h"
-#include "Core/Terminal/Termios/TermiosCore.h"
+
+#include "Core/Render/IRenderer.h"
 #include "Core/Render/RenderVisitorVariant.h"
 
+#include "Core/Terminal/Termios/TermiosCore.h"
+
+#include "Core/Utils/Logger.h"
+
+// ==================== Includes ====================
 #include <memory>
 #include <stdexcept>
 #include <type_traits>

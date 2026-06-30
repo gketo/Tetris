@@ -1,19 +1,27 @@
 #pragma once
 
+// ==================== Includes ====================
+#include "Core/Engine/EngineCommand.h"
+
 #include "Core/Event/CommandVariant.h"
 #include "Core/Event/Binding/Config_CoreInputBindings.h"
-#include "Core/Engine/EngineCommand.h"
 #include "Core/Event/Manager/EventLayer.h"
 #include "Core/Event/Manager/EventManager.h"
+
+#include "Core/Game/IGame.h"
+
 #include "Core/GameController/GameController.h"
 #include "Core/GameController/GameControllerSM/GameStatePaused.h"
-#include "Core/Game/IGame.h"
 #include "Core/GameController/GameControllerSM/GameStateContext.h"
-#include "Core/StateMachine/IState.h"
-#include "Core/Utils/Logger.h"
+
 #include "Core/Render/RenderQueue.h"
+
+#include "Core/StateMachine/IState.h"
 #include "Core/StateMachine/StateMachine.h"
 
+#include "Core/Utils/Logger.h"
+
+// ==================== Includes ====================
 #include <memory>
 
 namespace Core::Session {

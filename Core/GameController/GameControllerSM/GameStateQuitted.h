@@ -1,7 +1,10 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/GameController/GameControllerSM/GameStateContext.h"
+
 #include "Core/StateMachine/IState.h"
+
 #include "Core/Utils/Logger.h"
 
 namespace Core::Session {

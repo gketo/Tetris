@@ -1,7 +1,9 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/Event/Events/DeviceEvent.h"
 
+// ==================== Includes ====================
 #include <optional>
 
 namespace Core {

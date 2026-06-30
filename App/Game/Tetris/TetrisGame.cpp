@@ -1,20 +1,23 @@
 #include "App/Game/Tetris/TetrisGame.h"
 
-#include "Core/Event/CommandVariant.h"
-#include "Core/Event/Events/DeviceEvent.h"
-#include "Core/Event/Manager/EventManager.h"
-#include "Core/Game/IGame.h"
-#include "Core/Utils/Logger.h"
+// ==================== Includes ====================
 #include "App/Game/Tetris/TetrisBoard.h"
 #include "App/Game/Tetris/TetrisCommand.h"
 #include "App/Game/Tetris/Tetromino.h"
+
+#include "Core/Event/CommandVariant.h"
+#include "Core/Event/Events/DeviceEvent.h"
+#include "Core/Event/Manager/EventManager.h"
+
+#include "Core/Game/IGame.h"
+
 #include "Core/Render/RenderDataVariant.h"
 
+#include "Core/Utils/Logger.h"
+
+// ==================== Includes ====================
 #include <string>
 #include <variant>
-
-// dbg debug
-// #include "Core/Debug/DebugHelpers.h"
 
 namespace App::Game::Tetris {
 
@@ -57,9 +60,9 @@ namespace App::Game::Tetris {
 
     bool TetrisGame::handleEvent(Core::CommandVariant e)
     {
-        if (auto* action = std::get_if<TetrisCommand>(&e))
+        if (auto* cmd = std::get_if<TetrisCommand>(&e))
         {
-            switch (*action)
+            switch (*cmd)
             {
             case TetrisCommand::TRANSLATE_LEFT:
             case TetrisCommand::TRANSLATE_RIGHT:

@@ -1,17 +1,24 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/Help/Help.h"
-#include "Core/Render/HelpView.h"
-#include "Core/Graphics/GfxUtils.h"
+
 #include "Core/Geometry/Rect.h"
+
+#include "Core/Graphics/GfxUtils.h"
+
+#include "Core/Render/HelpView.h"
 #include "Core/Render/Surface.h"
+
 #include "Core/Terminal/TerminalSurface.h"
 #include "Core/Terminal/Termios/TermiosUtils.h"
+
 #include "Core/Types/Index2D.h"
 #include "Core/Types/Size2D.h"
 
 #include "Core/Utils/Logger.h"
 
+// ==================== Includes ====================
 #include <stdexcept>
 #include <string>
 
@@ -94,44 +101,5 @@ namespace Core::Terminal::Termios {
                 }
             }
         }
-
-        // for each row in rect
-        // for (size_t shapeRow = startRow; shapeRow < (startRow + maxRow); ++shapeRow)
-        // {
-        //     auto dataRow = shapeRow - startRow;
-
-        //     if (dataRow >= helpData.helpCommands.size())
-        //     {
-        //         return;
-        //     }
-
-        //     auto cmd = helpData.helpCommands[dataRow];
-
-        //     std::string commandsStr;
-            
-        //     for (size_t i = 0; i < cmd.commands.size(); ++i)
-        //     {
-        //         const auto& cmd = cmd.commands[i];
-        //         commandsStr += cmd;
-        //         if (i + 1 < cmd.size())
-        //         {
-        //             commandsStr += ", ";
-        //         }
-        //     }
-            
-        //     auto totalCmdLength = cmd.description.size() + 1 + commandsStr.size(); // +1 for the space separating descrip and commands
-
-        //     // padding
-        //     int padding = maxCol - totalCmdLength;
-
-        //     auto command = cmd.description + " ";
-        //     if (padding > 0)
-        //     {
-        //         command += std::string(padding, ' ');
-        //     }
-        //     command += commandsStr;
-
-        //     termSurface->drawText(shapeRow, startCol, maxRow, maxCol, toTerminalChars(command));
-        // }
     }
 };

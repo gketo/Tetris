@@ -1,8 +1,10 @@
 #pragma once
 
-#include "Core/Graphics/Color.h"
+// ==================== Includes ====================
 #include "Core/Graphics/Attr.h"
+#include "Core/Graphics/Color.h"
 
+// ==================== Includes ====================
 #include <format>
 #include <string>
 #include <unordered_set>

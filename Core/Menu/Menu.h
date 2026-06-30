@@ -1,7 +1,9 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/Menu/MenuData.h"
 
+// ==================== Includes ====================
 #include <cstddef>
 #include <optional>
 #include <string>

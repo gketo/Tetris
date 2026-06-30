@@ -1,25 +1,22 @@
 #include "Core/Terminal/Termios/TermiosCore.h"
 
-#include "Core/Event/Events/DeviceEvent.h"
-// #include "Core/Grid2D.h"
+// ==================== Includes ====================
 #include "Core/Event/Binding/InputType.h"
-#include "Core/Utils/Logger.h"
-#include "Core/Menu/MenuData.h"
+#include "Core/Event/Events/DeviceEvent.h"
+
 #include "Core/Geometry/Rect.h"
+
+#include "Core/Menu/MenuData.h"
+
+#include "Core/Terminal/TerminalChar.h"
 #include "Core/Terminal/Termios/TermiosBoardView.h"
 #include "Core/Terminal/Termios/TermiosHelpView.h"
 #include "Core/Terminal/Termios/TermiosMenuView.h"
-// #include "Core/TermiosFramedTextHelper.h"
-// #include "Core/TermiosGrid2DHelper.h"
-// #include "Core/TermiosTetrisHelper.h"
 #include "Core/Terminal/Termios/TermiosUtils.h"
-#include "Core/Terminal/TerminalChar.h"
 
-#include "App/Game/Tetris/TetrisBoard.h"
-// #include "Core/Tile.h"
+#include "Core/Utils/Logger.h"
 
-#include <iostream>
-
+// ==================== Includes ====================
 #include <array>
 #include <cstddef>
 #include <cstdio>
@@ -177,8 +174,6 @@ namespace Core::Terminal::Termios {
     void TermiosCore::outputBuffer()
     {
         std::string output;
-        
-        // output += TermiosUtils::CURSOR_HOME.data();
 
         GfxUtils::Style prevStyle{};
         prevStyle.fg = GfxUtils::Color::Invalid;
@@ -195,16 +190,6 @@ namespace Core::Terminal::Termios {
                 const auto str = TermiosUtils::Termios_TerminalCharToStr(tch, &prevStyle);
 
                 output += str;
-
-                // if (c == m_buffer.data.cols() - 1)
-                // {
-                //     // end of line
-                //     output += TermiosUtils::RESET_COLORS;      // reset colors
-                //     output += TermiosUtils::RESET_ATTRS;      // reset attrs
-
-                //     prevStyle.fg = GfxUtils::Color::Invalid;
-                //     prevStyle.bg = GfxUtils::Color::Invalid;
-                // }
             }
         }
 
@@ -238,7 +223,6 @@ namespace Core::Terminal::Termios {
 
     void TermiosCore::moveCursor(size_t r, size_t c)
     {
-        // LOG_DEBUG("[TermiosCore] Move cursor to ( %d, %d )", row, col);
         if (!m_termConfig.size.width || !m_termConfig.size.height)
         {
             return; // todo
@@ -518,12 +502,3 @@ namespace Core::Terminal::Termios {
 	}
    
 }
-
-
-  // void TermiosCore::render([[maybe_unused]]const App::Grid::Grid2D<App::Grid::Tile<char>>& frame)
-    // {        
-    //     LOG_DEBUG("[TermiosCore] Rendering Grid2D");
-    //     //appendToBuffer(TermiosGrid2DRenderHelper::toString(*this, frame));
-    //     outputBuffer();
-    // }
-        // todo

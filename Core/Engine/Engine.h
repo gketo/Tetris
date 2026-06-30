@@ -1,11 +1,17 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "App/Game/GameType.h"
-#include "Core/GameController/GameController.h"
+
 #include "Core/Engine/EngineSM/EngineStateContext.h"
+
+#include "Core/GameController/GameController.h"
+
 #include "Core/Menu/Menu.h"
+
 #include "Core/StateMachine/StateMachine.h"
 
+// ==================== Includes ====================
 #include <string>
 
 namespace Core {

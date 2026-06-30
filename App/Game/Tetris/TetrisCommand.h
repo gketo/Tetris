@@ -1,5 +1,6 @@
 #pragma once
 
+// ==================== Includes ====================
 #include <string_view>
 
 namespace App::Game::Tetris {
@@ -19,9 +20,9 @@ namespace App::Game::Tetris {
     };
 
     // Helper function to convert TetrisCommand to string
-    inline std::string_view dbg_to_string(TetrisCommand action)
+    inline std::string_view dbg_to_string(TetrisCommand cmd)
     {
-        switch (action)
+        switch (cmd)
         {
         case TetrisCommand::TRANSLATE_LEFT:     return "TRANSLATE_LEFT";
         case TetrisCommand::TRANSLATE_RIGHT:    return "TRANSLATE_RIGHT";

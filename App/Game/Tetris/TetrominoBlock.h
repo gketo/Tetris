@@ -1,10 +1,15 @@
 #pragma once
 
-#include "Core/Types/Index2D.h"
+// ==================== Includes ====================
 #include "Core/Containers/Board/CellVisual.h"
+
 #include "Core/Graphics/GfxUtils.h"
+
 #include "Core/Lib/Matrix/Matrix.h"
 
+#include "Core/Types/Index2D.h"
+
+// ==================== Includes ====================
 #include <cstddef>
 
 namespace App::Game::Tetris {
@@ -26,7 +31,7 @@ namespace App::Game::Tetris {
 
         GfxUtils::Color color() const { return m_blockColor; }
 
-        void setColor(GfxUtils::Color blockColor) { m_blockColor = blockColor; }
+        void setColor(GfxUtils::Color c) { m_blockColor = c; }
 
         size_t row() const { return m_externCoords.row; }
         size_t col() const { return m_externCoords.col; }

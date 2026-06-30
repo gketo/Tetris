@@ -1,19 +1,25 @@
 #pragma once
 
-#include "Core/Event/CommandVariant.h"
-#include "Core/Render/RenderDataVariant.h"
-#include "Core/Help/Help.h"
-#include "Core/Event/Events/DeviceEvent.h"
-#include "Core/Event/Binding/DeviceType.h"
-#include "Core/Event/Manager/EventLayer.h"
-#include "Core/Game/IGame.h"
-#include "Core/Event/Binding/InputBinding.h"
-#include "Core/Event/Binding/InputType.h"
-#include "Core/Event/Binding/SourceType.h"
+// ==================== Includes ====================
 #include "App/Game/Tetris/TetrisBoard.h"
 #include "App/Game/Tetris/TetrisCommand.h"
 #include "App/Game/Tetris/Tetromino.h"
 
+#include "Core/Event/CommandVariant.h"
+#include "Core/Event/Binding/DeviceType.h"
+#include "Core/Event/Binding/InputBinding.h"
+#include "Core/Event/Binding/InputType.h"
+#include "Core/Event/Binding/SourceType.h"
+#include "Core/Event/Events/DeviceEvent.h"
+#include "Core/Event/Manager/EventLayer.h"
+
+#include "Core/Game/IGame.h"
+
+#include "Core/Help/Help.h"
+
+#include "Core/Render/RenderDataVariant.h"
+
+// ==================== Includes ====================
 #include <cstddef>
 #include <vector>
 

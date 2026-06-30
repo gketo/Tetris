@@ -1,7 +1,10 @@
 #pragma once 
 
+// ==================== Includes ====================
 #include "App/Game/GameType.h"
+
 #include "Core/Engine/Engine.h"
+
 #include "Core/Menu/Menu.h"
 
 namespace App::Launcher {

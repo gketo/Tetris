@@ -1,9 +1,13 @@
 #pragma once
 
-#include "Core/Engine/EngineCommand.h"
-#include "Core/Menu/MenuCommand.h"
+// ==================== Includes ====================
 #include "App/Game/Tetris/TetrisCommand.h"
 
+#include "Core/Engine/EngineCommand.h"
+
+#include "Core/Menu/MenuCommand.h"
+
+// ==================== Includes ====================
 #include <string>
 #include <variant>
 

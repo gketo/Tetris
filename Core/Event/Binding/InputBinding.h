@@ -1,13 +1,15 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/Event/CommandVariant.h"
-#include "Core/Event/Events/DeviceEvent.h"
 #include "Core/Event/Binding/DeviceType.h"
-#include "Core/Event/Events/Event.h"
-#include "Core/Event/Manager/EventLayer.h"
 #include "Core/Event/Binding/InputType.h"
 #include "Core/Event/Binding/SourceType.h"
+#include "Core/Event/Events/Event.h"
+#include "Core/Event/Events/DeviceEvent.h"
+#include "Core/Event/Manager/EventLayer.h"
 
+// ==================== Includes ====================
 #include <optional>
 #include <string>
 

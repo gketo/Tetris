@@ -1,7 +1,9 @@
 #pragma once
 
-#include "Core/Lib/Matrix/MatrixStridedSpan.h"
+// ==================== Includes ====================
+#include "MatrixStridedSpan.h"
 
+// ==================== Includes ====================
 #include <cstddef>
 #include <stdexcept>
 

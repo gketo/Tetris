@@ -1,22 +1,30 @@
 #pragma once
 
+// ==================== Includes ====================
+#include "Core/Engine/EngineCommand.h"
+
 #include "Core/Event/CommandVariant.h"
 #include "Core/Event/Binding/Config_CoreInputBindings.h"
-#include "Core/Render/RenderDataVariant.h"
-#include "Core/Engine/EngineCommand.h"
 #include "Core/Event/Manager/EventLayer.h"
 #include "Core/Event/Manager/EventManager.h"
+
+#include "Core/GameController/GameControllerSM/GameStateContext.h"
 #include "Core/GameController/GameControllerSM/GameStatePausedRules.h"
 #include "Core/GameController/GameControllerSM/GameStateQuitted.h"
-#include "Core/GameController/GameControllerSM/GameStateContext.h"
-#include "Core/StateMachine/IState.h"
-#include "Core/Utils/Logger.h"
+
 #include "Core/Menu/Menu.h"
 #include "Core/Menu/MenuCommand.h"
 #include "Core/Menu/MenuData.h"
+
+#include "Core/Render/RenderDataVariant.h"
 #include "Core/Render/RenderQueue.h"
+
+#include "Core/StateMachine/IState.h"
 #include "Core/StateMachine/StateMachine.h"
 
+#include "Core/Utils/Logger.h"
+
+// ==================== Includes ====================
 #include <memory>
 #include <stdexcept>
 #include <utility>

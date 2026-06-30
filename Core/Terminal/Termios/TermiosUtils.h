@@ -1,9 +1,12 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/Graphics/GfxUtils.h"
-#include "Core/Terminal/TerminalChar.h"
 #include "Core/Graphics/Style.h"
 
+#include "Core/Terminal/TerminalChar.h"
+
+// ==================== Includes ====================
 #include <algorithm>
 #include <cstddef>
 #include <string>
@@ -30,7 +33,6 @@ namespace Core::Terminal::Termios::Utils {
 
     inline void appendClearScreen(std::string& out)
     {
-        // out += CLEAR_SCROLLBACK.data(); // clear scrollback buffer
         out += CLEAR_SCREEN.data(); // clear screen
         out += CURSOR_HOME.data();  // move cursor to home
     }

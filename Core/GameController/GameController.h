@@ -1,11 +1,17 @@
 #pragma once
 
-#include "Core/Event/CommandVariant.h"
+// ==================== Includes ====================
 #include "App/Game/GameType.h"
+
+#include "Core/Event/CommandVariant.h"
+
 #include "Core/Game/IGame.h"
+
 #include "Core/GameController/GameControllerSM/GameStateContext.h"
+
 #include "Core/StateMachine/StateMachine.h"
 
+// ==================== Includes ====================
 #include <memory>
 
 namespace Core {

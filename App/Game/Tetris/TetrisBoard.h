@@ -1,10 +1,13 @@
 #pragma once
 
-#include "Core/Containers/Board/Board.h"
-#include "Core/Containers/Board/Cell.h"
+// ==================== Includes ====================
 #include "App/Game/Tetris/Tetromino.h"
 #include "App/Game/Tetris/TetrominoBlock.h"
 
+#include "Core/Containers/Board/Board.h"
+#include "Core/Containers/Board/Cell.h"
+
+// ==================== Includes ====================
 #include <cstddef>
 #include <memory>
 #include <variant>
@@ -22,7 +25,7 @@ namespace App::Game::Tetris {
 
         Core::Container::Board board() const;
 
-        void setActiveTetromino(Tetromino tetromino);
+        void setActiveTetromino(Tetromino t);
         bool requestTetromino() const;
 
         void translateLeftActive();

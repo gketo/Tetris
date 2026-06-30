@@ -1,7 +1,9 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/Graphics/GfxUtils.h"
 
+// ==================== Includes ====================
 #include <format>
 #include <iostream>
 #include <optional>
@@ -58,8 +60,8 @@ namespace Core::Container {
         : elements{ re }
         {}
 
-        CellVisual(const std::vector<RenderElement>& vre)
-        : elements{ vre }
+        CellVisual(const std::vector<RenderElement>& reVect)
+        : elements{ reVect }
         {}
 
         std::vector<RenderElement> elements;

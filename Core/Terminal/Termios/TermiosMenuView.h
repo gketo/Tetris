@@ -1,19 +1,25 @@
 #pragma once
 
-#include "Core/Menu/MenuData.h"
-#include "Core/Render/MenuView.h"
-#include "Core/Graphics/GfxUtils.h"
+// ==================== Includes ====================
 #include "Core/Geometry/Rect.h"
+
+#include "Core/Graphics/GfxUtils.h"
+
+#include "Core/Menu/MenuData.h"
+
+#include "Core/Render/MenuView.h"
 #include "Core/Render/Surface.h"
+
+#include "Core/Terminal/TerminalString.h"
 #include "Core/Terminal/TerminalSurface.h"
 #include "Core/Terminal/Termios/TermiosUtils.h"
+
 #include "Core/Types/Index2D.h"
 #include "Core/Types/Size2D.h"
 
-#include "Core/Terminal/TerminalString.h"
-
 #include "Core/Utils/Logger.h"
 
+// ==================== Includes ====================
 #include <stdexcept>
 #include <string>
 #include <variant>

@@ -1,8 +1,11 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/Menu/MenuEntry.h"
+
 #include "Core/Render/IRenderable.h"
 
+// ==================== Includes ====================
 #include <cstddef>
 #include <optional>
 #include <stdexcept>

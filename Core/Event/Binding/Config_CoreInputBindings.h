@@ -1,11 +1,13 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/Event/CommandVariant.h"
 #include "Core/Event/Binding/DeviceType.h"
 #include "Core/Event/Binding/InputBinding.h"
 #include "Core/Event/Binding/InputType.h"
 #include "Core/Event/Binding/SourceType.h"
 
+// ==================== Includes ====================
 #include <vector>
 
 namespace Core {

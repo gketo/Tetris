@@ -1,10 +1,13 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/Event/Binding/DeviceType.h"
 #include "Core/Event/Binding/InputType.h"
 #include "Core/Event/Binding/SourceType.h"
+
 #include "Core/Utils/Timestamp.h"
 
+// ==================== Includes ====================
 #include <format>
 #include <optional>
 #include <string>

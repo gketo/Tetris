@@ -1,11 +1,13 @@
 #include "App/Game/Tetris/TetrisBoard.h"
 
+// ==================== Includes ====================
 #include "App/Game/Tetris/Tetromino.h"
+
 #include "Core/Containers/Board/Board.h"
 #include "Core/Containers/Board/Cell.h"
 #include "Core/Containers/Board/CellVisual.h"
 
-
+// ==================== Includes ====================
 #include <utility>
 
 namespace App::Game::Tetris {
@@ -40,9 +42,9 @@ namespace App::Game::Tetris {
         return board;
     }
 
-    void TetrisBoard::setActiveTetromino(Tetromino tetromino)
+    void TetrisBoard::setActiveTetromino(Tetromino t)
     {
-        m_activeTetromino = std::move(tetromino);
+        m_activeTetromino = std::move(t);
     }
 
     bool TetrisBoard::requestTetromino() const

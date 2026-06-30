@@ -1,7 +1,9 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/Event/Events/Event.h"
 
+// ==================== Includes ====================
 #include <queue>
 
 namespace Core {
@@ -18,16 +20,16 @@ namespace Core {
 //     Optionally: add fairness (e.g., process 5 high, then 1 low).
     struct compare 
     {
-        bool operator()(const Event& a, const Event& b) const
+        bool operator()(const Event& e1, const Event& e2) const
         {
             // Lower layer loses
-            if (a.layer == b.layer)
+            if (e1.layer == e2.layer)
             {
-                return a.timestamp > b.timestamp;
+                return e1.timestamp > e2.timestamp;
             }
 
             // Newer event loses (FIFO for equal layer)
-            return a.layer < b.layer;
+            return e1.layer < e2.layer;
         }
     };
 

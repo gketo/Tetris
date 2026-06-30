@@ -1,9 +1,13 @@
 #pragma once
 
-#include "Core/Menu/MenuData.h"
+// ==================== Includes ====================
 #include "Core/Containers/Board/Board.h"
+
 #include "Core/Help/Help.h"
 
+#include "Core/Menu/MenuData.h"
+
+// ==================== Includes ====================
 #include <optional>
 #include <variant>
 
@@ -12,7 +16,6 @@ namespace Core {
     // add type of frame here aswell
     using RenderDataVariant = std::variant< 
                                 Core::MenuData,
-                                // App::Grid::Grid2D<App::Grid::Tile<char>>,
                                 Core::Container::Board,
                                 Core::Help::HelpData
                                 >;
@@ -28,10 +31,6 @@ namespace Core {
                 {
                     return std::string{ "MenuData" };
                 }
-                // else if constexpr (std::is_same_v<T, App::Grid::Grid2D<App::Grid::Tile<char>>>)
-                // {
-                //     return std::string{ "Grid2D<char>" };
-                // }
                 else if constexpr (std::is_same_v<T, Core::Container::Board>)
                 {
                     return std::string{ "Board" };

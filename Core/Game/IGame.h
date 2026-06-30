@@ -1,12 +1,16 @@
 #pragma once
 
-#include "Core/Event/CommandVariant.h"
-#include "Core/Render/RenderDataVariant.h"
-#include "Core/Event/Binding/InputBinding.h"
-#include "Core/Render/RenderQueue.h"
+// ==================== Includes ====================
 #include "App/Rules/Rules.h"
+
+#include "Core/Event/CommandVariant.h"
+#include "Core/Event/Binding/InputBinding.h"
+
+#include "Core/Render/RenderDataVariant.h"
+#include "Core/Render/RenderQueue.h"
 #include "Core/Render/WindowSize.h"
 
+// ==================== Includes ====================
 #include <string>
 #include <vector>
 

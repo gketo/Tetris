@@ -1,7 +1,9 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/Terminal/ITerminalCore.h"
 
+// ==================== Includes ====================
 #include <cstddef>
 #include <memory>
 #include <optional>
@@ -9,7 +11,6 @@
 #include <termios.h>
 
 // NOTE dbg debug : DOESN'T HANDLE TERMINAL RESTORE MODE ON CRASH. TODO todo
-//todo vertical wrapping
 
 namespace Core {
     class MenuData; // forward declaration
@@ -18,15 +19,6 @@ namespace Core {
 namespace Core::Container {
     class Board;    // forward declaration
 }
-
-// namespace App::Grid {
-//     template <typename TTile>
-//     class Grid2D;  // forward declaration
-
-//     template <typename TContent>
-//     class Tile;  // forward declaration
-// }
-
 
 namespace Core::Terminal::Termios {
     
@@ -53,7 +45,6 @@ namespace Core::Terminal::Termios {
         
         // rendering
         void render(const Core::MenuData& menuData) override;
-        // void render(const App::Grid::Grid2D<App::Grid::Tile<char>>& frame) override;
         void render(const Core::Container::Board& board) override;
         void render(const Core::Help::HelpData& helpData) override;
 

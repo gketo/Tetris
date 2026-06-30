@@ -1,9 +1,12 @@
 #pragma once
 
-#include "Core/Event/Manager/EventLayer.h"
+// ==================== Includes ====================
 #include "Core/Event/CommandVariant.h"
+#include "Core/Event/Manager/EventLayer.h"
+
 #include "Core/Utils/Timestamp.h"
 
+// ==================== Includes ====================
 #include <format>
 #include <string>
 

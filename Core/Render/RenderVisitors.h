@@ -1,5 +1,6 @@
 #pragma once
 
+// ==================== Includes ====================
 #include <optional>
 
 namespace Core {
@@ -22,18 +23,6 @@ namespace App::Game {//todo
     class RulesData;    // forward declaration
 }
 
-// namespace App::Grid {
-//     template <typename TTile>
-//     class Grid2D;  // forward declaration
-
-//     template <typename TContent>
-//     class Tile;  // forward declaration
-// }
-
-// namespace App::Game::Tetris {
-//     class TetrisBoard;   // forward declaration
-// }
-
 namespace Core {
     class TerminalVisitor
     {
@@ -43,8 +32,6 @@ namespace Core {
         {}
 
         void operator()(const Core::MenuData& data) const;
-        // void operator()(const App::Grid::Grid2D<App::Grid::Tile<char>>& frame) const;
-        // void operator()(const App::Game::Tetris::TetrisBoard& board) const;
         void operator()(const Core::Container::Board& data) const;
         void operator()(const Core::Help::HelpData& data) const;
 

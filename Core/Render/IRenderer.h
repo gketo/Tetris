@@ -1,20 +1,14 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/Render/RenderDataVariant.h"
 #include "Core/Render/RenderQueue.h"
 #include "Core/Render/RenderSystem.h"
 #include "Core/Render/RenderVisitorVariant.h"
 
+// ==================== Includes ====================
 #include <memory>
 #include <optional>
-
-// namespace App::Grid {
-//     template <typename TTile>
-//     class Grid2D;  // forward declaration
-
-//     template <typename TContent>
-//     class Tile;  // forward declaration
-// }
 
 namespace Core {
     class MenuData; // forward declaration
@@ -23,11 +17,6 @@ namespace Core {
 namespace Core::Container {
     class Board;    // forward declaration
 }
-
-// namespace Core::Container {
-//     template <typename TCellContent>
-//     class Board; // forward declaration
-// }
 
 namespace Core {
 

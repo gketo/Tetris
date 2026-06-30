@@ -1,8 +1,10 @@
 #include "Core/Menu/Menu.h"
 
+// ==================== Includes ====================
 #include "Core/Menu/MenuData.h"
 #include "Core/Menu/MenuEntry.h"
 
+// ==================== Includes ====================
 #include <cstddef>
 #include <utility>
 #include <string>

@@ -1,8 +1,10 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Point.h"
 #include "Size.h"
 
+// ==================== Includes ====================
 #include <cstddef>
 
 namespace Core::Geometry {

@@ -1,11 +1,11 @@
 #pragma once
 
+// ==================== Includes ====================
 #include <compare>
 #include <cstddef>
 
 namespace Core::Type {
 
-    // todo overflow prevention with size t and vector, and store capacity instead of size returning multiplication
     struct Size2D
     {
         size_t rows;

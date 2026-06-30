@@ -1,7 +1,9 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/StateMachine/IState.h"
 
+// ==================== Includes ====================
 #include <memory>
 #include <stack>
 #include <utility>

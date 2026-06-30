@@ -1,11 +1,16 @@
 #pragma once
 
-#include "Core/Types/Index2D.h"
+// ==================== Includes ====================
 #include "Core/Event/Source/IEventSource.h"
+
 #include "Core/Render/IRenderer.h"
+
 #include "Core/Terminal/TerminalSurface.h"
 #include "Core/Terminal/TerminalConfig.h"
 
+#include "Core/Types/Index2D.h"
+
+// ==================== Includes ====================
 #include <cstddef>
 #include <memory>
 #include <mutex>

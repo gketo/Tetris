@@ -1,8 +1,11 @@
 #pragma once
 
-#include "Core/Graphics/GfxUtils.h"
+// ==================== Includes ====================
 #include "Core/Containers/Board/CellVisual.h"
 
+#include "Core/Graphics/GfxUtils.h"
+
+// ==================== Includes ====================
 #include <cstddef>
 #include <optional>
 #include <unordered_set>
@@ -23,8 +26,8 @@ namespace Core::Container {
         : visual{ re }
         {}
 
-        Cell(const std::vector<RenderElement>& vre)
-        : visual{ vre }
+        Cell(const std::vector<RenderElement>& reVect)
+        : visual{ reVect }
         {}
 
         bool claimed() const { return m_isClaimed; }

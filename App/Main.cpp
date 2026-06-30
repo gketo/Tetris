@@ -1,8 +1,12 @@
 // Main.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
+
+// ==================== Includes ====================
 #include "App/AppLauncher/AppLauncher.h"
+
 #include "Core/Utils/Logger.h"
 
+// ==================== Includes ====================
 /* DEBUG */
 #include <cstddef>
 #include <execinfo.h>

@@ -1,14 +1,17 @@
 #pragma once
 
-#include "Core/Types/Index2D.h"
-#include "Core/Containers/Board/CellVisual.h"
-#include "Core/Containers/Deck/Deck.h"
-#include "Core/Lib/Matrix/Matrix.h"
+// ==================== Includes ====================
 #include "App/Game/Tetris/TetrominoBlock.h"
 #include "App/Game/Tetris/TetrominoType.h"
 
-#include "Core/Utils/Logger.h"
+#include "Core/Containers/Board/CellVisual.h"
+#include "Core/Containers/Deck/Deck.h"
 
+#include "Core/Lib/Matrix/Matrix.h"
+
+#include "Core/Types/Index2D.h"
+
+#include "Core/Utils/Logger.h"
 
 namespace App::Game::Tetris {
 
@@ -27,13 +30,13 @@ namespace App::Game::Tetris {
         const std::vector<TetrominoBlock>& getBlocks() const { return m_blocks; }
 
         const Lib::Matrix::Matrix<int>& getShape() const { return m_shape; }
-        void setShape(const Lib::Matrix::Matrix<int>& shape) { m_shape = shape; }
+        void setShape(const Lib::Matrix::Matrix<int>& s) { m_shape = s; }
 
         void init();
         
         void setSpawnLocation(const Core::Type::Index2D& topLeft);
 
-        void setColor(GfxUtils::Color blockColor);
+        void setColor(GfxUtils::Color c);
 
         void translateLeft();
         void translateRight();

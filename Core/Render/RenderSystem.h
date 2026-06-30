@@ -1,8 +1,10 @@
 #pragma once
 
-#include "Core/Render/RenderVisitorVariant.h"
+// ==================== Includes ====================
 #include "Core/Render/RenderDataVariant.h"
+#include "Core/Render/RenderVisitorVariant.h"
 
+// ==================== Includes ====================
 #include <variant>
 
 namespace Core {

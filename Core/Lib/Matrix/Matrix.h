@@ -1,13 +1,16 @@
 #pragma once
 
-#include "Core/Lib/Matrix/MatrixColView.h"
-#include "Core/Types/Index2D.h"
-#include "Core/Types/Size2D.h"
-#include "Core/Lib/Matrix/MatrixRowView.h"
-#include "Core/Lib/Matrix/MatrixStridedSpan.h"
+// ==================== Includes ====================
+#include "MatrixColView.h"
+#include "MatrixRowView.h"
+#include "MatrixStridedSpan.h"
 
+// ==================== Includes ====================
+#include "Core/Types/Index2D.h"
+#include "Core/Types/Size2D.h"//todo for lib copy of that or something
+
+// ==================== Includes ====================
 #include <iostream> // debug
-#include "Core/Utils/Logger.h" // debug todo remove
 
 #include <algorithm>
 #include <cstddef>

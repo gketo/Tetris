@@ -1,11 +1,14 @@
 #pragma once
 
+// ==================== Includes ====================
+#include "Core/Controller/IController.h"
+
 #include "Core/Event/CommandVariant.h"
 #include "Core/Event/Manager/EventLayer.h"
 #include "Core/Event/Manager/EventPriorityQueue.h"
-#include "Core/Controller/IController.h"
 #include "Core/Event/Binding/InputBinding.h"
 
+// ==================== Includes ====================
 #include <memory>
 #include <optional>
 #include <unordered_set>

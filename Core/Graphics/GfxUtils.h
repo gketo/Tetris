@@ -1,11 +1,9 @@
 #pragma once
 
-// include all gfx-related headers
+// ==================== Includes ====================
 #include "Core/Graphics/Attr.h"
 #include "Core/Graphics/Color.h"
 #include "Core/Graphics/Style.h"
-
-// todo 
 
 namespace Core::Graphics::Utils {
     using Attr = Attr;

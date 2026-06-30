@@ -1,7 +1,9 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/Event/CommandVariant.h"
 
+// ==================== Includes ====================
 #include <iostream>
 #include <typeinfo>
 #include <string>

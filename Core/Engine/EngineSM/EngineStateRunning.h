@@ -1,9 +1,15 @@
 #pragma once
 
-#include "Core/Event/Manager/EventManager.h"
-#include "Core/GameController/GameController.h"
+// ==================== Includes ====================
 #include "Core/Engine/EngineSM/EngineStateContext.h"
+
+#include "Core/Event/Manager/EventManager.h"
+
+#include "Core/GameController/GameController.h"
+
 #include "Core/StateMachine/IState.h"
+
+// ==================== Includes ====================
 #include "Core/Utils/Logger.h"
 
 namespace Core::Engine {

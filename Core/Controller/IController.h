@@ -1,7 +1,9 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/Event/Events/DeviceEvent.h"
 
+// ==================== Includes ====================
 #include <optional>
 
 namespace Core {
@@ -13,8 +15,8 @@ namespace Core {
 	class IController
 	{
 	public:
-		IController(const IEventSource& eventSource)
-			: m_eventSource{ eventSource }
+		IController(const IEventSource& s)
+			: m_eventSource{ s }
 		{ }
 
 		virtual ~IController() = default;

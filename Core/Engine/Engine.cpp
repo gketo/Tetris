@@ -1,14 +1,22 @@
 #include "Core/Engine/Engine.h"
 
+// ==================== Includes ====================
 #include "Core/Engine/EngineSM/EngineStateInitialized.h"
 #include "Core/Engine/EngineSM/EngineStateTerminated.h"
+
 #include "Core/Event/Manager/EventManager.h"
+
 #include "Core/GameController/GameController.h"
-#include "Core/Render/IRenderer.h"
-#include "Core/Utils/Logger.h"
+
 #include "Core/Menu/Menu.h"
+
+#include "Core/Render/IRenderer.h"
+
 #include "Core/StateMachine/StateMachine.h"
 
+#include "Core/Utils/Logger.h"
+
+// ==================== Includes ====================
 #include <memory>
 #include <stdexcept>
 

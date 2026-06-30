@@ -1,11 +1,14 @@
 #include "App/Game/Tetris/Tetromino.h"
 
-#include "Core/Types/Index2D.h"
-#include "Core/Graphics/GfxUtils.h"
-#include "Core/Lib/Matrix/Matrix.h"
+// ==================== Includes ====================
 #include "App/Game/Tetris/TetrominoBlock.h"
 
-#include "Core/Utils/Logger.h"
+#include "Core/Graphics/GfxUtils.h"
+
+#include "Core/Lib/Matrix/Matrix.h"
+
+#include "Core/Types/Index2D.h"
+
 namespace App::Game::Tetris {
 
     namespace GfxUtils = Core::Graphics::Utils;
@@ -31,11 +34,11 @@ namespace App::Game::Tetris {
         m_spawnLocation = topLeft;
     }
 
-    void Tetromino::setColor(GfxUtils::Color blockColor)
+    void Tetromino::setColor(GfxUtils::Color c)
     { 
         for (auto& block : m_blocks)
         {
-            block.setColor(blockColor);
+            block.setColor(c);
         } 
     }
 

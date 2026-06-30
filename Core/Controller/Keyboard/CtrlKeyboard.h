@@ -1,8 +1,11 @@
 #pragma once
 
-#include "Core/Event/Events/DeviceEvent.h"
+// ==================== Includes ====================
 #include "Core/Controller/IController.h"
 
+#include "Core/Event/Events/DeviceEvent.h"
+
+// ==================== Includes ====================
 #include <optional>
 
 namespace Core {
@@ -14,8 +17,8 @@ namespace Core {
 	class CtrlKeyboard : public IController
     {
 	public:
-		CtrlKeyboard(const IEventSource& eventSource)
-			: IController{ eventSource }
+		CtrlKeyboard(const IEventSource& s)
+			: IController{ s }
 		{ }
 
 		std::optional<DeviceEvent> readEvent() const override;

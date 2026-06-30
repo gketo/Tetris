@@ -1,5 +1,6 @@
 #pragma once
 
+// ==================== Includes ====================
 #include "Core/Render/WindowSize.h"
 
 namespace Core::Terminal {
